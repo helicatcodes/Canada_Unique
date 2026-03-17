@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+
+  # routes for the chatbot Chats & Messages controllers. NVD
+  resources :chats, only: [:create, :show] do
+    resources :messages, only: [:create]
+  end
+
   devise_for :users
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -13,4 +19,7 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+
+
+
 end
