@@ -22,4 +22,5 @@ Rails.application.routes.draw do
 
 
 
+  get "pre_canada", to: "pages#pre_canada", as: :pre_canada
 end
