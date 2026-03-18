@@ -1,12 +1,55 @@
 .navbar-lewagon {
   justify-content: space-between;
-  background: white;
+  background-color: $cu-navy;
+  border-bottom: 3px solid $cu-red;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .navbar-lewagon .navbar-collapse {
   flex-grow: 0;
 }
 
+// Logo
 .navbar-lewagon .navbar-brand img {
-  width: 40px;
+  height: 40px;
+  width: auto;
+}
+
+// Nav links — white on the blue bar
+.navbar-lewagon .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 500;
+  transition: color 0.15s;
+
+  &:hover,
+  &.active {
+    color: $cu-white;
+  }
+}
+
+// Hamburger icon colour on mobile
+.navbar-lewagon .navbar-toggler-icon {
+  filter: brightness(0) invert(1);
+}
+
+.navbar-lewagon .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+// Dropdown
+.navbar-lewagon .dropdown-menu {
+  border: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+
+  .dropdown-item {
+    color: $cu-charcoal;
+    font-size: 0.9rem;
+
+    &:hover {
+      background-color: $light-gray;
+      color: $cu-navy;
+    }
+  }
 }
