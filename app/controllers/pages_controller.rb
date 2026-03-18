@@ -10,4 +10,10 @@ class PagesController < ApplicationController
     # t2 = current_user.departure_date
     # @countdown = (t1 - t2).to_i
   end
+
+  def in_canada
+  end
+
+  def post_canada
+  end
 end

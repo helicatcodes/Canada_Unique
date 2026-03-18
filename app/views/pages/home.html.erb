@@ -1,29 +1,27 @@
 <h1>Pages#home - CA Logo goes here</h1>
 
 <div class="flex-container">
-  <div class="card flex-item">
-    <div class ="container" <%= link_to "This is pre_canada section", pre_canada_path %> >
-      <img src="app/assets/images/pre_canada_image.jpg" alt="image with a packed suitcase with canada flag on it and canadian city in the background" class="rounded">
-      <%# <p><%= image_tag "pre_canada_image.jpg" %> </p> %>
-    </div>
-  </div>
-  <br>
-  <div class="card flex_item rounded" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(../app//assets/images/pre_canada_image.jpg);">
-    <%= image_tag "pre_canada_image.jpg" %>
-    <div class="container">
+  <%= link_to pre_canada_path do %>
+  <div class="card flex-item rounded" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+    <div class="font-homepage">
       <h1>Let's get ready for Canada</h1>
     </div>
   </div>
+  <% end %>
   <br>
-  <div class="card flex_item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(../app//assets/images/pre_canada_image.jpg);">
-    <div class="container">
+  <%= link_to in_canada_path do %>
+  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+    <div class="font-homepage">
       <h1>Community</h1>
     </div>
   </div>
+  <% end  %>
   <br>
-  <div class="card flex_item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(../app//assets/images/pre_canada_image.jpg);">
-    <div class="container">
+  <%= link_to post_canada_path do %>
+  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+    <div class="font-homepage">
       <h1>Welcome back</h1>
     </div>
   </div>
+  <% end  %>
 </div>
