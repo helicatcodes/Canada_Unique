@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-
   # routes for the chatbot Chats & Messages controllers. NVD
   resources :chats, only: [:create, :show] do
     resources :messages, only: [:create]
@@ -21,8 +20,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   get    "/notifications/new",     to: "notifications#new",    as: :new_notification
   post   "/notifications",         to: "notifications#create"
-  end
-
 
 
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada
