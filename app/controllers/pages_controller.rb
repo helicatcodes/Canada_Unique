@@ -5,6 +5,7 @@ class PagesController < ApplicationController
   end
 
   def pre_canada
+    raise
     return unless current_user.departure_date.present?
 
     @countdown = (current_user.departure_date - Date.today).to_i
