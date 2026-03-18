@@ -1,2 +1,20 @@
-<h1>Chats#show</h1>
-<p>Find me in app/views/chats/show.html.erb</p>
+<div class="chat-page">
+  <div class="chat-messages" id="chat-messages">
+    <% @messages.each do |message| %>
+      <div class="chat-message chat-message--<%= message.role %>">
+        <div class="chat-bubble">
+          <%= message.content %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <%= image_tag "chatbot_avatar_1.png", class: "chat-avatar", alt: "Assistant" %>
+
+  <div class="chat-input-bar">
+    <%= form_with url: chat_messages_path(@chat), method: :post, class: "chat-form" do |f| %>
+      <%= f.text_area :content, placeholder: "Type a message...", class: "chat-textarea", rows: 1 %>
+      <%= f.submit "Send", class: "chat-send-btn" %>
+    <% end %>
+  </div>
+</div>

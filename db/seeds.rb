@@ -41,6 +41,7 @@ users = 5.times.map do
   name: Faker::Name.name,
   batch_number: Date.current.year,
   program_duration: PROGRAM_DURATIONS.sample,
+  departure_date: Date.today + rand(30..60),
   status: STATUSES.sample
   )
 end
