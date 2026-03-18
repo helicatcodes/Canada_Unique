@@ -21,6 +21,5 @@ Rails.application.routes.draw do
   get    "/notifications/new",     to: "notifications#new",    as: :new_notification
   post   "/notifications",         to: "notifications#create"
 
-
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada
 end
