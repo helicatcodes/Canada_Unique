@@ -19,6 +19,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  get    "/notifications/new",     to: "notifications#new",    as: :new_notification
+  post   "/notifications",         to: "notifications#create"
+  end
 
 
 
