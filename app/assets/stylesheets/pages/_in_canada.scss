@@ -120,4 +120,48 @@
       border-color: darken($cu-navy, 8%);
     }
   }
+
+  // [HW] Filled red when the current user has already liked this photo
+  &--liked {
+    color: $cu-red;
+    border-color: $cu-red;
+    background: lighten($cu-red, 42%);
+
+    &:hover {
+      background: lighten($cu-red, 36%);
+    }
+  }
+}
+
+// [HW] Comment list inside a feed card — left-aligned text under the photo
+.feed-comments {
+  width: 100%;
+  text-align: left;
+}
+
+// [HW] Single comment row: author name + text side by side, delete icon pushed to the right
+.feed-comment {
+  font-size: 0.78rem;
+  color: $cu-charcoal;
+  padding: 3px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  form {
+    display: inline-flex;
+    margin: 0 0 0 auto;
+  }
+}
+
+// [HW] Small × button to delete own comment — hidden until hovered
+.feed-comment__delete {
+  background: none;
+  border: none;
+  color: $light-gray;
+  cursor: pointer;
+  font-size: 0.65rem;
+  padding: 0;
+
+  &:hover { color: $cu-red; }
 }

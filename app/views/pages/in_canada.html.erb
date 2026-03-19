@@ -68,6 +68,43 @@
               <div class="photo-card__body">
                 <p class="photo-card__desc"><%= photo.description %></p>
                 <small class="text-muted">By <%= photo.user.name %></small>
+
+                <%# [HW] Like button — checks in-memory loaded likes (no extra DB query) %>
+                <%# [HW] already_liked uses .any? on the already-loaded likes array %>
+                <% already_liked = photo.likes.any? { |l| l.user_id == current_user.id } %>
+                <div class="photo-actions mt-2">
+                  <%= button_to photo_likes_path(photo), method: :post,
+                      class: "photo-action-btn #{ already_liked ? 'photo-action-btn--liked' : '' }",
+                      title: already_liked ? "Unlike" : "Like" do %>
+                    <i class="fa-#{ already_liked ? 'solid' : 'regular' } fa-heart"></i>
+                    <span class="ms-1"><%= photo.likes.size %></span>
+                  <% end %>
+                </div>
+
+                <%# [HW] Comments list — loops over already-loaded comments (no extra DB query) %>
+                <div class="feed-comments mt-2">
+                  <% photo.comments.each do |comment| %>
+                    <div class="feed-comment">
+                      <strong><%= comment.user.name %></strong> <%= comment.text %>
+                      <%# [HW] Delete button only visible to the comment's author %>
+                      <% if comment.user == current_user %>
+                        <%= button_to photo_comment_path(photo, comment), method: :delete,
+                            class: "feed-comment__delete", title: "Delete comment" do %>
+                          <i class="fa-solid fa-xmark"></i>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+
+                <%# [HW] Comment form — posts to CommentsController#create via nested route %>
+                <%= simple_form_for [photo, Comment.new], url: photo_comments_path(photo) do |f| %>
+                  <div class="d-flex gap-1 mt-2">
+                    <%= f.input :text, label: false, placeholder: "Add a comment...",
+                        wrapper: false, input_html: { class: "form-control form-control-sm" } %>
+                    <%= f.submit "Post", class: "btn btn-sm btn-primary" %>
+                  </div>
+                <% end %>
               </div>
             </div>
           <% end %>

@@ -25,6 +25,10 @@ Rails.application.routes.draw do
     member do
       patch :toggle_share
     end
+    # [HW] comments and likes are nested under photos because they belong to a specific photo
+    # [HW] likes only needs :create because the create action toggles (like or unlike)
+    resources :comments, only: [:create, :destroy]
+    resources :likes,    only: [:create]
   end
   # [HW] FYI: member do adds a custom route that operates on a specific, existing record (it includes the :id in the URL).
   #       So patch :toggle_share inside it generates: PATCH /photos/:id/toggle_share → photos#toggle_share
