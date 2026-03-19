@@ -3,7 +3,7 @@
 .chat-page {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 56px); // account for Bootstrap navbar height
+  height: calc(100vh - 64px); // account for bottom nav height
   background-color: #f0f2f5;
   overflow: hidden;
 }
@@ -131,18 +131,20 @@
 
 // ── Assistant avatar ─────────────────────────────────────────────────────────
 
+.chat-avatar-row {
+  flex-shrink: 0;
+  background-color: #f0f2f5;
+  padding: 6px 14px 0;
+}
+
 .chat-avatar {
-  position: fixed;
-  bottom: 80px; // sit just above the input bar
-  left: 20px;
-  width: 56px;
-  height: 56px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-  z-index: 10;
-  pointer-events: none; // don't intercept clicks
+  border: 2px solid #e5e5ea;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  display: block;
 }
 
 // ── Mobile adjustments ────────────────────────────────────────────────────────

@@ -1,0 +1,10 @@
+<%# Shows the full notification content. Marked as read when this page is opened. MJR %>
+<div class="container mt-4">
+  <h1><%= @notification.params[:title] %></h1>
+  <p><%= @notification.params[:message] %></p>
+  <small class="text-muted"><%= @notification.created_at.strftime("%B %d, %Y") %></small>
+
+  <div class="mt-3">
+    <%= link_to "Back to Inbox", notifications_path, class: "btn btn-secondary" %>
+  </div>
+</div>

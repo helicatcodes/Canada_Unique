@@ -1,2 +1,18 @@
-<h1>Notifications#new</h1>
-<p>Find me in app/views/notifications/new.html.erb</p>
+<%# Admin compose form - sends a notification with title and message to all users. MJR %>
+<div class="container mt-4">
+  <h1>Send Notification to All Users</h1>
+
+  <%= form_with url: notifications_path, method: :post do |f| %>
+    <div class="mb-3">
+      <%= f.label :title, class: "form-label" %>
+      <%= f.text_field :title, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :message, class: "form-label" %>
+      <%= f.text_area :message, rows: 5, class: "form-control", required: true %>
+    </div>
+
+    <%= f.submit "Send to All Users", class: "btn btn-primary" %>
+  <% end %>
+</div>

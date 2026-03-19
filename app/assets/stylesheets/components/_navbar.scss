@@ -1,55 +1,72 @@
-.navbar-lewagon {
+// ── Bottom navigation bar ─────────────────────────────────────────────────────
+
+$nav-beige: #FDF6E3; // pastel yellow/beige
+$nav-height: 64px;
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: $nav-height;
+  background-color: $nav-beige;
+  border-top: 2px solid $cu-red;
+  display: flex;
+  align-items: center;
   justify-content: space-between;
-  background-color: $cu-navy;
-  border-bottom: 3px solid $cu-red;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding: 0 20px;
+  z-index: 1000;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.08);
 }
 
-.navbar-lewagon .navbar-collapse {
-  flex-grow: 0;
-}
-
-// Logo
-.navbar-lewagon .navbar-brand img {
-  height: 40px;
+// Logo on the left
+.bottom-nav__brand img {
+  height: 36px;
   width: auto;
 }
 
-// Nav links — white on the blue bar
-.navbar-lewagon .nav-link {
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 500;
-  transition: color 0.15s;
-
-  &:hover,
-  &.active {
-    color: $cu-white;
-  }
+// Nav buttons grouped on the right
+.bottom-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-// Hamburger icon colour on mobile
-.navbar-lewagon .navbar-toggler-icon {
-  filter: brightness(0) invert(1);
-}
+.bottom-nav__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 6px 14px;
+  border-radius: 10px;
+  color: $cu-navy;
+  text-decoration: none;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background-color 0.15s, color 0.15s;
 
-.navbar-lewagon .navbar-toggler {
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-// Dropdown
-.navbar-lewagon .dropdown-menu {
-  border: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-  border-radius: 8px;
-
-  .dropdown-item {
+  i {
+    font-size: 1.15rem;
     color: $cu-charcoal;
-    font-size: 0.9rem;
-
-    &:hover {
-      background-color: $light-gray;
-      color: $cu-navy;
-    }
+    transition: color 0.15s;
   }
+
+  &:hover {
+    background-color: darken($nav-beige, 6%);
+    color: $cu-red;
+
+    i { color: $cu-red; }
+  }
+
+  &.active {
+    color: $cu-red;
+    i { color: $cu-red; }
+  }
+}
+
+// Push page content above the bar
+body {
+  padding-bottom: $nav-height;
 }

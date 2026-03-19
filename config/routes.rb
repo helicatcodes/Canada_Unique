@@ -18,9 +18,13 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  get    "/notifications/new",     to: "notifications#new",    as: :new_notification
-  post   "/notifications",         to: "notifications#create"
 
+  # Routes for admin broadcast and user inbox. MJR
+  resources :notifications, only: %i[index show new create]
+
+  # Profile page route. MJR
+  get "profile", to: "pages#profile", as: :profile
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada
   get "in_canada", to: "pages#in_canada", as: :in_canada
+  get "post_canada", to: "pages#post_canada", as: :post_canada
 end
