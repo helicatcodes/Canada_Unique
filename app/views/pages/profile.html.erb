@@ -1,0 +1,10 @@
+<%# Profile page showing user info and a link to the notification inbox. MJR %>
+<div class="container mt-4">
+  <h1><%= current_user.name %></h1>
+  <p class="text-muted"><%= current_user.email %></p>
+
+  <%# Button linking to the user's notification inbox. MJR %>
+  <%= link_to notifications_path, class: "btn btn-primary mt-3" do %>
+    <i class="fa fa-bell me-2"></i> My Inbox
+  <% end %>
+</div>

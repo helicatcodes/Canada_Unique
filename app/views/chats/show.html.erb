@@ -9,7 +9,9 @@
     <% end %>
   </div>
 
-  <%= image_tag "chatbot_avatar_1.png", class: "chat-avatar", alt: "Assistant" %>
+  <div class="chat-avatar-row">
+    <%= image_tag "chatbot_avatar_1.png", class: "chat-avatar", alt: "Assistant" %>
+  </div>
 
   <div class="chat-input-bar">
     <%= form_with url: chat_messages_path(@chat), method: :post, class: "chat-form" do |f| %>

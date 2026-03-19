@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_17_112159) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_141234) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -57,6 +57,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_112159) do
     t.index ["chat_id"], name: "index_messages_on_chat_id"
   end
 
+  create_table "noticed_events", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "notifications_count"
+    t.jsonb "params"
+    t.bigint "record_id"
+    t.string "record_type"
+    t.string "type"
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id"], name: "index_noticed_events_on_record"
+  end
+
+  create_table "noticed_notifications", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "read_at", precision: nil
+    t.bigint "recipient_id", null: false
+    t.string "recipient_type", null: false
+    t.datetime "seen_at", precision: nil
+    t.string "type"
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_noticed_notifications_on_event_id"
+    t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
+  end
+
   create_table "notifications", force: :cascade do |t|
     t.text "content"
     t.datetime "created_at", null: false
@@ -101,6 +125,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_17_112159) do
   end
 
   create_table "users", force: :cascade do |t|
+    t.boolean "admin", default: false, null: false
     t.integer "batch_number"
     t.datetime "created_at", null: false
     t.date "date_of_birth"

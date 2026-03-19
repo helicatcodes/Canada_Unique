@@ -1,14 +1,29 @@
-<h1>Pages#home</h1>
-
-<p>This app has been deployed 🤓</p>
-<p>Delete this 💩</p>
+<h1>Pages#home - CA Logo goes here</h1>
 
 <div class="flex-container">
-  <div class="flex-item"> <%= link_to "This is pre_canada section", pre_canada_path %> </div>
-<br>
-  <div class="flex-item">This is in_canada section</div>
-<br>
-  <div class="flex-item">This is post_canada section</div>
+  <%= link_to pre_canada_path do %>
+  <div class="card flex-item rounded" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+    <div class="font-homepage">
+      <h1>Let's get ready for Canada</h1>
+    </div>
+  </div>
+  <% end %>
+  <br>
+  <%= link_to in_canada_path do %>
+  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+    <div class="font-homepage">
+      <h1>Community</h1>
+    </div>
+  </div>
+  <% end  %>
+  <br>
+  <%= link_to post_canada_path do %>
+  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+    <div class="font-homepage">
+      <h1>Welcome back</h1>
+    </div>
+  </div>
+  <% end  %>
 </div>
 
 <%= button_to "Start Chat", chats_path, method: :post %>

@@ -11,5 +11,6 @@ class User < ApplicationRecord
   has_many :questionnaires, dependent: :destroy
   has_many :chats, dependent: :destroy
   has_many :messages, through: :chats
-  has_many :notifications, dependent: :destroy
+  # Gives each user access to their notification inbox via current_user.noticed_notifications. MJR
+  has_many :noticed_notifications, as: :recipient, class_name: "Noticed::Notification", dependent: :destroy
 end
