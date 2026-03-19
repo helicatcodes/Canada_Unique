@@ -35,4 +35,9 @@ class NotificationsController < ApplicationController
   def require_admin!
     redirect_to root_path, alert: "Not authorized." unless current_user.admin?
   end
+
+  # Redirects viewer users away from any write actions since they have read-only access. MJR
+  def require_not_viewer!
+    redirect_to root_path, alert: "Viewers can only read." if current_user.viewer?
+  end
 end

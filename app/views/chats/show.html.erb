@@ -13,10 +13,17 @@
     <%= image_tag "chatbot_avatar_1.png", class: "chat-avatar", alt: "Assistant" %>
   </div>
 
-  <div class="chat-input-bar">
-    <%= form_with url: chat_messages_path(@chat), method: :post, class: "chat-form" do |f| %>
-      <%= f.text_area :content, placeholder: "Type a message...", class: "chat-textarea", rows: 1 %>
-      <%= f.submit "Send", class: "chat-send-btn" %>
-    <% end %>
-  </div>
+  <%# Viewers see a notice instead of the chat input since they have read-only access. MJR %>
+  <% if current_user.viewer? %>
+    <div class="chat-input-bar">
+      <p class="text-muted text-center">You have view-only access and cannot send messages.</p>
+    </div>
+  <% else %>
+    <div class="chat-input-bar">
+      <%= form_with url: chat_messages_path(@chat), method: :post, class: "chat-form" do |f| %>
+        <%= f.text_area :content, placeholder: "Type a message...", class: "chat-textarea", rows: 1 %>
+        <%= f.submit "Send", class: "chat-send-btn" %>
+      <% end %>
+    </div>
+  <% end %>
 </div>

@@ -16,7 +16,11 @@ Photo.destroy_all
 Answer.destroy_all
 Question.destroy_all
 Questionnaire.destroy_all
-Notification.destroy_all
+# Noticed gem stores notifications here; must be cleared before destroying users. MJR
+Noticed::Notification.destroy_all
+Noticed::Event.destroy_all
+# Raw SQL to clear the notifications table since there is no Notification model. MJR
+ActiveRecord::Base.connection.execute("DELETE FROM notifications")
 Task.destroy_all
 Message.destroy_all
 Chat.destroy_all
@@ -34,19 +38,48 @@ puts "Creating users..."
 STATUSES = %w[pre_flight in_canada post_canada]
 PROGRAM_DURATIONS = [5, 10]
 
-users = 5.times.map do
-  User.create!(
-  email: Faker::Internet.unique.email,
-  password: "password",
-  name: Faker::Name.name,
+# Create one fixed admin user for easy login during development. MJR
+admin = User.create!(
+  email: "admin@test.com",
+  password: "123456", # changed from "password" to match project standard. MJR
+  name: "Admin User",
+  role: "admin", # assigned admin role so this user can manage notifications and users. MJR
   batch_number: Date.current.year,
   program_duration: PROGRAM_DURATIONS.sample,
   departure_date: Date.today + rand(30..60),
   status: STATUSES.sample
+)
+
+# Create one fixed viewer user to test read-only access. MJR
+viewer = User.create!(
+  email: "viewer@test.com",
+  password: "123456", # changed from "password" to match project standard. MJR
+  name: "Viewer User",
+  role: "viewer", # assigned viewer role so this user can only read. MJR
+  batch_number: Date.current.year,
+  program_duration: PROGRAM_DURATIONS.sample,
+  departure_date: Date.today + rand(30..60),
+  status: STATUSES.sample
+)
+
+# Create 5 regular student users with randomised data. MJR
+students = 5.times.map do
+  User.create!(
+    email: Faker::Internet.unique.email,
+    password: "123456", # changed from "password" to match project standard. MJR
+    name: Faker::Name.name,
+    role: "student", # explicitly set student role instead of relying on the default. MJR
+    batch_number: Date.current.year,
+    program_duration: PROGRAM_DURATIONS.sample,
+    departure_date: Date.today + rand(30..60),
+    status: STATUSES.sample
   )
 end
 
-puts "Created #{users.count} users"
+# Combine all users into one array for use in associations below. MJR
+users = [admin, viewer] + students
+
+puts "Created #{users.count} users (1 admin, 1 viewer, #{students.count} students)"
 
 # ---------------------------
 # 2. PHOTOS
@@ -142,22 +175,7 @@ end
 puts "Created #{answers.count} answers"
 
 # -----------------------------
-# 8. NOTIFICATIONS
-# -----------------------------
-puts "Creating notifications..."
-
-notifications = 10.times.map do
-  Notification.create!(
-    content: Faker::Lorem.sentence,
-    user: users.sample,
-    date_time: Faker::Time.forward(days: 5)
-  )
-end
-
-puts "Created #{notifications.count} notifications"
-
-# -----------------------------
-# 9. CHATS
+# 8. CHATS
 # -----------------------------
 puts "Creating chats..."
 

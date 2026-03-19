@@ -4,6 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Three roles: admin can do everything, student can read and write, viewer can only read. MJR
+  enum :role, { admin: "admin", student: "student", viewer: "viewer" }
+
   has_many :tasks, dependent: :destroy
   has_many :photos, dependent: :destroy
   has_many :likes, dependent: :destroy
