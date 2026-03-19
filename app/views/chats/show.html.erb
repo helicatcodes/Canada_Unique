@@ -1,12 +1,12 @@
-<div class="chat-page">
-  <div class="chat-messages" id="chat-messages">
-    <% @messages.each do |message| %>
-      <div class="chat-message chat-message--<%= message.role %>">
-        <div class="chat-bubble">
-          <%= message.content %>
-        </div>
-      </div>
-    <% end %>
+<div class="chat-page" data-controller="chat">
+  <div class="chat-messages" id="chat-messages" data-chat-target="messages">
+    <%= render @messages %>
+  </div>
+
+  <div id="typing-indicator" class="chat-message chat-message--assistant" hidden data-chat-target="typing">
+    <div class="chat-bubble typing-bubble">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 
   <div class="chat-avatar-row">
@@ -14,9 +14,11 @@
   </div>
 
   <div class="chat-input-bar">
-    <%= form_with url: chat_messages_path(@chat), method: :post, class: "chat-form" do |f| %>
-      <%= f.text_area :content, placeholder: "Type a message...", class: "chat-textarea", rows: 1 %>
-      <%= f.submit "Send", class: "chat-send-btn" %>
+    <%= form_with url: chat_messages_path(@chat), method: :post, class: "chat-form",
+        data: { action: "turbo:submit-start->chat#showTyping turbo:submit-end->chat#hideTyping" } do |f| %>
+      <%= f.text_area :content, placeholder: "Type a message...", class: "chat-textarea", rows: 1,
+          data: { chat_target: "input", action: "keydown->chat#submitOnEnter" } %>
+      <%= f.submit "Send", class: "chat-send-btn", data: { chat_target: "submit" } %>
     <% end %>
   </div>
 </div>
