@@ -5,7 +5,6 @@ class PagesController < ApplicationController
   end
 
   def pre_canada
-    raise
     return unless current_user.departure_date.present?
 
     @countdown = (current_user.departure_date - Date.today).to_i
@@ -16,10 +15,8 @@ class PagesController < ApplicationController
   end
 
   def in_canada
-    # as a user I can upload photos
-    # as a user i can view uploaded pictures in my gallery
-    # as a user i can view a shared feed of pictures
-    # # # retrieve all pics from db and organize in gallery
+    @photos = Photo.includes(:user).order(created_at: :desc)
+    @photo = Photo.new
   end
 
   def post_canada

@@ -53,12 +53,21 @@ puts "Created #{users.count} users"
 # ---------------------------
 puts "Creating photos..."
 
-photos = 10.times.map do
-  Photo.create!(
-    description: Faker::Lorem.sentence,
-    photo: Faker::LoremFlickr.image(size: "300x300"),
-    user: users.sample
-  )
+require "open-uri"
+
+photos = users.flat_map do |user|
+  3.times.map do
+    photo = Photo.create!(
+      description: Faker::Lorem.sentence,
+      user: user
+    )
+    photo.image.attach(
+      io: URI.open(Faker::LoremFlickr.image(size: "300x300", search_terms: ["canada"])),
+      filename: "photo_#{photo.id}.jpg",
+      content_type: "image/jpeg"
+    )
+    photo
+  end
 end
 
 puts "Created #{photos.count} photos"

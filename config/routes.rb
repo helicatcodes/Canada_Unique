@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   # Routes for admin broadcast and user inbox. MJR
   resources :notifications, only: %i[index show new create]
 
+  resources :photos, only: [:create, :destroy]
+
   # Profile page route. MJR
   get "profile", to: "pages#profile", as: :profile
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada

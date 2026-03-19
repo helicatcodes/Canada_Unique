@@ -1,6 +1,40 @@
-<h1>In Canada - Your Photos</h1>
+<div class="container mt-4">
+  <h1 class="mb-4">Canada Community</h1>
 
-<h2>Upload a photo</h2>
+  <%# Upload section %>
+  <div class="cu-panel mb-5">
+    <h2 class="cu-panel__title">Upload a Photo</h2>
+    <%= simple_form_for @photo, url: photos_path do |f| %>
+      <%= f.input :image, as: :file, label: "Choose a photo" %>
+      <%= f.input :description, placeholder: "Add a caption..." %>
+      <%= f.submit "Upload", class: "btn btn-primary" %>
+    <% end %>
+  </div>
 
-
-<h2>In Canada - Your Photos</h2>
+  <%# Gallery section %>
+  <div class="cu-panel">
+    <h2 class="cu-panel__title">Gallery</h2>
+    <% if @photos.none? %>
+      <p class="text-muted">No photos yet — be the first to upload!</p>
+    <% else %>
+      <div class="photo-grid">
+        <% @photos.each do |photo| %>
+          <% if photo.image.attached? %>
+            <div class="photo-card">
+              <%= image_tag photo.image, class: "photo-card__img" %>
+              <div class="photo-card__body">
+                <p class="photo-card__desc"><%= photo.description %></p>
+                <small class="text-muted">By <%= photo.user.name %></small>
+                <% if photo.user == current_user %>
+                  <%= button_to "Delete", photo_path(photo), method: :delete,
+                      class: "btn btn-sm btn-outline-danger mt-2",
+                      data: { turbo_confirm: "Are you sure?" } %>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>
