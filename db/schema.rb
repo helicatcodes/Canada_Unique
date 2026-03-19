@@ -144,6 +144,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_19_124147) do
   create_table "tasks", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "description"
+    t.string "name"
+    t.boolean "obligatory"
+    t.date "start_date"
     t.string "status"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
