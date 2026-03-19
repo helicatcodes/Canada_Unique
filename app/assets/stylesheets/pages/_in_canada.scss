@@ -1,0 +1,273 @@
+// [HW] Panel boxes — white card with a $cu-red top accent, matching the navbar's border-top style
+.cu-panel {
+  background-color: $cu-white;
+  border-top: 3px solid $cu-red;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem 2rem;
+}
+
+// [HW] Section title rendered as a full-width navy banner inside each panel
+// [HW] Negative margin pulls it to the panel edges; border-radius matches the panel's top corners
+.cu-panel__title {
+  color: $cu-white;
+  background: $cu-navy;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin: -1.5rem -2rem 1.5rem -2rem;
+  padding: 0.6rem 2rem;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+}
+
+// [HW] Constrains the upload form to a card-sized width so it doesn't stretch the full panel
+.upload-form-wrapper {
+  max-width: 360px;
+}
+
+// [HW] Photo grid — responsive columns, wider gap to let polaroid shadows breathe
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+
+// [HW] Polaroid card: thick white border on all sides, extra padding at the bottom
+.photo-card {
+  background: $cu-white;
+  padding: 8px 8px 36px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.08);
+  border-radius: 2px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: scale(1.03) rotate(0deg) !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  }
+
+  // [HW] Feed cards: less bottom padding since the body has more content (reactions, comments)
+  &--feed {
+    padding-bottom: 12px;
+  }
+}
+
+// [HW] Square crop — keeps the grid uniform regardless of original image dimensions
+.photo-card__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+// [HW] Caption area — centered for My Photos (polaroid feel), left-aligned for feed cards
+.photo-card__body {
+  padding: 10px 4px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.photo-card--feed .photo-card__body {
+  align-items: flex-start;
+  text-align: left;
+}
+
+// [HW] Caption text
+.photo-card__desc {
+  font-size: 0.8rem;
+  color: $cu-charcoal;
+  margin-bottom: 0.25rem;
+}
+
+// [HW] Bold navy author name sits inline before the caption text (Instagram style)
+.photo-card__author {
+  font-weight: 700;
+  color: $cu-navy;
+  margin-right: 4px;
+}
+
+// [HW] Icon bar on white card area above the photo — share left, edit+delete right
+.photo-card__actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 4px 6px;
+
+  form { display: inline-flex; margin: 0; }
+}
+
+.photo-card__actions-left,
+.photo-card__actions-right {
+  display: flex;
+  gap: 4px;
+}
+
+// [HW] Circular icon buttons — dark navy default, coloured on hover or when active
+.photo-action-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid $light-gray;
+  border-radius: 50%;
+  background: none;
+  color: $cu-navy;
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  padding: 0;
+
+  &:hover {
+    background: $light-gray;
+    color: $cu-navy;
+    border-color: $cu-charcoal;
+  }
+
+  // [HW] Unified delete style — dark navy default, red on hover (matches feed-comment__delete)
+  &--danger {
+    color: $cu-navy;
+    &:hover {
+      background: lighten($cu-red, 38%);
+      color: $cu-red;
+      border-color: $cu-red;
+    }
+  }
+
+  // [HW] Filled navy when photo is currently shared (active state)
+  &--active {
+    background: $cu-navy;
+    color: $cu-white;
+    border-color: $cu-navy;
+
+    &:hover {
+      background: darken($cu-navy, 8%);
+      border-color: darken($cu-navy, 8%);
+    }
+  }
+}
+
+// [HW] Flat reactions bar: heart left, comment count pushed to the right via margin-left: auto
+.feed-reactions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 6px 0 4px;
+  border-top: 1px solid $light-gray;
+
+  form { display: inline-flex; margin: 0; }
+}
+
+// [HW] Flat icon + count — no border, no circle, icon and number inline
+.feed-reaction-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 0.85rem;
+  color: $cu-charcoal;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover { color: $cu-navy; }
+
+  // [HW] Red heart when already liked
+  &--liked {
+    color: $cu-red;
+    &:hover { color: darken($cu-red, 10%); }
+  }
+
+  // [HW] Comment count pushed to the right of the reactions row
+  &--comment {
+    margin-left: auto;
+    cursor: default;
+    &:hover { color: $cu-charcoal; }
+  }
+}
+
+// [HW] Comment list — left-aligned, Instagram-style
+.feed-comments {
+  width: 100%;
+  text-align: left;
+  margin-top: 4px;
+}
+
+// [HW] Single comment row: author + text, delete icon pushed to the far right
+.feed-comment {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 2px 0;
+  font-size: 0.78rem;
+  color: $cu-charcoal;
+
+  form { display: inline-flex; margin: 0; }
+}
+
+.feed-comment__body {
+  flex: 1;
+  line-height: 1.4;
+}
+
+.feed-comment__author {
+  font-weight: 600;
+  color: $cu-navy;
+  margin-right: 4px;
+}
+
+.feed-comment__text {
+  color: $cu-charcoal;
+}
+
+// [HW] Unified delete icon — dark navy default, red on hover (matches photo-action-btn--danger)
+.feed-comment__delete {
+  background: none;
+  border: none;
+  color: $cu-navy;
+  cursor: pointer;
+  font-size: 0.65rem;
+  padding: 0 0 0 4px;
+  flex-shrink: 0;
+  transition: color 0.15s ease;
+
+  &:hover, &:active { color: $cu-red; }
+}
+
+// [HW] Minimal inline comment form — input grows to fill space, Post button stays compact
+.feed-comment-form {
+  display: flex;
+  gap: 4px;
+  margin-top: 6px;
+  border-top: 1px solid $light-gray;
+  padding-top: 6px;
+}
+
+.feed-comment-form__input {
+  flex: 1;
+  border: none;
+  border-bottom: 1px solid $light-gray;
+  outline: none;
+  font-size: 0.78rem;
+  padding: 2px 0;
+  background: transparent;
+  color: $cu-charcoal;
+
+  &::placeholder { color: lighten($cu-charcoal, 30%); }
+  &:focus { border-bottom-color: $cu-navy; }
+}
+
+.feed-comment-form__submit {
+  background: none;
+  border: none;
+  color: $cu-blue;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+
+  &:hover { color: darken($cu-blue, 10%); }
+}

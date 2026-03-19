@@ -50,6 +50,7 @@ gem "simple_form", github: "heartcombo/simple_form"
 gem "sassc-rails"
 
 gem "faker"
+gem "cloudinary"
 gem "noticed", "~> 2.0"
 
 group :development, :test do

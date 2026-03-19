@@ -15,10 +15,15 @@ class PagesController < ApplicationController
   end
 
   def in_canada
-    # as a user I can upload photos
-    # as a user i can view uploaded pictures in my gallery
-    # as a user i can view a shared feed of pictures
-    # # # retrieve all pics from db and organize in gallery
+    # [HW] @my_photos: only the current user's photos (for their private gallery)
+    # [HW] @feed_photos: all photos marked as shared by any user (for the community feed)
+    # [HW] @photo: blank photo object needed by the upload form
+    @my_photos   = current_user.photos.order(created_at: :desc)
+    # [HW] includes(:user, :likes, comments: :user) loads all likes, comments and their authors
+    # [HW] for every feed photo upfront in one go (eager-loading), so the view doesn't hit the
+    # [HW] database again for each individual photo card — preventing N+1 queries
+    @feed_photos = Photo.includes(:user, :likes, comments: :user).where(shared: true).order(created_at: :desc)
+    @photo       = Photo.new
   end
 
   def post_canada

@@ -1,0 +1,2 @@
+<%= turbo_stream.append "chat-messages", partial: "messages/message", locals: { message: @user_message } %>
+<%= turbo_stream.append "chat-messages", partial: "messages/message", locals: { message: @ai_message } %>

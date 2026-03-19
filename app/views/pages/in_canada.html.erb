@@ -1,6 +1,137 @@
-<h1>In Canada - Your Photos</h1>
+<div class="container mt-4">
+  <h1 class="mb-4">Canada Community</h1>
 
-<h2>Upload a photo</h2>
+  <%# Upload section %>
+  <div class="cu-panel mb-5">
+    <h2 class="cu-panel__title">Upload a Photo</h2>
+    <%# [HW] Constrained to a fixed width so the form doesn't stretch across the full panel %>
+    <div class="upload-form-wrapper">
+      <%= simple_form_for @photo, url: photos_path do |f| %>
+        <%= f.input :image, as: :file, label: false %>
+        <%= f.input :description, placeholder: "Add a caption..." %>
+        <%= f.submit "Upload", class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  </div>
 
+  <%# My Photos section — only the current user's photos, with icon action buttons %>
+  <div class="cu-panel mb-5">
+    <h2 class="cu-panel__title">My Photos</h2>
+    <% if @my_photos.none? %>
+      <p class="text-muted">You haven't uploaded any photos yet.</p>
+    <% else %>
+      <div class="photo-grid">
+        <% @my_photos.each do |photo| %>
+          <% if photo.image.attached? %>
+            <div class="photo-card">
+              <%# [HW] Icon bar sits on the white card background above the photo %>
+              <%# [HW] Left side: share. Right side: edit + delete %>
+              <div class="photo-card__actions">
+                <div class="photo-card__actions-left">
+                  <%= link_to toggle_share_photo_path(photo),
+                      data: { turbo_method: :patch },
+                      class: "photo-action-btn #{ photo.shared ? 'photo-action-btn--active' : '' }",
+                      title: photo.shared ? "Unshare from feed" : "Share to community feed" do %>
+                    <i class="fa-solid fa-share-nodes"></i>
+                  <% end %>
+                </div>
+                <div class="photo-card__actions-right">
+                  <%= link_to edit_photo_path(photo), class: "photo-action-btn", title: "Edit caption" do %>
+                    <i class="fa-solid fa-pen"></i>
+                  <% end %>
+                  <%# [HW] Delete — dark navy default, red on hover (unified with comment delete) %>
+                  <%= button_to photo_path(photo), method: :delete,
+                      class: "photo-action-btn photo-action-btn--danger",
+                      title: "Delete photo",
+                      data: { turbo_confirm: "Are you sure?" } do %>
+                    <i class="fa-solid fa-trash"></i>
+                  <% end %>
+                </div>
+              </div>
 
-<h2>In Canada - Your Photos</h2>
+              <%= image_tag photo.image, class: "photo-card__img" %>
+
+              <%# [HW] Caption only below the photo %>
+              <div class="photo-card__body">
+                <p class="photo-card__desc"><%= photo.description %></p>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Community Feed — all photos explicitly shared by any user %>
+  <div class="cu-panel">
+    <h2 class="cu-panel__title">Community Feed</h2>
+    <% if @feed_photos.none? %>
+      <p class="text-muted">No photos shared yet — be the first!</p>
+    <% else %>
+      <div class="photo-grid">
+        <% @feed_photos.each do |photo| %>
+          <% if photo.image.attached? %>
+            <%# [HW] photo-card--feed modifier switches body to left-aligned for IG style %>
+            <div class="photo-card photo-card--feed">
+              <%= image_tag photo.image, class: "photo-card__img" %>
+
+              <div class="photo-card__body">
+                <%# [HW] Reactions row: heart left, comment bubble right (pushed by margin-left: auto) %>
+                <% already_liked = photo.likes.any? { |l| l.user_id == current_user.id } %>
+                <div class="feed-reactions">
+                  <%# [HW] fa-solid fa-heart always — FA Free doesn't include fa-regular fa-heart %>
+                  <%# [HW] liked vs not-liked state handled by CSS via feed-reaction-btn--liked %>
+                  <%= button_to photo_likes_path(photo), method: :post,
+                      class: "feed-reaction-btn #{ already_liked ? 'feed-reaction-btn--liked' : '' }",
+                      title: already_liked ? "Unlike" : "Like" do %>
+                    <i class="fa-solid fa-heart"></i>
+                    <span><%= photo.likes.size %></span>
+                  <% end %>
+                  <%# [HW] Comment count pushed to the right of the same row %>
+                  <span class="feed-reaction-btn feed-reaction-btn--comment">
+                    <i class="fa-solid fa-comment"></i>
+                    <span><%= photo.comments.size %></span>
+                  </span>
+                </div>
+
+                <%# [HW] Instagram-style: bold author name followed by caption on the same line %>
+                <p class="photo-card__desc">
+                  <strong class="photo-card__author"><%= photo.user.name %></strong>
+                  <%= photo.description %>
+                </p>
+
+                <%# [HW] Comments — bold author name + comment text, delete trash icon for own comments %>
+                <div class="feed-comments">
+                  <% photo.comments.each do |comment| %>
+                    <div class="feed-comment">
+                      <span class="feed-comment__body">
+                        <strong class="feed-comment__author"><%= comment.user.name %></strong>
+                        <span class="feed-comment__text"><%= comment.text %></span>
+                      </span>
+                      <%# [HW] Trash icon only for the comment's own author — dark navy, red on hover %>
+                      <% if comment.user == current_user %>
+                        <%= button_to photo_comment_path(photo, comment), method: :delete,
+                            class: "feed-comment__delete", title: "Delete comment" do %>
+                          <i class="fa-solid fa-trash"></i>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
+
+                <%# [HW] Comment form — posts to CommentsController#create via nested route %>
+                <%= simple_form_for [photo, Comment.new], url: photo_comments_path(photo) do |f| %>
+                  <div class="feed-comment-form">
+                    <%= f.input :text, label: false, placeholder: "Add a comment…",
+                        wrapper: false, input_html: { class: "feed-comment-form__input" } %>
+                    <%= f.submit "Post", class: "feed-comment-form__submit" %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</div>

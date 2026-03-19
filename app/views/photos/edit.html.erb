@@ -1,0 +1,13 @@
+<div class="container mt-4">
+  <div class="cu-panel">
+    <h2 class="cu-panel__title">Edit Caption</h2>
+    <%= simple_form_for @photo do |f| %>
+      <%= f.input :description, placeholder: "Update your caption..." %>
+      <%# [HW] Save and Cancel sit on the same row; Cancel pushed to the right via ms-auto %>
+      <div class="d-flex align-items-center">
+        <%= f.submit "Save", class: "btn btn-primary" %>
+        <%= link_to "Cancel", in_canada_path, class: "btn btn-outline-secondary ms-auto" %>
+      </div>
+    <% end %>
+  </div>
+</div>

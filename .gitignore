@@ -8,7 +8,7 @@
 /.bundle
 
 # Ignore all environment files.
-/.env*
+.env*
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -39,3 +39,4 @@
 # Ignore Mac and Linux file system files
 *.swp
 .DS_Store
+.env*
