@@ -2,3 +2,10 @@
 <h2></h2>
 
 <%= button_to "Reflect on your experiences with our questionnaire", post_canada_path, class: "btn btn-primary"%>
+<%= link_to "Here is your questionnaire", post_canada_path, class: "btn btn-primary"%>
+
+<div>
+  <h2>A summary of your experiences in Canada</h2>
+  <h3> This summary was generated with AI with compliance to your personal and sensitive personal data</h3>
+<p> <%= display @summary %></p>
+</div>

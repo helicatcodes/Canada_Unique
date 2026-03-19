@@ -1,4 +1,13 @@
 <div>
   <h1> "Let's get you ready for Canada" </h1>
-  <h2><%= @countdown %> days left until departure</h2>
+  <h2> Your personal countdown </h2>
+  <h3> <strong> <%= @countdown %> days </strong> left until departure</h3>
 </div>
+<br>
+<br>
+<h2>Your tasks</h2>
+<h3>Obligatory tasks</h3>
+<%= render 'tasks/task_list', tasks: current_user.tasks.where(obligatory: true) %>
+<br>
+<h3>Optional tasks</h3>
+<%= render 'tasks/task_list', tasks: current_user.tasks.where(obligatory: false) %>

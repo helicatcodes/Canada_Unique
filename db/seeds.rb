@@ -16,7 +16,7 @@ Photo.destroy_all
 Answer.destroy_all
 Question.destroy_all
 Questionnaire.destroy_all
-Notification.destroy_all
+# Notification.destroy_all
 Task.destroy_all
 Message.destroy_all
 Chat.destroy_all
@@ -144,17 +144,17 @@ puts "Created #{answers.count} answers"
 # -----------------------------
 # 8. NOTIFICATIONS
 # -----------------------------
-puts "Creating notifications..."
+# puts "Creating notifications..."
 
-notifications = 10.times.map do
-  Notification.create!(
-    content: Faker::Lorem.sentence,
-    user: users.sample,
-    date_time: Faker::Time.forward(days: 5)
-  )
-end
+# notifications = 10.times.map do
+#   Notification.create!(
+#     content: Faker::Lorem.sentence,
+#     user: users.sample,
+#     date_time: Faker::Time.forward(days: 5)
+#   )
+# end
 
-puts "Created #{notifications.count} notifications"
+# puts "Created #{notifications.count} notifications"
 
 # -----------------------------
 # 9. CHATS
@@ -189,15 +189,54 @@ puts "Created #{messages.count} messages"
 # -----------------------------
 puts "Creating tasks..."
 
-tasks = 10.times.map do
-  Task.create!(
-    description: Faker::Lorem.sentence,
-    status: ["pending", "done"].sample,
-    user: users.sample
-  )
+obligatory_tasks = [
+  "Jahreszeugnisse",
+  "Gastfamilienbrief",
+  "Fotocollage",
+  "Recommendation Form",
+  "Reisepass",
+  "Passbild",
+  "Personalausweise deiner Eltern",
+  "(Internationale) Geburtsurkunde",
+  "Impfpass",
+  "Medizinische Einschränkungen",
+  "Application",
+  "Custodianship Declaration",
+  "Letter of Acceptance",
+  "Visum",
+  "Sonstige"
+]
+users.each do |user|
+  obligatory_tasks.each do |task|
+    Task.create!(
+      description: Faker::Lorem.sentence,
+      name: task,
+      obligatory: true,
+      start_date: Date.tomorrow+rand(10..20),
+      user: user,
+      status: ["offen", "in Bearbeitung", "erledigt"].sample
+    )
+  end
 end
 
-puts "Created #{tasks.count} tasks"
+fun_tasks = [
+  "Packing list",
+  "Resources about location"
+]
+users.each do |user|
+  fun_tasks.each do |task|
+    Task.create!(
+      description: Faker::Lorem.sentence,
+      name: task,
+      obligatory: false,
+      start_date: Date.tomorrow+rand(10..20),
+      user: user,
+      status: ["offen", "in Bearbeitung", "erledigt"].sample
+    )
+  end
+end
+
+puts "Created #{Task.count} tasks"
 
 # Confirm result with success message
 

@@ -1,0 +1,5 @@
+<ul>
+  <% tasks.each do |task| %>
+    <li> <%= link_to task.name, task_path(task) %> - <%= task.start_date %> - <%= task.status %></li>
+  <% end %>
+</ul>

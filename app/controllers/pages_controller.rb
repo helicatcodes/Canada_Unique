@@ -22,9 +22,28 @@ class PagesController < ApplicationController
   end
 
   def post_canada
+    answers = current_user.questionnaires.first.answers.map(&:text).join("\n")
+    ruby_llm_chat = RubyLLM.chat
+    ruby_llm_chat.with_instructions(prompt)
+    @summary = ruby_llm_chat.ask("Summarize the #{answers} of the qestionnare and give me advice")
+    puts @summary.content
   end
 
   # Renders the profile page for the logged-in user. MJR
   def profile
+  end
+
+  private
+
+  def prompt
+  <<-PROMPT
+  You are a life coach specialized in personal development of youngsters.
+
+  I am a student from Germany that just came back from a one year exchange from Canada.
+
+  Give ma advice if I feel bad or have issues.
+
+  Give me next steps where I feel I have made progress during my stay in Canada.
+  PROMPT
   end
 end

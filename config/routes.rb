@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get "tasks/index"
   # routes for the chatbot Chats & Messages controllers. NVD
   resources :chats, only: [:create, :show] do
     resources :messages, only: [:create]
@@ -27,4 +28,6 @@ Rails.application.routes.draw do
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada
   get "in_canada", to: "pages#in_canada", as: :in_canada
   get "post_canada", to: "pages#post_canada", as: :post_canada
+
+  resources :tasks, only: [:show]
 end
