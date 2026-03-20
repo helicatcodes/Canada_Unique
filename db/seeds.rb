@@ -16,7 +16,6 @@ Photo.destroy_all
 Answer.destroy_all
 Question.destroy_all
 Questionnaire.destroy_all
-Notification.destroy_all
 Task.destroy_all
 Message.destroy_all
 Chat.destroy_all
@@ -167,22 +166,7 @@ end
 puts "Created answers for #{questionnaires.count} questionnaires (4 per user)"
 
 # -----------------------------
-# 8. NOTIFICATIONS
-# -----------------------------
- puts "Creating notifications..."
-
- notifications = 10.times.map do
-   Notification.create!(
-     content: Faker::Lorem.sentence,
-     user: users.sample,
-     date_time: Faker::Time.forward(days: 5)
-   )
- end
-
-puts "Created #{notifications.count} notifications"
-
-# -----------------------------
-# 9. CHATS
+# 8. CHATS
 # -----------------------------
 puts "Creating chats..."
 
