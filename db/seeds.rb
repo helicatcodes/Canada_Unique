@@ -19,6 +19,12 @@ Questionnaire.destroy_all
 Task.destroy_all
 Message.destroy_all
 Chat.destroy_all
+# Clean noticed gem tables and legacy notifications table before destroying users
+# (these have foreign keys to users but have no Ruby model class)
+conn = ActiveRecord::Base.connection
+conn.execute("DELETE FROM noticed_notifications") if conn.table_exists?("noticed_notifications")
+conn.execute("DELETE FROM noticed_events")       if conn.table_exists?("noticed_events")
+conn.execute("DELETE FROM notifications")        if conn.table_exists?("notifications")
 User.destroy_all
 
 puts "Database cleaned ✅..."
