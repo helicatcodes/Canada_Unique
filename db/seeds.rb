@@ -93,8 +93,11 @@ puts "Created #{comments.count} comments"
 # do we need to create likes in advance?
 puts "Creating likes..."
 
+# [HW] Temporary fix for testing — find_or_create_by avoids a uniqueness crash when
+# random sampling picks the same user+photo pair more than once.
+# This can be reverted/replaced once Mario's seed merge covers the likes section.
 likes = 20.times.map do
-  Like.create!(
+  Like.find_or_create_by(
     user: users.sample,
     photo: photos.sample
   )
@@ -103,52 +106,65 @@ end
 puts "Created #{likes.count} likes"
 
 # -----------------------------
-# 5. QUESTIONNAIRES
+# 5. QUESTIONNAIRES + QUESTIONS
 # -----------------------------
-puts "Creating questionnaires..."
+# [HW] create_for creates the questionnaire and seeds all 8 predefined questions in one call.
+puts "Creating questionnaires and questions..."
 
-questionnaires = users.map do |user|
-  Questionnaire.create!(
-    user: user,
-    ai_summary: Faker::Lorem.paragraph
-  )
-end
+questionnaires = users.map { |user| Questionnaire.create_for(user) }
 
 puts "Created #{questionnaires.count} questionnaires"
 
 # -----------------------------
-# 6. QUESTIONS
+# 6. ANSWERS (4 per user, matched to first 4 questions)
 # -----------------------------
-puts "Creating questions..."
+# [HW] ANSWER_PROFILES: 5 sets of 4 short answers, one per seed user, matched to QUESTIONS order.
+# Questions 5-8 are left unanswered so testers can fill them in during demo/testing.
+# [HW] zip pairs each question with its matching answer string before creating the Answer record.
+ANSWER_PROFILES = [
+  [ # User 1
+    "The language barrier in the first month was hard. Watching TV without subtitles every evening helped a lot.",
+    "Canadians are much more open about emotions than Germans. It made me appreciate both communication styles.",
+    "Joining drama club even though I had never acted before taught me I can do things I am not naturally good at.",
+    "By the end I was joking in English and dreaming in it — after three months it just started to flow naturally."
+  ],
+  [ # User 2
+    "Making friends was harder than expected. Joining the school soccer team immediately gave me a group and a purpose.",
+    "Canada made my hometown feel smaller but more special. I now appreciate Germany's efficiency differently.",
+    "Ice camping in January was completely out of my element, but it showed me that vulnerability builds real trust.",
+    "I went from speaking English only in class to leading group projects and presenting confidently."
+  ],
+  [ # User 3
+    "Falling behind in maths because the curriculum differed was stressful. A study buddy fixed it quickly.",
+    "Surrounded by forests and lakes, I realised how little green space I engage with at home.",
+    "Trying surfing despite my fear of deep water taught me that fear is often just unfamiliarity.",
+    "By spring I was correcting my own grammar in real time and naturally adjusting my tone to each situation."
+  ],
+  [ # User 4
+    "My host parents spoke very fast. Asking them to slow down felt awkward at first but became a warm daily ritual.",
+    "Germans treat silence as comfortable; Canadians treat it as awkward. Knowing this made me a much better listener.",
+    "Speaking at the school assembly with shaking legs and getting a standing ovation cured my fear of public speaking.",
+    "I went from sounding textbook-formal to using the natural rhythm of a native speaker."
+  ],
+  [ # User 5
+    "A conflict with my host sibling over shared space was tough. Talking it out honestly made us close.",
+    "Canada is far more multicultural than home. It changed what 'normal' looks like to me.",
+    "Joining a First Nations cultural workshop felt uncomfortable at first but was genuinely eye-opening.",
+    "I stopped being afraid of making mistakes in English — that mindset shift helped me in every other area too."
+  ]
+].freeze
 
-questions = questionnaires.flat_map do |questionnaire|
-  3.times.map do
-    Question.create!(
-      text: Faker::Lorem.question,
-      questionnaire: questionnaire
-    )
+puts "Creating answers..."
+
+questionnaires.each_with_index do |questionnaire, i|
+  # [HW] zip pairs each of the first 4 questions with its matching answer string.
+  # Questions 5-8 are skipped — left blank for manual testing of the form.
+  questionnaire.questions.first(4).zip(ANSWER_PROFILES[i]) do |question, answer_text|
+    Answer.create!(question: question, text: answer_text)
   end
 end
 
-# flat_map = map + flatten (1 level)
-#   runs .map on each element
-#   merges all nested arrays into one single array
-
-puts "Created #{questions.count} questions"
-
-# -----------------------------
-# 7. ANSWERS
-# -----------------------------
-puts "Creating answers..."
-
-answers = questions.map do |question|
-  Answer.create!(
-    text: Faker::Lorem.sentence,
-    question: question
-  )
-end
-
-puts "Created #{answers.count} answers"
+puts "Created answers for #{questionnaires.count} questionnaires (4 per user)"
 
 # -----------------------------
 # 8. NOTIFICATIONS

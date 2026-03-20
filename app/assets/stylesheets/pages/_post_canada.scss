@@ -1,0 +1,202 @@
+// [HW] Back navigation link — subtle navy, arrow left icon prefix
+.back-link {
+  color: $cu-navy;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: color 0.15s ease;
+
+  &:hover { color: $cu-red; }
+}
+
+// [HW] Individual question card — white card with a coloured left accent bar and emoji slot.
+// position: relative allows the icon area to be anchored to the bottom-right of each card.
+// padding-bottom leaves room so the icon never overlaps the answer text.
+.question-card {
+  background: $cu-white;
+  border-radius: 10px;
+  border-left: 4px solid $cu-red;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  padding: 1.1rem 1.3rem 2.5rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  position: relative;
+  transition: box-shadow 0.2s ease;
+
+  &:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); }
+
+  // [HW] Cycle accent colours across questions so the form feels lively, not monotone
+  &:nth-child(2n)   { border-left-color: $cu-blue; }
+  &:nth-child(3n)   { border-left-color: $yellow; }
+  &:nth-child(4n+1) { border-left-color: $green; }
+}
+
+// [HW] Large emoji anchored to the top-left of each card
+.question-card__emoji {
+  font-size: 1.75rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+// [HW] Text + textarea fill remaining card width
+.question-card__body {
+  flex: 1;
+}
+
+// [HW] Pen (edit) and floppy-disk (save) icons anchored to the bottom-right of the card.
+// Only one is visible at a time — controlled by the question_card Stimulus controller.
+.question-card__icon-area {
+  position: absolute;
+  bottom: 0.7rem;
+  right: 0.9rem;
+}
+
+// [HW] Shared style for both the pen and floppy-disk icon buttons — borderless, icon-only.
+// Near-invisible at rest, darkens to navy on hover so they don't compete with the content.
+.question-card__edit-btn,
+.question-card__save-btn {
+  background: none;
+  border: none;
+  padding: 4px 5px;
+  color: darken($light-gray, 12%);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+
+  &:hover { color: $cu-navy; }
+}
+
+// [HW] Status row — centered below the last question card when the questionnaire is submitted.
+// A thin top border separates it from the cards above.
+.questionnaire-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid $light-gray;
+}
+
+// [HW] Revert-to-draft icon button — sits next to the Submitted badge on the white status row.
+// Charcoal at rest, navy on hover.
+.btn-revert-draft {
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  color: $cu-charcoal;
+  font-size: 0.8rem;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color 0.15s ease;
+
+  &:hover { color: $cu-navy; }
+}
+
+// [HW] Bold navy question text
+.question-card__label {
+  font-weight: 700;
+  color: $cu-navy;
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem;
+  display: block;
+}
+
+// [HW] Saved answer displayed as styled text (italic, slightly muted) in saved mode
+.question-card__answer-text {
+  color: $cu-charcoal;
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+// [HW] Subtle rounded textarea, highlights blue on focus
+.question-card textarea.form-control {
+  border: 1px solid $light-gray;
+  border-radius: 8px;
+  resize: vertical;
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: $cu-blue;
+    box-shadow: 0 0 0 3px rgba(51, 87, 180, 0.12);
+    outline: none;
+  }
+}
+
+// [HW] AI summary panel — navy-to-blue gradient to signal "something exciting is coming"
+.ai-summary-panel {
+  background: linear-gradient(135deg, $cu-navy 0%, darken($cu-blue, 10%) 100%);
+  border-radius: $border-radius-lg;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: $cu-white;
+
+  .ai-summary__icon {
+    font-size: 3.2rem;
+    color: $yellow;
+    margin-bottom: 0.75rem;
+  }
+
+  .ai-summary__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 0.6rem;
+  }
+
+  .ai-summary__body {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    max-width: 460px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  // [HW] Pill badge used for the "submit first" nudge (kept for potential reuse)
+  .ai-summary__nudge {
+    display: inline-block;
+    margin-top: 1.2rem;
+    background: rgba($yellow, 0.18);
+    border: 1px solid rgba($yellow, 0.45);
+    color: $yellow;
+    border-radius: 50px;
+    padding: 0.35rem 1rem;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  // [HW] Unlock button — sits on the gradient background, styled as a glowing gold pill CTA
+  .ai-summary__unlock-btn {
+    display: inline-block;
+    margin-top: 1.5rem;
+    background: $yellow;
+    color: $cu-navy;
+    border: none;
+    border-radius: 50px;
+    padding: 0.65rem 2rem;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    box-shadow: 0 4px 20px rgba($yellow, 0.45);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba($yellow, 0.6);
+      color: $cu-navy;
+    }
+  }
+}

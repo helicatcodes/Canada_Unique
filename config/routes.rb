@@ -42,4 +42,7 @@ Rails.application.routes.draw do
   get "post_canada", to: "pages#post_canada", as: :post_canada
 
   resources :tasks, only: [:show]
+
+  # [HW] only :update — the questionnaire form lives on the post_canada page, no separate show needed
+  resources :questionnaires, only: [:update]
 end
