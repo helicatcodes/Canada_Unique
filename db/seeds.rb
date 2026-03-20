@@ -139,32 +139,30 @@ photo_captions = {
 
 all_photos = []
 
+# [HW] Collect all photo files from every user's subfolder into one shared pool.
+# The glob pattern matches both capitalised (Photo1.jpg) and lowercase (photo1.jpg) filenames.
+all_seed_photos = Dir.glob("#{SEEDS_IMAGES_PATH}/*/[Pp]hoto*").sort
+# [HW] Fail early with a clear message if no images are found (e.g. path misconfigured).
+raise "No seed images found in #{SEEDS_IMAGES_PATH}" if all_seed_photos.empty?
+
 users.each do |folder, user|
-  # Glob picks up files regardless of capitalisation (e.g. Photo5.jpg vs photo1.jpg). MJR
-  photo_files = Dir.glob("#{SEEDS_IMAGES_PATH}/#{folder}/[Pp]hoto*").sort
   captions = photo_captions[folder] || []
 
-  photo_files.each_with_index do |file, index|
+  # [HW] One photo per caption. Cycles through the shared image pool using modulo
+  # so we never run out of files even if a user has more captions than photos.
+  captions.each_with_index do |caption, index|
+    file = all_seed_photos[index % all_seed_photos.length]
     photo = Photo.create!(
-      description: captions[index] || "Photo #{index + 1}",
+      description: caption,
       user: user,
       shared: [true, true, false].sample
     )
-#    photo.image.attach(
-#     io: File.open(file),
-#     filename: File.basename(file),
-#     content_type: "image/jpeg"
+    photo.image.attach(
+      io: File.open(file),
+      filename: File.basename(file),
+      content_type: "image/jpeg"
     )
     all_photos << photo
-    # Only attach images if Cloudinary is configured (skipped in environments without API keys)
-    if ENV["CLOUDINARY_URL"].present?
-      photo.image.attach(
-        io: URI.open(Faker::LoremFlickr.image(size: "300x300", search_terms: ["canada"])),
-        filename: "photo_#{photo.id}.jpg",
-        content_type: "image/jpeg"
-      )
-    end
-    photo
   end
 end
 
@@ -274,7 +272,9 @@ puts "Creating notifications..."
 # [HW] create_for creates the questionnaire and seeds all 8 predefined questions in one call.
 puts "Creating questionnaires and questions..."
 
-questionnaires = users.map { |user| Questionnaire.create_for(user) }
+# [HW] users is a hash {folder => user}. Looping over a hash gives both key and value,
+# so we write |_folder, user| to get just the User object. The _ means "not needed here".
+questionnaires = users.map { |_folder, user| Questionnaire.create_for(user) }
 
 puts "Created #{questionnaires.count} questionnaires"
 
@@ -329,16 +329,8 @@ end
 
 puts "Created answers for #{questionnaires.count} questionnaires (4 per user)"
 
-# -----------------------------
-# 8. CHATS
-# -----------------------------
-puts "Creating chats..."
-
-chats = users.map do |user|
-  Chat.create!(user: user)
-end
-
-puts "Created #{chats.count} chats"
+# [HW] Chats are already created above in section 5 (with messages). A duplicate block
+# was removed here — it had the same hash bug and would have created empty extra chats.
 # CONTINUE OF 6. NOTIFICATIONS originally line 268
 # Niels is the admin user — notifications are sent from his account. MJR
 admin_user = users["Niels"]
@@ -404,7 +396,8 @@ task_descriptions = {
 task_statuses = {
   "Mario"   => { obligatory: (["offen"] * 10) + (["in Bearbeitung"] * 5),        fun: ["offen", "offen"] },
   "Helena"  => { obligatory: (["erledigt"] * 8) + (["in Bearbeitung"] * 4) + (["offen"] * 3), fun: ["erledigt", "in Bearbeitung"] },
-  "Niels"   => { obligatory: (["erledigt"] * 12) + (["in Bearbeitung"] * 2) + (["offen"] * 1), fun: ["erledigt", "erledigt"] },
+  # [HW] Niels has already returned from Canada, so all his tasks are marked as completed.
+  "Niels"   => { obligatory: ["erledigt"] * 15, fun: ["erledigt", "erledigt"] },
   "Manu"    => { obligatory: ["erledigt"] * 15,                                   fun: ["erledigt", "erledigt"] }
 }
 
