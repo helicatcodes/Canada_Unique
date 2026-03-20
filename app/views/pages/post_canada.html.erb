@@ -1,11 +1,30 @@
-<h1>Welcome back, buddy</h1>
-<h2></h2>
-
-<%= button_to "Reflect on your experiences with our questionnaire", post_canada_path, class: "btn btn-primary"%>
-<%= link_to "Here is your questionnaire", post_canada_path, class: "btn btn-primary"%>
-
 <div>
-  <h2>A summary of your experiences in Canada</h2>
-  <h3> This summary was generated with AI with compliance to your personal and sensitive personal data</h3>
-<p> <%= display @summary %></p>
+  <h1>Welcome back, buddy</h1>
+<p>We are glad that you arrived home safely and with a lot of useful life experiences...</p>
+<br>
+<br>
+<h2>Get stronger</h2>
+<p>
+  To grow as person reflection is the tool for it.
+  Since you experiences what most others could only experience later in
+  their lives, and some may never, reflect on what you experienced is the
+  final stept to grow as a person. We created a bunch of questions that
+  support this reflection for you. Below you can comfortably write your answers on a computer or laptop.
+  Just type your emaail and we will send you a link to the questionnare.
+</p>
+<%= form_with url: "#", method: :post do |f| %>
+  <%= f.email_field :email, placeholder: "your@email.com" %>
+  <%= f.submit "Send me the link", class: "btn btn-primary",
+    data: { disable_with: "Sent!" } %>
+<% end %>
+
+<br>
+<br>
+<p> # If questionnare was done, show in text field </p>
+<%= link_to "Here is your questionnaire", post_canada_path, class: "btn btn-primary"%>
+<br>
+<br>
+<h3> This summary was generated with AI with compliance to your sensitive personal data</h3>
+<p> <%= @summary %> </p>
+<p> # Add tasks that help user to grow ie. take the advice from a to your own grow diary / planner... </p>
 </div>

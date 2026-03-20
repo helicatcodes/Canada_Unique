@@ -28,10 +28,9 @@ class PagesController < ApplicationController
 
   def post_canada
     answers = current_user.questionnaires.first.answers.map(&:text).join("\n")
-    ruby_llm_chat = RubyLLM.chat
+    ruby_llm_chat = RubyLLM.chat(model: "claude-sonnet-4-6")
     ruby_llm_chat.with_instructions(prompt)
-    @summary = ruby_llm_chat.ask("Summarize the #{answers} of the qestionnare and give me advice")
-    puts @summary.content
+    @summary = ruby_llm_chat.ask("Summarize the #{answers} of the qestionnare and give me advice").content
   end
 
   # Renders the profile page for the logged-in user. MJR
