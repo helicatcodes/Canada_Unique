@@ -139,32 +139,24 @@ photo_captions = {
 
 all_photos = []
 
+all_seed_photos = Dir.glob("#{SEEDS_IMAGES_PATH}/*/[Pp]hoto*").sort
+
 users.each do |folder, user|
-  # Glob picks up files regardless of capitalisation (e.g. Photo5.jpg vs photo1.jpg). MJR
-  photo_files = Dir.glob("#{SEEDS_IMAGES_PATH}/#{folder}/[Pp]hoto*").sort
   captions = photo_captions[folder] || []
 
-  photo_files.each_with_index do |file, index|
+  captions.each_with_index do |caption, index|
+    file = all_seed_photos[index % all_seed_photos.length]
     photo = Photo.create!(
-      description: captions[index] || "Photo #{index + 1}",
+      description: caption,
       user: user,
       shared: [true, true, false].sample
     )
-#    photo.image.attach(
-#     io: File.open(file),
-#     filename: File.basename(file),
-#     content_type: "image/jpeg"
+    photo.image.attach(
+      io: File.open(file),
+      filename: File.basename(file),
+      content_type: "image/jpeg"
     )
     all_photos << photo
-    # Only attach images if Cloudinary is configured (skipped in environments without API keys)
-    if ENV["CLOUDINARY_URL"].present?
-      photo.image.attach(
-        io: URI.open(Faker::LoremFlickr.image(size: "300x300", search_terms: ["canada"])),
-        filename: "photo_#{photo.id}.jpg",
-        content_type: "image/jpeg"
-      )
-    end
-    photo
   end
 end
 
@@ -264,10 +256,6 @@ end
 
 puts "Created #{Chat.count} chats, #{Message.count} messages"
 
-# ---------------------------
-# 6. NOTIFICATIONS
-# ---------------------------
-puts "Creating notifications..."
 # -----------------------------
 # 5. QUESTIONNAIRES + QUESTIONS
 # -----------------------------
@@ -339,7 +327,12 @@ chats = users.map do |user|
 end
 
 puts "Created #{chats.count} chats"
-# CONTINUE OF 6. NOTIFICATIONS originally line 268
+
+# ---------------------------
+# 9. NOTIFICATIONS
+# ---------------------------
+puts "Creating notifications..."
+
 # Niels is the admin user — notifications are sent from his account. MJR
 admin_user = users["Niels"]
 
@@ -353,7 +346,7 @@ end
 puts "Created #{Notification.count} notifications"
 
 # ---------------------------
-# 7. TASKS
+# 10. TASKS
 # ---------------------------
 puts "Creating tasks..."
 
