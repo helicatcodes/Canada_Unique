@@ -1,0 +1,160 @@
+// ── Profile page ──────────────────────────────────────────────────────────────
+
+.profile-page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 32px 20px 40px;
+}
+
+// ── Avatar section ────────────────────────────────────────────────────────────
+
+.profile-avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 36px;
+}
+
+.profile-avatar-wrapper {
+  position: relative;
+  margin-bottom: 14px;
+}
+
+.profile-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid $cu-red;
+  display: block;
+}
+
+.profile-avatar--placeholder {
+  background-color: lighten($cu-navy, 55%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: 2.4rem;
+    color: $cu-navy;
+  }
+}
+
+.profile-avatar-upload-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: $cu-red;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid #fff;
+  transition: background-color 0.15s;
+
+  i { font-size: 0.7rem; }
+
+  &:hover { background-color: darken($cu-red, 8%); }
+}
+
+.profile-name {
+  margin: 0 0 4px;
+  font-size: 1.3rem;
+}
+
+.profile-email {
+  margin: 0;
+  font-size: 0.9rem;
+  color: lighten($cu-charcoal, 15%);
+}
+
+// ── Settings section ──────────────────────────────────────────────────────────
+
+.profile-section {
+  margin-bottom: 28px;
+}
+
+.profile-section__title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: lighten($cu-charcoal, 20%);
+  margin-bottom: 8px;
+}
+
+.profile-section__list {
+  border: 1px solid darken(#FDF6E3, 10%);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.profile-section__item {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  color: $cu-navy;
+  text-decoration: none;
+  transition: background-color 0.15s;
+
+  & + & {
+    border-top: 1px solid darken(#FDF6E3, 8%);
+  }
+
+  &:hover {
+    background-color: #FDF6E3;
+  }
+}
+
+.profile-section__item-icon {
+  width: 28px;
+  text-align: center;
+  margin-right: 12px;
+
+  i {
+    font-size: 1rem;
+    color: $cu-charcoal;
+  }
+}
+
+.profile-section__item-label {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.profile-section__item-arrow {
+  font-size: 0.75rem;
+  color: lighten($cu-charcoal, 25%);
+}
+
+// ── Log out button ────────────────────────────────────────────────────────────
+
+.profile-logout-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px;
+  border: 2px solid $cu-red;
+  border-radius: 12px;
+  color: $cu-red;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+
+  i { font-size: 1rem; }
+
+  &:hover {
+    background-color: $cu-red;
+    color: #fff;
+  }
+}

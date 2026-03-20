@@ -49,6 +49,15 @@ class PagesController < ApplicationController
   def profile
   end
 
+  # Handles avatar upload from the profile page.
+  def update_avatar
+    if params[:avatar].present? && current_user.update(avatar: params[:avatar])
+      redirect_to profile_path, notice: "Profile photo updated."
+    else
+      redirect_to profile_path, alert: "Could not update photo."
+    end
+  end
+
   # private
 
   # [HW] AI prompt for the summary feature — kept for when the AI summary is wired up.
