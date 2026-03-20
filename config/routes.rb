@@ -36,7 +36,8 @@ Rails.application.routes.draw do
   #       This is the right fit here because we're toggling the shared flag on a specific photo by its ID.
 
   # Profile page route. MJR
-  get "profile", to: "pages#profile", as: :profile
+  get  "profile",        to: "pages#profile",        as: :profile
+  patch "profile/avatar", to: "pages#update_avatar",  as: :update_avatar
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada
   get "in_canada", to: "pages#in_canada", as: :in_canada
   get "post_canada", to: "pages#post_canada", as: :post_canada

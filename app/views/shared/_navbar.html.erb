@@ -3,21 +3,22 @@
     <%= image_tag "cu_logo.png", alt: "Canada Unique" %>
   <% end %>
 
-  <div class="bottom-nav__links">
-    <%= link_to root_path, class: "bottom-nav__item" do %>
-      <i class="fa fa-home"></i>
-      <span>Home</span>
+  <div class="bottom-nav__center">
+    <%= button_to chats_path, method: :post, class: "bottom-nav__chat-btn", form_class: "bottom-nav__chat-form" do %>
+      <%= image_tag "chatbot_avatar_1.png", alt: "Chat", class: "bottom-nav__chat-avatar" %>
+      <span>Start Chat</span>
     <% end %>
+  </div>
 
+  <div class="bottom-nav__links">
     <% if user_signed_in? %>
-      <%# Profile link updated to point to the profile page. MJR %>
       <%= link_to profile_path, class: "bottom-nav__item" do %>
-        <i class="fa fa-user"></i>
+        <% if current_user.avatar.attached? %>
+          <%= image_tag current_user.avatar, class: "bottom-nav__user-avatar" %>
+        <% else %>
+          <i class="fa fa-user"></i>
+        <% end %>
         <span>Profile</span>
-      <% end %>
-      <%= link_to destroy_user_session_path, class: "bottom-nav__item", data: { turbo_method: :delete } do %>
-        <i class="fa fa-sign-out"></i>
-        <span>Log out</span>
       <% end %>
     <% else %>
       <%= link_to new_user_session_path, class: "bottom-nav__item" do %>

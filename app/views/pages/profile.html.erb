@@ -1,10 +1,58 @@
-<%# Profile page showing user info and a link to the notification inbox. MJR %>
-<div class="container mt-4">
-  <h1><%= current_user.name %></h1>
-  <p class="text-muted"><%= current_user.email %></p>
+<%# Profile page — avatar, user info, settings, log out. %>
+<div class="profile-page">
 
-  <%# Button linking to the user's notification inbox. MJR %>
-  <%= link_to notifications_path, class: "btn btn-primary mt-3" do %>
-    <i class="fa fa-bell me-2"></i> My Inbox
+  <%# ── Avatar ──────────────────────────────────────────────────────────── %>
+  <div class="profile-avatar-section">
+    <div class="profile-avatar-wrapper">
+      <% if current_user.avatar.attached? %>
+        <%= image_tag current_user.avatar, class: "profile-avatar" %>
+      <% else %>
+        <div class="profile-avatar profile-avatar--placeholder">
+          <i class="fa fa-user"></i>
+        </div>
+      <% end %>
+
+      <%# Invisible file input — clicking the camera badge triggers it %>
+      <%= form_with url: update_avatar_path, method: :patch, multipart: true, id: "avatar-form" do |f| %>
+        <%= f.file_field :avatar, id: "avatar-upload", class: "d-none",
+              accept: "image/*", onchange: "document.getElementById('avatar-form').submit()" %>
+      <% end %>
+
+      <label for="avatar-upload" class="profile-avatar-upload-badge" title="Change photo">
+        <i class="fa fa-camera"></i>
+      </label>
+    </div>
+
+    <h2 class="profile-name"><%= current_user.name %></h2>
+    <p class="profile-email"><%= current_user.email %></p>
+  </div>
+
+  <%# ── Account settings ────────────────────────────────────────────────── %>
+  <div class="profile-section">
+    <h3 class="profile-section__title">Account</h3>
+    <div class="profile-section__list">
+
+      <%= link_to edit_user_registration_path, class: "profile-section__item" do %>
+        <span class="profile-section__item-icon"><i class="fa fa-lock"></i></span>
+        <span class="profile-section__item-label">Change email / password</span>
+        <i class="fa fa-chevron-right profile-section__item-arrow"></i>
+      <% end %>
+
+      <%= link_to notifications_path, class: "profile-section__item" do %>
+        <span class="profile-section__item-icon"><i class="fa fa-bell"></i></span>
+        <span class="profile-section__item-label">Notifications</span>
+        <i class="fa fa-chevron-right profile-section__item-arrow"></i>
+      <% end %>
+
+    </div>
+  </div>
+
+  <%# ── Log out ──────────────────────────────────────────────────────────── %>
+  <%= link_to destroy_user_session_path,
+        class: "profile-logout-btn",
+        data: { turbo_method: :delete } do %>
+    <i class="fa fa-sign-out"></i>
+    Log out
   <% end %>
+
 </div>
