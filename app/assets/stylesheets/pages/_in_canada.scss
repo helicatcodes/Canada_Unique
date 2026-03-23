@@ -7,11 +7,11 @@
   padding: 1.5rem 2rem;
 }
 
-// [HW] Section title rendered as a full-width navy banner inside each panel
+// [HW] Section title rendered as a full-width banner inside each panel
 // [HW] Negative margin pulls it to the panel edges; border-radius matches the panel's top corners
 .cu-panel__title {
-  color: $cu-white;
-  background: $cu-navy;
+  color: $cu-navy;
+  background: $cu-beige;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.03em;
@@ -274,6 +274,7 @@
 }
 
 // [HW] Single comment row: author + text, delete icon pushed to the far right
+// [HW] Hovering the whole row reveals the hidden trash icon 
 .feed-comment {
   display: flex;
   align-items: baseline;
@@ -283,6 +284,12 @@
   color: $cu-charcoal;
 
   form { display: inline-flex; margin: 0; }
+
+  // [HW] When the cursor is anywhere on this row, fade in the delete button
+  &:hover .feed-comment__delete {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .feed-comment__body {
@@ -300,9 +307,9 @@
   color: $cu-charcoal;
 }
 
-// [HW] Trash icon is hidden by default and only appears when you hover the comment row
-// [HW] opacity:0 hides it visually but keeps its space so the row layout doesn't shift
-// [HW] The parent .feed-comment:hover rule below brings it into view
+// [HW] Unified delete icon — hidden by default, fades in when the comment row is hovered
+// [HW] opacity: 0 keeps the space reserved so the row doesn't shift;
+// [HW] pointer-events: none prevents accidental clicks on the invisible button
 .feed-comment__delete {
   background: none;
   border: none;

@@ -36,14 +36,16 @@ class PagesController < ApplicationController
     # can display each question's existing answer without extra DB queries.
     @questions = @questionnaire.questions.includes(:answers)
 
-    # [HW] AI summary logic — prep work for the summary feature (handled by teammate).
-    # Kept here so it can be wired up once the questionnaire is submitted.
-    # answers = current_user.questionnaires.first.answers.map(&:text).join("\n")
-    # ruby_llm_chat = RubyLLM.chat
-    # ruby_llm_chat.with_instructions(prompt)
-    # @summary = ruby_llm_chat.ask("Summarize the #{answers} of the qestionnare and give me advice")
-    # puts @summary.content
+    # AI questionnaire summary logic
+    if @questionnaire.submitted? && @questionnaire.ai_summary.blank?
+      answers = @questionnaire.answers.map(&:text).join("\n")
+      ruby_llm_chat = RubyLLM.chat(model: "claude-sonnet-4-6")
+      ruby_llm_chat.with_instructions(prompt)
+      @questionnaire.update(ai_summary: ruby_llm_chat.ask("Summarize the #{answers} of the qestionnare and give me advice").content)
+    end
   end
+
+
 
   # Renders the profile page for the logged-in user. MJR
   def profile
@@ -58,18 +60,18 @@ class PagesController < ApplicationController
     end
   end
 
-  # private
 
-  # [HW] AI prompt for the summary feature — kept for when the AI summary is wired up.
-  # def prompt
-  # <<-PROMPT
-  # You are a life coach specialized in personal development of youngsters.
-  #
-  # I am a student from Germany that just came back from a one year exchange from Canada.
-  #
-  # Give ma advice if I feel bad or have issues.
-  #
-  # Give me next steps where I feel I have made progress during my stay in Canada.
-  # PROMPT
-  # end
+  private
+
+  def prompt
+    <<-PROMPT
+  You are a life coach specialized in personal development of youngsters.
+
+  I am a student from Germany that just came back from a one year exchange from Canada.
+
+  Give ma advice if I feel bad or have issues.
+
+  Give me next steps where I feel I have made progress during my stay in Canada.
+    PROMPT
+  end
 end

@@ -1,5 +1,14 @@
 <ul>
   <% tasks.each do |task| %>
-    <li> <%= link_to task.name, task_path(task) %> - <%= task.start_date %> - <%= task.status %></li>
+    <li>
+      <%= link_to task.name, task_path(task) %> - <%= task.start_date %> - <%= task.status %>
+      <% unless task.obligatory %>
+        <% if task.status == "open" %>
+          <%= button_to "Done?", task_path(task), method: :patch, params: { task: { status: "done" } }, form: { style: "display:inline" } %>
+        <% else %>
+          <%= button_to "Re-open?", task_path(task), method: :patch, params: { task: { status: "open" } }, form: { style: "display:inline" } %>
+        <% end %>
+      <% end  %>
+    </li>
   <% end %>
 </ul>

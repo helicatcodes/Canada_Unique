@@ -97,19 +97,10 @@
     <div class="ai-summary__title">Your Personal Growth Summary</div>
 
     <% if @questionnaire.submitted? %>
-      <%# ——————————————————————————————————————————————————————————————————
-           [HW] MANU — AI SUMMARY HOOK
-           This is where the AI-generated summary output connects to this view.
-           Once your LLM summary logic is wired up in PagesController#post_canada,
-           replace the placeholder <p> below with your @summary output.
-           The commented-out line shows where the content should be rendered.
-           The prompt used to generate the summary lives in PagesController (also commented out).
-           —————————————————————————————————————————————————————————————————— %>
       <p class="ai-summary__body">
         Your answers are in. Your AI life coach is ready to reflect your journey back to you — growth, challenges, and all.
       </p>
-      <%# TODO (Manu): render AI summary here once wired up %>
-      <%# <p class="ai-summary__body"><%= display @summary %></p> %>
+      <p class="ai-summary__body"> <%= @questionnaire.ai_summary %> </p>
     <% else %>
       <p class="ai-summary__body">
         Save your answers above and unlock a personalised summary of your exchange year — written just for you.

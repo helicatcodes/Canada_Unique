@@ -14,6 +14,8 @@ class CommentsController < ApplicationController
   def destroy
     # [HW] Scope to current_user.comments so users can only delete their own comments
     @comment = current_user.comments.find(params[:id])
+    # [HW] Capture the photo before destroying the comment — needed by the turbo stream view
+    @photo = @comment.photo
     @comment.destroy
     respond_to do |format|
       format.turbo_stream
