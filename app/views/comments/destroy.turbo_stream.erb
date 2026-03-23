@@ -1,3 +1,2 @@
-<%# [HW] Turbo Stream response for deleting a comment %>
-<%# [HW] turbo_stream.remove finds the element by id and removes it from the DOM instantly %>
+<%# [HW] Remove the comment row from the DOM by its unique id — modal stays open, no page navigation %>
 <%= turbo_stream.remove "comment-#{@comment.id}" %>

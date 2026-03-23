@@ -20,11 +20,6 @@
   border-radius: $border-radius-lg $border-radius-lg 0 0;
 }
 
-// [HW] Constrains the upload form to a card-sized width so it doesn't stretch the full panel
-.upload-form-wrapper {
-  max-width: 360px;
-}
-
 // [HW] Photo grid — responsive columns, wider gap to let polaroid shadows breathe
 .photo-grid {
   display: grid;
@@ -45,10 +40,97 @@
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   }
 
-  // [HW] Feed cards: less bottom padding since the body has more content (reactions, comments)
-  &--feed {
-    padding-bottom: 12px;
+  // [HW] Upload card inherits the full polaroid look — no border override, no shadow reset
+  // [HW] It sits in the same grid slot as real photo cards so dimensions match automatically
+  &--upload {
+    border: none;
+
+    // [HW] Suppress the scale-on-hover — looks odd when the card contains a form
+    &:hover {
+      transform: none !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    // [HW] The empty actions bar collapses to ~10px without buttons inside it.
+    // [HW] Real cards have 32px buttons + 4px top + 6px bottom padding = 42px total.
+    // [HW] This forces the spacer to the same height so the grey box aligns with adjacent photos.
+    .photo-card__actions {
+      min-height: 42px;
+    }
   }
+}
+
+// [HW] Grey square fills the same space as a real photo — aspect-ratio 1/1 enforces the square
+// [HW] cursor: pointer signals the whole area is clickable (linked to the hidden file input)
+.photo-card--upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: $light-gray;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-bottom: 0;
+
+  &:hover { background: darken($light-gray, 4%); }
+}
+
+// [HW] Hidden file input — label click triggers it so it never needs to be visible
+.photo-card--upload__input {
+  display: none;
+}
+
+// [HW] Camera icon centred inside the grey square
+.photo-card--upload__camera {
+  font-size: 2rem;
+  color: darken($light-gray, 25%);
+  margin-bottom: 0.4rem;
+}
+
+// [HW] Small hint text below the camera icon
+.photo-card--upload__hint {
+  font-size: 0.7rem;
+  color: darken($light-gray, 25%);
+}
+
+// [HW] Caption body — overrides the center-align inherited from photo-card__body
+.photo-card--upload__body {
+  align-items: stretch;
+  width: 100%;
+}
+
+// [HW] Minimal underline input — matches the comment form style in the feed
+.photo-card--upload__caption {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid $light-gray;
+  outline: none;
+  font-size: 0.8rem;
+  color: $cu-charcoal;
+  background: transparent;
+  padding: 2px 0;
+
+  &::placeholder { color: lighten($cu-charcoal, 35%); }
+  &:focus { border-bottom-color: $cu-navy; }
+}
+
+// [HW] Full-width navy upload button at the bottom of the card body
+.photo-card--upload__submit {
+  margin-top: 8px;
+  width: 100%;
+  background: $cu-navy;
+  color: $cu-white;
+  border: none;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 4px 0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover { background: darken($cu-navy, 8%); }
 }
 
 // [HW] Square crop — keeps the grid uniform regardless of original image dimensions
@@ -66,11 +148,6 @@
   flex-direction: column;
   align-items: center;
   text-align: center;
-}
-
-.photo-card--feed .photo-card__body {
-  align-items: flex-start;
-  text-align: left;
 }
 
 // [HW] Caption text
@@ -242,10 +319,14 @@
   padding: 0 0 0 4px;
   flex-shrink: 0;
   opacity: 0;
-  pointer-events: none;
   transition: color 0.15s ease, opacity 0.15s ease;
 
   &:hover, &:active { color: $cu-red; }
+}
+
+// [HW] Reveal the trash icon when the user hovers over the comment row
+.feed-comment:hover .feed-comment__delete {
+  opacity: 1;
 }
 
 // [HW] Minimal inline comment form — input grows to fill space, Post button stays compact
@@ -281,4 +362,179 @@
   padding: 0;
 
   &:hover { color: darken($cu-blue, 10%); }
+}
+
+// ============================================================
+// TAB BAR
+// ============================================================
+
+// [HW] Override Bootstrap's default tab colours to match the app's navy/red palette
+// [HW] Bootstrap tabs normally show a white active panel with a border — we replace that with
+// [HW] a simple navy underline to keep the look light and modern
+.cu-tabs {
+  border-bottom: 2px solid $light-gray;
+  margin-bottom: 0;
+
+  .nav-link {
+    color: $cu-charcoal;
+    font-weight: 600;
+    border: none;
+    border-radius: 0;
+    padding: 0.5rem 1.25rem;
+
+    &.active {
+      color: $cu-navy;
+      border-bottom: 2px solid $cu-navy;
+      background: none;
+      margin-bottom: -2px; // [HW] overlaps the tab bar's bottom border so active line sits flush
+    }
+
+    &:hover:not(.active) { color: $cu-navy; }
+  }
+}
+
+.cu-tab-content {
+  padding-top: 1rem;
+}
+
+// ============================================================
+// COMMUNITY FEED — GRID
+// ============================================================
+
+/// [HW] Cards sit flush against each other (gap:0) with side padding so they don't touch the screen edge
+// [HW] auto-fill fills as many columns as fit; 220px minimum keeps cards legible on small screens
+.feed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0;
+  padding: 0 1.25rem;
+}
+
+// [HW] Each card IS the polaroid frame — padding creates equal white space on top/left/right,
+// [HW] caption below gets more space (like the classic polaroid writing area at the bottom)
+// [HW] Shadow is downward so it stays visible even when cards are flush against each other
+.feed-grid__item {
+  cursor: pointer;
+  background: $cu-white;
+  padding: 10px 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.2s ease;
+
+  &:hover { box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1); }
+}
+
+// [HW] Author row sits inside the top white frame area — no extra horizontal padding needed
+// [HW] since the card already provides 10px on each side
+.feed-grid__author {
+  padding: 0 0 7px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: $cu-navy;
+}
+
+// [HW] Wrapper scopes the overlay to the photo only — position:relative here, not on the card
+.feed-grid__photo-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
+// [HW] Square photo, fills the full width of the card
+.feed-grid__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+.feed-grid__item:hover .feed-grid__img {
+  transform: scale(1.04);
+}
+
+// [HW] Overlay hidden by default on all screen sizes — fades in on hover, counts centred in photo
+// [HW] Removed the mobile override that always showed counts in the bottom-left corner
+.feed-grid__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  color: $cu-white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.feed-grid__item:hover .feed-grid__overlay {
+  opacity: 1;
+}
+
+// [HW] Caption sits in the bottom white area — no horizontal padding (card handles it)
+// [HW] More bottom padding than top gives the classic polaroid bottom-heavy feel
+// [HW] min-height keeps all cards the same height even when a photo has no caption
+.feed-grid__caption {
+  padding: 7px 0 14px;
+  font-size: 0.88rem;
+  color: $cu-charcoal;
+  text-align: center;
+  min-height: 40px;
+}
+
+// ============================================================
+// COMMUNITY FEED — MODAL
+// ============================================================
+
+// ============================================================
+// COMMUNITY FEED — MODAL (polaroid style: photo top, content below)
+// ============================================================
+
+// [HW] Modal styled as a zoomed polaroid — same shadow/radius as .photo-card but larger
+// [HW] modal-lg gives ~800px width on desktop; the polaroid padding below adds the white frame feel
+// [HW] Modal uses the same polaroid proportions as the grid card, just scaled up
+// [HW] padding: equal on top/left/right, 0 at bottom (content area handles the bottom space)
+.feed-modal .modal-content {
+  border: none;
+  border-radius: 2px;
+  box-shadow: 0 12px 50px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+  position: relative;
+  padding: 16px 16px 0;
+}
+
+// [HW] Square photo inside the white frame — aspect-ratio matches the grid card thumbnail exactly
+.feed-modal__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+// [HW] Content below the photo — no horizontal padding (modal-content handles the 16px frame)
+// [HW] Bottom padding is larger than top, matching the polaroid proportion of the grid cards
+.feed-modal__content {
+  padding: 10px 0 22px;
+  max-height: 45vh;
+  overflow-y: auto;
+}
+
+// [HW] Close button sits in the white frame — top:0 right:4px keeps it inside the 16px padding,
+// [HW] above the photo edge rather than overlapping it
+.feed-modal__close {
+  position: absolute;
+  top: 0;
+  right: 4px;
+  z-index: 10;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $cu-navy;
+  font-size: 0.8rem;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.15s ease;
+
+  &:hover { color: $cu-red; }
 }

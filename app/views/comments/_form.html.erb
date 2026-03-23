@@ -1,5 +1,4 @@
-<%# [HW] The wrapping div carries the id so turbo_stream.replace swaps in a fresh empty form %>
-<%# [HW] after a comment is posted, clearing the text input without a full page reload %>
+<%# [HW] Wrapping div carries the id so turbo_stream.replace can swap in a fresh empty form after posting %>
 <div id="comment-form-<%= photo.id %>">
   <%= simple_form_for [photo, Comment.new], url: photo_comments_path(photo) do |f| %>
     <div class="feed-comment-form">

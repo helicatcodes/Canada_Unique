@@ -1,10 +1,9 @@
-<%# [HW] Turbo Stream response for creating a comment — no full page reload %>
-<%# [HW] turbo_stream.append adds the new comment inside the target div (at the bottom) %>
+<%# [HW] Appends the new comment to the bottom of this photo's comment list %>
 <%= turbo_stream.append "feed-comments-#{@photo.id}" do %>
   <%= render "comments/comment", comment: @comment, photo: @photo %>
 <% end %>
 
-<%# [HW] turbo_stream.replace swaps the form with a fresh empty one, clearing the text input %>
+<%# [HW] Replaces the form with a fresh empty one to clear the input field %>
 <%= turbo_stream.replace "comment-form-#{@photo.id}" do %>
   <%= render "comments/form", photo: @photo %>
 <% end %>

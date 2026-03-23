@@ -2,11 +2,9 @@ class CommentsController < ApplicationController
   def create
     # [HW] Find the photo this comment belongs to via the nested route param :photo_id
     @photo = Photo.find(params[:photo_id])
-    # [HW] Assign to @comment (not just create) so the turbo stream view can render it
+    # [HW] Assign result to @comment so the turbo_stream partial can render it
+    # [HW] Previously the result was discarded, causing a nil error in the partial
     @comment = @photo.comments.create(text: params[:comment][:text], user: current_user)
-    # [HW] respond_to lets Rails pick the right response format:
-    # [HW]   turbo_stream → renders create.turbo_stream.erb (no page reload)
-    # [HW]   html         → falls back to a full redirect for browsers without Turbo
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to in_canada_path, status: :see_other }

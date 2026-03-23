@@ -1,4 +1,5 @@
-<%# [HW] The whole reactions bar is one unit — replacing it updates both the heart state and count %>
+<%# [HW] The whole reactions bar is replaced as one unit so like state + count update together %>
+<%# [HW] id targets this specific photo's bar for turbo_stream.replace %>
 <% already_liked = photo.likes.any? { |l| l.user_id == current_user.id } %>
 <div id="feed-reactions-<%= photo.id %>" class="feed-reactions">
   <%# [HW] fa-solid fa-heart always — FA Free doesn't include fa-regular fa-heart %>
