@@ -76,23 +76,8 @@
               <%= image_tag photo.image, class: "photo-card__img" %>
 
               <div class="photo-card__body">
-                <%# [HW] Reactions row: heart left, comment bubble right (pushed by margin-left: auto) %>
-                <% already_liked = photo.likes.any? { |l| l.user_id == current_user.id } %>
-                <div class="feed-reactions">
-                  <%# [HW] fa-solid fa-heart always — FA Free doesn't include fa-regular fa-heart %>
-                  <%# [HW] liked vs not-liked state handled by CSS via feed-reaction-btn--liked %>
-                  <%= button_to photo_likes_path(photo), method: :post,
-                      class: "feed-reaction-btn #{ already_liked ? 'feed-reaction-btn--liked' : '' }",
-                      title: already_liked ? "Unlike" : "Like" do %>
-                    <i class="fa-solid fa-heart"></i>
-                    <span><%= photo.likes.size %></span>
-                  <% end %>
-                  <%# [HW] Comment count pushed to the right of the same row %>
-                  <span class="feed-reaction-btn feed-reaction-btn--comment">
-                    <i class="fa-solid fa-comment"></i>
-                    <span><%= photo.comments.size %></span>
-                  </span>
-                </div>
+                <%# [HW] Reactions row rendered via partial so turbo_stream.replace can swap it in place %>
+                <%= render "likes/reactions", photo: photo %>
 
                 <%# [HW] Instagram-style: bold author name followed by caption on the same line %>
                 <p class="photo-card__desc">
@@ -100,33 +85,16 @@
                   <%= photo.description %>
                 </p>
 
-                <%# [HW] Comments — bold author name + comment text, delete trash icon for own comments %>
-                <div class="feed-comments">
+                <%# [HW] id on this div lets turbo_stream.append insert new comments at the bottom %>
+                <div id="feed-comments-<%= photo.id %>" class="feed-comments">
+                  <%# [HW] Each comment rendered via partial — partial's outermost div carries comment-N id %>
                   <% photo.comments.each do |comment| %>
-                    <div class="feed-comment">
-                      <span class="feed-comment__body">
-                        <strong class="feed-comment__author"><%= comment.user.name %></strong>
-                        <span class="feed-comment__text"><%= comment.text %></span>
-                      </span>
-                      <%# [HW] Trash icon only for the comment's own author — dark navy, red on hover %>
-                      <% if comment.user == current_user %>
-                        <%= button_to photo_comment_path(photo, comment), method: :delete,
-                            class: "feed-comment__delete", title: "Delete comment" do %>
-                          <i class="fa-solid fa-trash"></i>
-                        <% end %>
-                      <% end %>
-                    </div>
+                    <%= render "comments/comment", comment: comment, photo: photo %>
                   <% end %>
                 </div>
 
-                <%# [HW] Comment form — posts to CommentsController#create via nested route %>
-                <%= simple_form_for [photo, Comment.new], url: photo_comments_path(photo) do |f| %>
-                  <div class="feed-comment-form">
-                    <%= f.input :text, label: false, placeholder: "Add a comment…",
-                        wrapper: false, input_html: { class: "feed-comment-form__input" } %>
-                    <%= f.submit "Post", class: "feed-comment-form__submit" %>
-                  </div>
-                <% end %>
+                <%# [HW] Comment form rendered via partial so turbo_stream.replace can reset it after post %>
+                <%= render "comments/form", photo: photo %>
               </div>
             </div>
           <% end %>

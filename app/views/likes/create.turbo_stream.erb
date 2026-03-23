@@ -1,0 +1,5 @@
+<%# [HW] Turbo Stream response for liking/unliking a photo %>
+<%# [HW] turbo_stream.replace swaps the entire reactions bar so both heart state and count update %>
+<%= turbo_stream.replace "feed-reactions-#{@photo.id}" do %>
+  <%= render "likes/reactions", photo: @photo %>
+<% end %>

@@ -1,0 +1,3 @@
+<%# [HW] Turbo Stream response for deleting a comment %>
+<%# [HW] turbo_stream.remove finds the element by id and removes it from the DOM instantly %>
+<%= turbo_stream.remove "comment-#{@comment.id}" %>

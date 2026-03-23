@@ -197,6 +197,7 @@
 }
 
 // [HW] Single comment row: author + text, delete icon pushed to the far right
+// [HW] Hovering the whole row reveals the hidden trash icon 
 .feed-comment {
   display: flex;
   align-items: baseline;
@@ -206,6 +207,12 @@
   color: $cu-charcoal;
 
   form { display: inline-flex; margin: 0; }
+
+  // [HW] When the cursor is anywhere on this row, fade in the delete button
+  &:hover .feed-comment__delete {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .feed-comment__body {
@@ -223,7 +230,9 @@
   color: $cu-charcoal;
 }
 
-// [HW] Unified delete icon — dark navy default, red on hover (matches photo-action-btn--danger)
+// [HW] Unified delete icon — hidden by default, fades in when the comment row is hovered
+// [HW] opacity: 0 keeps the space reserved so the row doesn't shift;
+// [HW] pointer-events: none prevents accidental clicks on the invisible button
 .feed-comment__delete {
   background: none;
   border: none;
@@ -232,7 +241,9 @@
   font-size: 0.65rem;
   padding: 0 0 0 4px;
   flex-shrink: 0;
-  transition: color 0.15s ease;
+  opacity: 0;
+  pointer-events: none;
+  transition: color 0.15s ease, opacity 0.15s ease;
 
   &:hover, &:active { color: $cu-red; }
 }

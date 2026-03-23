@@ -1,0 +1,17 @@
+<%# [HW] The whole reactions bar is one unit — replacing it updates both the heart state and count %>
+<% already_liked = photo.likes.any? { |l| l.user_id == current_user.id } %>
+<div id="feed-reactions-<%= photo.id %>" class="feed-reactions">
+  <%# [HW] fa-solid fa-heart always — FA Free doesn't include fa-regular fa-heart %>
+  <%# [HW] liked vs not-liked state handled by CSS via feed-reaction-btn--liked %>
+  <%= button_to photo_likes_path(photo), method: :post,
+      class: "feed-reaction-btn #{ already_liked ? 'feed-reaction-btn--liked' : '' }",
+      title: already_liked ? "Unlike" : "Like" do %>
+    <i class="fa-solid fa-heart"></i>
+    <span><%= photo.likes.size %></span>
+  <% end %>
+  <%# [HW] Comment count pushed to the right of the same row %>
+  <span class="feed-reaction-btn feed-reaction-btn--comment">
+    <i class="fa-solid fa-comment"></i>
+    <span><%= photo.comments.size %></span>
+  </span>
+</div>

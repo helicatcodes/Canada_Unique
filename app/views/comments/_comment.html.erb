@@ -1,0 +1,14 @@
+<%# [HW] Each comment row gets a unique DOM id so turbo_stream.remove can find and remove it %>
+<div id="comment-<%= comment.id %>" class="feed-comment">
+  <span class="feed-comment__body">
+    <strong class="feed-comment__author"><%= comment.user.name %></strong>
+    <span class="feed-comment__text"><%= comment.text %></span>
+  </span>
+  <%# [HW] Trash icon only shown to the comment's own author %>
+  <% if comment.user == current_user %>
+    <%= button_to photo_comment_path(photo, comment), method: :delete,
+        class: "feed-comment__delete", title: "Delete comment" do %>
+      <i class="fa-solid fa-trash"></i>
+    <% end %>
+  <% end %>
+</div>
