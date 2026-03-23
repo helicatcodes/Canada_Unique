@@ -95,6 +95,16 @@ users_data.each do |data|
   folder = data.delete(:folder)
   user = User.create!(data)
 
+  # Attach each user's avatar from their seed folder — supports both .jpg and .jpeg. MJR
+  avatar_path = Dir.glob("#{SEEDS_IMAGES_PATH}/#{folder}/Avatar.{jpg,jpeg}").first
+  if avatar_path
+    user.avatar.attach(
+      io: File.open(avatar_path),
+      filename: File.basename(avatar_path),
+      content_type: "image/jpeg"
+    )
+  end
+
   users[folder] = user
 end
 
@@ -139,13 +149,13 @@ photo_captions = {
 
 all_photos = []
 
-all_seed_photos = Dir.glob("#{SEEDS_IMAGES_PATH}/*/[Pp]hoto*").sort
-
 users.each do |folder, user|
   captions = photo_captions[folder] || []
+  # Scope photos to each user's own folder so users get their own images, not a shared pool. MJR
+  user_photos = Dir.glob("#{SEEDS_IMAGES_PATH}/#{folder}/[Pp]hoto*").sort
 
   captions.each_with_index do |caption, index|
-    file = all_seed_photos[index % all_seed_photos.length]
+    file = user_photos[index % user_photos.length]
     photo = Photo.create!(
       description: caption,
       user: user,
