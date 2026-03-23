@@ -89,7 +89,7 @@
 }
 
 .profile-section__list {
-  border: 1px solid darken(#FDF6E3, 10%);
+  border: 1px solid darken($cu-beige, 10%);
   border-radius: 12px;
   overflow: hidden;
   background: #fff;
@@ -104,11 +104,11 @@
   transition: background-color 0.15s;
 
   & + & {
-    border-top: 1px solid darken(#FDF6E3, 8%);
+    border-top: 1px solid darken($cu-beige, 8%);
   }
 
   &:hover {
-    background-color: #FDF6E3;
+    background-color: $cu-beige;
   }
 }
 

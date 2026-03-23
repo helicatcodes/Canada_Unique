@@ -7,11 +7,11 @@
   padding: 1.5rem 2rem;
 }
 
-// [HW] Section title rendered as a full-width navy banner inside each panel
+// [HW] Section title rendered as a full-width banner inside each panel
 // [HW] Negative margin pulls it to the panel edges; border-radius matches the panel's top corners
 .cu-panel__title {
-  color: $cu-white;
-  background: $cu-navy;
+  color: $cu-navy;
+  background: $cu-beige;
   font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.03em;
