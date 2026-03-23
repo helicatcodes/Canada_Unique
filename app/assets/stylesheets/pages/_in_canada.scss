@@ -20,11 +20,6 @@
   border-radius: $border-radius-lg $border-radius-lg 0 0;
 }
 
-// [HW] Constrains the upload form to a card-sized width so it doesn't stretch the full panel
-.upload-form-wrapper {
-  max-width: 360px;
-}
-
 // [HW] Photo grid — responsive columns, wider gap to let polaroid shadows breathe
 .photo-grid {
   display: grid;
@@ -49,6 +44,31 @@
   &--feed {
     padding-bottom: 12px;
   }
+
+  // [HW] Upload placeholder card — dashed border signals "empty slot", no hover shadow/scale
+  &--upload {
+    border: 2px dashed $light-gray;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+
+    // [HW] Override the scale hover — it looks odd on a form card
+    &:hover {
+      transform: none !important;
+      box-shadow: none;
+      border-color: $cu-navy;
+    }
+  }
+}
+
+// [HW] Large centred camera icon as a visual cue before the user picks a file
+.photo-card--upload__icon {
+  text-align: center;
+  font-size: 2rem;
+  color: $light-gray;
+  margin-bottom: 0.75rem;
 }
 
 // [HW] Square crop — keeps the grid uniform regardless of original image dimensions
