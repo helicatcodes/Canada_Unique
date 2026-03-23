@@ -43,12 +43,6 @@ Rails.application.routes.draw do
   get "post_canada", to: "pages#post_canada", as: :post_canada
 
   resources :tasks, only: [:show, :edit, :update]
-  # [MG] For changing fun-task status via toggle_status
-  resources :tasks, only: [:show, :edit, :update] do
-    member do
-      patch :toggle_status
-    end
-  end
 
   # [HW] only :update — the questionnaire form lives on the post_canada page, no separate show needed
   resources :questionnaires, only: [:update]
