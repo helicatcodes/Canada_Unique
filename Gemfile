@@ -51,7 +51,7 @@ gem "sassc-rails"
 
 gem "faker"
 gem "cloudinary"
-gem "noticed", "~> 2.0"
+gem "noticed", "~> 3.0"
 
 group :development, :test do
   gem "dotenv-rails"
