@@ -5,9 +5,28 @@ export default class extends Controller {
 
   connect() {
     this.scrollToBottom()
+
+    // Auto-scroll whenever a new message node is added to the conversation —
+    // this fires after the turbo stream DOM update, solving the timing issue
+    this._observer = new MutationObserver(() => this.scrollToBottom())
+    this._observer.observe(this.messagesTarget, { childList: true, subtree: true })
+  }
+
+  disconnect() {
+    this._observer?.disconnect()
   }
 
   showTyping() {
+    // Optimistically render the user's message immediately on submit,
+    // before waiting for the server response
+    const text = this.inputTarget.value.trim()
+    if (text) {
+      const bubble = document.createElement("div")
+      bubble.className = "chat-message chat-message--user"
+      bubble.innerHTML = `<div class="chat-bubble">${this._escapeHtml(text)}</div>`
+      this.messagesTarget.appendChild(bubble)
+    }
+
     this.typingTarget.hidden = false
     this.submitTarget.disabled = true
     this.scrollToBottom()
@@ -18,7 +37,6 @@ export default class extends Controller {
     this.submitTarget.disabled = false
     this.inputTarget.value = ""
     this.inputTarget.focus()
-    this.scrollToBottom()
   }
 
   submitOnEnter(event) {
@@ -30,5 +48,15 @@ export default class extends Controller {
 
   scrollToBottom() {
     this.messagesTarget.scrollTop = this.messagesTarget.scrollHeight
+  }
+
+  // Prevent XSS in the optimistically rendered bubble
+  _escapeHtml(text) {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;")
   }
 }
