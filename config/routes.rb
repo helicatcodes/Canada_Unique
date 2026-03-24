@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     resources :messages, only: [:create]
   end
 
-  devise_for :users
+  devise_for :users, controllers: { registrations: "registrations"}
   root to: "pages#home"
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -41,6 +41,10 @@ Rails.application.routes.draw do
   get "pre_canada", to: "pages#pre_canada", as: :pre_canada
   get "in_canada", to: "pages#in_canada", as: :in_canada
   get "post_canada", to: "pages#post_canada", as: :post_canada
+
+  # Admin-only: create user accounts
+  resources :invitations, only: [:new, :create]
+  get "/invite/:token", to: "tokens#verify", as: :verify_invitation
 
   # Admin-only: create viewer accounts linked to a student.
   # Uses "viewers" path to avoid conflict with devise_for :users (both would map to POST /users). MJR
