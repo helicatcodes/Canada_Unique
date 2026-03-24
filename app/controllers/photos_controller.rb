@@ -7,9 +7,9 @@ class PhotosController < ApplicationController
     # Check if the current user is allowed to upload photos. MJR
     authorize @photo
     if @photo.save
-      redirect_to in_canada_path, notice: "Photo uploaded!"
+      redirect_to in_canada_path(active_tab: "gallery"), notice: "Photo uploaded!"
     else
-      redirect_to in_canada_path, alert: "Upload failed."
+      redirect_to in_canada_path(active_tab: "gallery"), alert: "Upload failed."
     end
   end
 

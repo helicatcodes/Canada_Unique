@@ -5,17 +5,23 @@
   <%# [HW] No custom JavaScript required — Bootstrap's bundled JS handles show/hide %>
   <ul class="nav nav-tabs cu-tabs" id="canadaTabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="feed-tab"
+      <button class="nav-link <%= 'active' unless params[:active_tab] == 'gallery' %>" id="feed-tab"
               data-bs-toggle="tab" data-bs-target="#tab-feed"
               type="button" role="tab">
-        Community Feed
+        Community
       </button>
     </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="my-photos-tab"
+    <li class="nav-item nav-item--with-action" role="presentation">
+      <button class="nav-link <%= 'active' if params[:active_tab] == 'gallery' %>" id="my-photos-tab"
               data-bs-toggle="tab" data-bs-target="#tab-my-photos"
               type="button" role="tab">
-        My Photos
+        Gallery
+      </button>
+      <%# [HW] "+" opens the upload modal — not a tab, so no data-bs-toggle="tab" %>
+      <button class="add-photo-btn" type="button"
+              data-bs-toggle="modal" data-bs-target="#add-photo-modal"
+              title="Add photo">
+        <i class="fa-solid fa-plus"></i>
       </button>
     </li>
   </ul>
@@ -26,7 +32,7 @@
     <%# TAB 1 — Community Feed %>
     <%# show + active makes this the default visible tab on page load %>
     <%# ============================================================ %>
-    <div class="tab-pane fade show active" id="tab-feed" role="tabpanel">
+    <div class="tab-pane fade <%= 'show active' unless params[:active_tab] == 'gallery' %>" id="tab-feed" role="tabpanel">
       <% if @feed_photos.none? %>
         <p class="text-muted mt-3">No photos shared yet — be the first!</p>
       <% else %>
@@ -162,40 +168,12 @@
     </div>
 
     <%# ============================================================ %>
-    <%# TAB 2 — My Photos (unchanged from before) %>
+    <%# TAB 2 — Gallery %>
     <%# ============================================================ %>
-    <div class="tab-pane fade" id="tab-my-photos" role="tabpanel">
-      <%# [HW] Grid always rendered — always contains at least the upload card %>
+    <div class="tab-pane fade <%= 'show active' if params[:active_tab] == 'gallery' %>" id="tab-my-photos" role="tabpanel">
       <div class="photo-grid mt-3">
 
-        <%# [HW] Upload card — permanent first slot, styled as an empty polaroid %>
-        <div class="photo-card photo-card--upload">
-          <%= simple_form_for @photo, url: photos_path do |f| %>
-
-            <%# [HW] Empty actions bar — forces the grey dropzone to start at the same vertical %>
-            <%# [HW] position as the photo in adjacent real cards (min-height matches button row) %>
-            <div class="photo-card__actions"></div>
-
-            <%# [HW] Grey square "photo area" — clicking opens the file picker via label trick %>
-            <label class="photo-card--upload__dropzone" for="photo_image">
-              <i class="fa-solid fa-camera photo-card--upload__camera"></i>
-              <span class="photo-card--upload__hint">Click to upload</span>
-            </label>
-
-            <%# [HW] Hidden file input triggered by the label above %>
-            <%= f.input :image, as: :file, label: false,
-                input_html: { id: "photo_image", class: "photo-card--upload__input" } %>
-
-            <div class="photo-card__body photo-card--upload__body">
-              <%= f.input :description, label: false, placeholder: "Add a caption...",
-                  wrapper: false, input_html: { class: "photo-card--upload__caption" } %>
-              <%= f.submit "Upload", class: "photo-card--upload__submit" %>
-            </div>
-
-          <% end %>
-        </div>
-
-        <%# [HW] User's own photos follow the upload card %>
+        <%# [HW] User's own photos %>
         <% @my_photos.each do |photo| %>
           <% if photo.image.attached? %>
             <div class="photo-card">
@@ -236,4 +214,51 @@
     </div>
 
   </div>
+
+  <%# ============================================================ %>
+  <%# Add Photo Modal — triggered by the "+" next to the Gallery tab %>
+  <%# ============================================================ %>
+  <div class="modal fade add-photo-modal" id="add-photo-modal"
+       tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="upload-tab">
+          <%# [HW] data-controller wires up the Stimulus preview controller %>
+          <div class="photo-card photo-card--upload photo-card--upload-lg"
+               data-controller="photo-upload">
+            <%= simple_form_for @photo, url: photos_path do |f| %>
+
+              <%# [HW] Grey square dropzone — placeholder shows until a file is chosen %>
+              <label class="photo-card--upload__dropzone" for="photo_image">
+                <span class="photo-card--upload__placeholder" data-photo-upload-target="placeholder">
+                  <i class="fa-solid fa-camera photo-card--upload__camera"></i>
+                  <span class="photo-card--upload__hint">Click to upload a photo</span>
+                </span>
+                <%# [HW] Preview image — hidden until a file is selected %>
+                <img data-photo-upload-target="preview"
+                     class="photo-card--upload__preview" alt="" />
+              </label>
+
+              <%# [HW] Hidden file input — triggers preview on change %>
+              <%= f.input :image, as: :file, label: false,
+                  input_html: {
+                    id: "photo_image",
+                    class: "photo-card--upload__input",
+                    data: { action: "change->photo-upload#preview" }
+                  } %>
+
+              <div class="photo-card__body photo-card--upload__body">
+                <%= f.input :description, label: false, placeholder: "Add a caption...",
+                    wrapper: false, input_html: { class: "photo-card--upload__caption" } %>
+                <%= f.submit "Upload", class: "photo-card--upload__submit" %>
+              </div>
+
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>
