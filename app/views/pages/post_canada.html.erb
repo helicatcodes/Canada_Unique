@@ -1,12 +1,35 @@
 <div class="container mt-4">
 
-  <%# [HW] Back arrow — navigates to the home page %>
-  <%= link_to root_path, class: "back-link mb-3 d-inline-flex" do %>
-    <i class="fa-solid fa-arrow-left"></i> Home
-  <% end %>
-
-  <h1 class="mt-3 mb-1">Welcome back, <%= current_user.display_name %>! 🇨🇦</h1>
+  <h1 class="mt-3 mb-1">Welcome back, <%= current_user.display_name %>!</h1>
   <p class="text-muted mb-4">You did something incredible. Now let's reflect on it.</p>
+
+  <%# AI Summary section — shown first so the reward is visible before the questionnaire %>
+  <div class="ai-summary-panel mb-5" id="ai-summary">
+    <div class="ai-summary__icon">
+      <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+    <div class="ai-summary__title">Your Personal Growth Summary</div>
+
+    <% if @questionnaire.submitted? %>
+      <p class="ai-summary__body">
+        Your answers are in. Your AI life coach is ready to reflect your journey back to you — growth, challenges, and all.
+      </p>
+      <div class="ai-summary__response">
+        <%= simple_format(@questionnaire.ai_summary) %>
+      </div>
+    <% else %>
+      <p class="ai-summary__body">
+        Save your answers below and unlock a personalised summary of your exchange year — written just for you.
+      </p>
+
+      <%= button_to questionnaire_path(@questionnaire), method: :patch,
+            params: { submitted: true },
+            class: "ai-summary__unlock-btn",
+            form: { data: { turbo_confirm: "Ready? Make sure you've saved all your answers first!" } } do %>
+        <i class="fa-solid fa-lock-open"></i> Unlock My Personal Growth Summary
+      <% end %>
+    <% end %>
+  </div>
 
   <%# Questionnaire section — id used as scroll anchor after submit/revert redirects %>
   <div class="cu-panel mb-5" id="questionnaire">
@@ -17,12 +40,18 @@
 
     <p class="text-muted mb-4">Answer at your own pace — save each answer individually, then create your summary when you're ready.</p>
 
-    <%# [HW] One emoji per question, matched to its theme %>
-    <% emojis = ["💪", "🌍", "🚀", "💬", "🦅", "🏠", "🎯", "✉️"] %>
+    <%# One Font Awesome icon per question, matched to its theme %>
+    <% question_icons = [
+      "fa-solid fa-dumbbell",
+      "fa-solid fa-globe",
+      "fa-solid fa-rocket",
+      "fa-solid fa-comments",
+      "fa-solid fa-feather",
+      "fa-solid fa-house",
+      "fa-solid fa-bullseye",
+      "fa-solid fa-envelope"
+    ] %>
 
-    <%# [HW] Each card is controlled by the question_card Stimulus controller (question_card_controller.js).
-         data-question-card-questionnaire-id-value and data-question-card-question-id-value are passed
-         as Stimulus Values so the JS knows which questionnaire and question to PATCH. %>
     <% @questions.each_with_index do |question, index| %>
       <div class="question-card"
            data-controller="question-card"
@@ -30,17 +59,16 @@
            data-question-card-question-id-value="<%= question.id %>"
            data-question-card-submitted-value="<%= @questionnaire.submitted? %>">
 
-        <div class="question-card__emoji"><%= emojis[index] %></div>
+        <div class="question-card__icon">
+          <i class="<%= question_icons[index % question_icons.length] %>"></i>
+        </div>
 
         <div class="question-card__body">
           <label class="question-card__label"><%= question.text %></label>
 
-          <%# Saved mode: shows the student's answer as plain text %>
           <p class="question-card__answer-text" data-question-card-target="display"></p>
 
-          <%# Edit mode: textarea only — the save icon sits at the bottom-right of the card %>
           <div data-question-card-target="editor">
-            <%# [HW] question.answers.first&.text pre-fills existing answer (nil shows placeholder) %>
             <%= text_area_tag "answers[#{question.id}]",
                               question.answers.first&.text,
                               class: "form-control",
@@ -50,9 +78,6 @@
           </div>
         </div>
 
-        <%# [HW] Icon area anchored to the bottom-right of the card (position: absolute in CSS).
-             Only one icon is visible at a time — pen in saved mode, floppy disk in edit mode.
-             The Stimulus controller toggles them by adding/removing d-none. %>
         <div class="question-card__icon-area">
           <button type="button"
                   class="question-card__edit-btn"
@@ -70,9 +95,6 @@
       </div>
     <% end %>
 
-    <%# [HW] Status row — centered below the last question card.
-         Submitted: shows the green badge + a rotate-left icon to revert to draft.
-         Draft: shows nothing extra (the unlocked cards make the state obvious). %>
     <% if @questionnaire.submitted? %>
       <div class="questionnaire-status">
         <span class="badge bg-success">
@@ -86,35 +108,6 @@
           <i class="fa-solid fa-rotate-left"></i>
         <% end %>
       </div>
-    <% end %>
-  </div>
-
-  <%# AI Summary section — id used as scroll anchor after the unlock button submits %>
-  <div class="ai-summary-panel mb-5" id="ai-summary">
-    <div class="ai-summary__icon">
-      <i class="fa-solid fa-wand-magic-sparkles"></i>
-    </div>
-    <div class="ai-summary__title">Your Personal Growth Summary</div>
-
-    <% if @questionnaire.submitted? %>
-      <p class="ai-summary__body">
-        Your answers are in. Your AI life coach is ready to reflect your journey back to you — growth, challenges, and all.
-      </p>
-      <p class="ai-summary__body"> <%= @questionnaire.ai_summary %> </p>
-    <% else %>
-      <p class="ai-summary__body">
-        Save your answers above and unlock a personalised summary of your exchange year — written just for you.
-      </p>
-
-      <%# [HW] Unlock button — submits the questionnaire (sets submitted: true) as a standard HTML
-           PATCH form. This triggers a full page reload so the student sees the submitted state
-           and the summary panel above unlocks. NOT a fetch call — intentional redirect. %>
-      <%= button_to questionnaire_path(@questionnaire), method: :patch,
-            params: { submitted: true },
-            class: "ai-summary__unlock-btn",
-            form: { data: { turbo_confirm: "Ready? Make sure you've saved all your answers first!" } } do %>
-        🔓 Unlock My Personal Growth Summary
-      <% end %>
     <% end %>
   </div>
 
