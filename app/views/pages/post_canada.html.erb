@@ -4,7 +4,10 @@
   <p class="text-muted mb-4">You did something incredible. Now let's reflect on it.</p>
 
   <%# AI Summary section — shown first so the reward is visible before the questionnaire %>
-  <div class="ai-summary-panel mb-5" id="ai-summary">
+  <div class="ai-summary-panel mb-5" id="ai-summary"
+       data-controller="ai-summary"
+       data-ai-summary-url-value="<%= status_questionnaire_path(@questionnaire, format: :json) %>">
+
     <div class="ai-summary__icon">
       <i class="fa-solid fa-wand-magic-sparkles"></i>
     </div>
@@ -14,9 +17,21 @@
       <p class="ai-summary__body">
         Your answers are in. Your AI life coach is ready to reflect your journey back to you — growth, challenges, and all.
       </p>
-      <div class="ai-summary__response">
-        <%= simple_format(@questionnaire.ai_summary) %>
-      </div>
+
+      <% if @questionnaire.ai_summary.present? %>
+        <%# Summary already generated — show it directly %>
+        <div class="ai-summary__response" data-ai-summary-target="content">
+          <%= simple_format(@questionnaire.ai_summary) %>
+        </div>
+      <% else %>
+        <%# Job is queued — show spinner and start polling %>
+        <div class="ai-summary__spinner" data-ai-summary-target="spinner" data-pending="true">
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+          <p class="ai-summary__spinner-label">Generating your personal story… this takes about 20 seconds.</p>
+        </div>
+        <div class="ai-summary__response d-none" data-ai-summary-target="content"></div>
+      <% end %>
+
     <% else %>
       <p class="ai-summary__body">
         Save your answers below and unlock a personalised summary of your exchange year — written just for you.

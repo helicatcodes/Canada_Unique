@@ -1,6 +1,14 @@
 class QuestionnairesController < ApplicationController
   before_action :set_questionnaire
 
+  # Polled by the ai_summary Stimulus controller to check if the background job is done
+  def status
+    render json: {
+      ready: @questionnaire.ai_summary.present?,
+      html:  @questionnaire.ai_summary.present? ? helpers.simple_format(@questionnaire.ai_summary) : nil
+    }
+  end
+
   def update
     # Check if the current user is allowed to update this questionnaire. MJR
     authorize @questionnaire

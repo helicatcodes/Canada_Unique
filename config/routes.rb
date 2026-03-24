@@ -47,6 +47,8 @@ Rails.application.routes.draw do
   resources :viewers, only: [:new, :create], controller: "users"
   resources :tasks, only: [:show, :edit, :update]
 
-  # [HW] only :update — the questionnaire form lives on the post_canada page, no separate show needed
-  resources :questionnaires, only: [:update]
+  # status is polled by the frontend to check if the background AI summary job is done
+  resources :questionnaires, only: [:update] do
+    member { get :status }
+  end
 end

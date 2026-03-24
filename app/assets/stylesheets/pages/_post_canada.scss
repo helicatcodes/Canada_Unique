@@ -173,6 +173,23 @@
     strong { color: $yellow; font-weight: 700; }
   }
 
+  // Spinner shown while the background job is still running
+  .ai-summary__spinner {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: $yellow;
+    font-size: 2.5rem;
+  }
+
+  .ai-summary__spinner-label {
+    font-size: 0.88rem;
+    color: rgba($light-gray, 0.7);
+    margin: 0;
+  }
+
   // [HW] Unlock button — gold pill CTA
   .ai-summary__unlock-btn {
     display: inline-flex;
