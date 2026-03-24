@@ -274,7 +274,7 @@
 }
 
 // [HW] Single comment row: author + text, delete icon pushed to the far right
-// [HW] Hovering the whole row reveals the hidden trash icon 
+// [HW] Hovering the whole row reveals the hidden trash icon
 .feed-comment {
   display: flex;
   align-items: baseline;
@@ -501,7 +501,9 @@
   box-shadow: 0 12px 50px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   position: relative;
-  padding: 16px 16px 0;
+  // [HW] 28px frame on top/left/right gives a thick polaroid border and keeps the close button
+  // [HW] well above the photo — no bottom padding here, the content section handles that
+  padding: 28px 28px 0;
 }
 
 // [HW] Square photo inside the white frame — aspect-ratio matches the grid card thumbnail exactly
@@ -520,21 +522,31 @@
   overflow-y: auto;
 }
 
-// [HW] Close button sits in the white frame — top:0 right:4px keeps it inside the 16px padding,
-// [HW] above the photo edge rather than overlapping it
+// [HW] Close button sits inside the white polaroid frame — not flush with the card edge
+// [HW] top: 10px / right: 12px centres the 22px circle in the new 28px frame
+// [HW] The light-gray circle makes it read as a tappable button without dominating the card
 .feed-modal__close {
   position: absolute;
-  top: 0;
-  right: 4px;
+  top: 6px;   // [HW] vertically centred in the 28px top frame (28 - 22 = 6px spare)
+  right: 6px; // [HW] comfortably inside the 28px right frame
   z-index: 10;
-  background: none;
+  background: $light-gray;
   border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   color: $cu-navy;
-  font-size: 0.8rem;
-  padding: 4px;
-  line-height: 1;
-  transition: color 0.15s ease;
+  font-size: 0.7rem;
+  padding: 0;
+  transition: background 0.15s ease, color 0.15s ease;
 
-  &:hover { color: $cu-red; }
+  // [HW] Danger hover matches the trash icon pattern used elsewhere in the app
+  &:hover {
+    background: darken($light-gray, 10%);
+    color: $cu-charcoal;
+  }
 }
