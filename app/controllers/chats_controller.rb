@@ -1,11 +1,12 @@
 class ChatsController < ApplicationController
   def create
     @chat = current_user.chats.build
-    # Check if the current user is allowed to start a chat. MJR
-    authorize @chat
+    authorize @chat # Check if the current user is allowed to start a chat. MJR
+    
+    user_name = current_user.display_name
+    welcome = "Hey #{user_name}! I'm Lucy — super excited you're here! Moving to Canada as a teenager is such a big deal, and I want you to know you've totally got this. I'm here whenever you want to chat — whether it's about school, making friends, missing home, or just anything on your mind. How are you feeling about everything so far?"
+    
     @chat.save!
-    user_name = current_user.name.presence || current_user.email.split("@").first
-    welcome = "Hey #{user_name}! I'm Lucy 🍁 — super excited you're here! Moving to Canada as a teenager is such a big deal, and I want you to know you've totally got this. I'm here whenever you want to chat — whether it's about school, making friends, missing home, or just anything on your mind. How are you feeling about everything so far?"
     @chat.messages.create!(role: "assistant", content: welcome)
     redirect_to chat_path(@chat)
   end

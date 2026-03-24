@@ -81,7 +81,7 @@
               <%# [HW] Modal — narrower (modal-md) and stacked like a polaroid: photo on top, content below %>
               <%# [HW] Modal — modal-lg gives ~800px width, styled as a zoomed polaroid card %>
               <div class="modal fade feed-modal" id="photo-modal-<%= photo.id %>"
-                   tabindex="-1" aria-label="<%= photo.user.name %>'s photo">
+                   tabindex="-1" aria-label="<%= photo.user.display_name %>'s photo">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                   <div class="modal-content">
 
@@ -102,7 +102,7 @@
 
                       <%# [HW] Author name + caption — bold name inline before the description %>
                       <p class="photo-card__desc">
-                        <strong class="photo-card__author"><%= photo.user.name %></strong>
+                        <strong class="photo-card__author"><%= photo.user.display_name %></strong>
                         <%= photo.description %>
                       </p>
 

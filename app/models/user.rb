@@ -18,6 +18,10 @@ class User < ApplicationRecord
   has_many :chats, dependent: :destroy
   has_many :messages, through: :chats
   has_one_attached :avatar
+
+  def display_name
+    first_name.presence || name.presence || email.split("@").first
+  end
   # Gives each user access to their notification inbox via current_user.noticed_notifications. MJR
   has_many :noticed_notifications, as: :recipient, class_name: "Noticed::Notification", dependent: :destroy
 end

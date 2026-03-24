@@ -1,14 +1,23 @@
-<div>
-  <h1> "Let's get you ready for Canada" </h1>
-  <h2> Your personal countdown </h2>
-  <h3> <strong> <%= @countdown %> days </strong> left until departure</h3>
+<div class="pre-canada">
+
+  <%# ── Card 1: Countdown ── %>
+  <div class="pre-canada__card pre-canada__countdown">
+    <h2 class="pre-canada__card-title">Your countdown</h2>
+    <span class="pre-canada__countdown-number"><%= @countdown %></span>
+    <span class="pre-canada__countdown-label">days until departure</span>
+  </div>
+
+  <%# ── Card 2: Obligatory tasks ── %>
+  <div class="pre-canada__card">
+    <h2 class="pre-canada__card-title">Obligatory tasks</h2>
+    <%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: true) %>
+  </div>
+
+  <%# ── Card 3: Next steps ── %>
+  <div class="pre-canada__card">
+    <h2 class="pre-canada__card-title">Next steps</h2>
+    <p class="pre-canada__tasks-intro">Find more information about your new home for the next year to be perfectly prepared for your adventure to come!</p>
+    <%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: false) %>
+  </div>
+
 </div>
-<br>
-<br>
-<h2>Your tasks</h2>
-<h3>Obligatory tasks</h3>
-<%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: true) %>
-<br>
-<h3>Next steps</h3>
-<p>Find more information about your new home for the next year to be perfectly prepared for your adventure to come!</p>
-<%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: false) %>
