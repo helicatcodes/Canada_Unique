@@ -147,6 +147,103 @@
   &:hover { background: darken($cu-navy, 8%); }
 }
 
+// [HW] Location field row in the upload modal — red pin icon left, input right
+.photo-card--upload__field-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+// [HW] Red pin icon that prefixes the location input
+.photo-card--upload__field-icon {
+  font-size: 0.75rem;
+  color: $cu-red;
+  flex-shrink: 0;
+}
+
+// [HW] Wrapper gives the dropdown an anchor point (position: relative) while the input fills the space
+.location-autocomplete-wrap {
+  position: relative;
+  flex: 1;
+}
+
+// [HW] Suggestion dropdown — floats below the input, scrollable if many results
+.location-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid $light-gray;
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+// [HW] Each suggestion row — truncated to one line, highlights on hover
+.location-suggestion {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: $cu-charcoal;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover { background: $light-gray; }
+}
+
+// [HW] Gallery card location label — left of the polaroid actions bar, above the photo
+// [HW] Truncated with ellipsis if the place name is long
+.photo-card__location-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  max-width: 110px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: $cu-red;
+
+  span {
+    color: $cu-charcoal;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// [HW] Feed grid location row — sits between author name and photo on the white card frame
+// [HW] overflow: hidden on the row + min-width: 0 on the span enables ellipsis inside flex
+.feed-grid__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 5px;
+  font-size: 0.72rem;
+  color: $cu-charcoal;
+  font-weight: 600;
+  overflow: hidden;
+
+  i { color: $cu-red; font-size: 0.65rem; flex-shrink: 0; }
+
+  span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+}
+
 // [HW] Gallery nav item — flex row so the "+" button sits inline beside the tab label
 .nav-item--with-action {
   display: flex;
@@ -195,6 +292,14 @@
   .photo-card--upload__hint {
     font-size: 0.9rem;
   }
+}
+
+// [HW] Wrapper for the gallery photo — position:relative anchors the location badge,
+// [HW] overflow:hidden clips the hover scale, cursor:pointer signals the image is clickable
+.photo-card__img-wrap {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 // [HW] Square crop — keeps the grid uniform regardless of original image dimensions
@@ -655,6 +760,11 @@
 // COMMUNITY FEED — MODAL (polaroid style: photo top, content below)
 // ============================================================
 
+// [HW] Constrain to ~420px — matches add-photo modal width, keeps photo + comments in one view
+.feed-modal .modal-dialog {
+  max-width: 420px;
+}
+
 .feed-modal .modal-content {
   border: none;
   border-radius: 2px;
@@ -676,10 +786,26 @@
 
 // [HW] Content below the photo — no horizontal padding (modal-content handles the 16px frame)
 // [HW] Bottom padding is larger than top, matching the polaroid proportion of the grid cards
+// [HW] max-height reduced from 45vh — photo is smaller now so less scroll room needed
 .feed-modal__content {
   padding: 10px 0 22px;
-  max-height: 45vh;
+  max-height: 28vh;
   overflow-y: auto;
+}
+
+// [HW] Location in the white frame above the photo — right-aligned to sit in the top-right corner
+// [HW] padding-right leaves clearance for the absolute close button (22px wide + 6px from edge)
+.feed-modal__above-img {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $cu-charcoal;
+
+  i { color: $cu-red; font-size: 0.65rem; }
 }
 
 .feed-modal__close {
