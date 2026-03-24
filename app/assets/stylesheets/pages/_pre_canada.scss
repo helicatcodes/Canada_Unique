@@ -1,0 +1,70 @@
+// ============================================================
+// PRE-CANADA PAGE
+// Single centred column: countdown → obligatory tasks → next steps
+// Follows the .cu-panel card style from _in_canada.scss
+// ============================================================
+
+// Page wrapper — centred column, cards fill the same width
+.pre-canada {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+// Each card — same width, white with red top accent
+.pre-canada__card {
+  width: 100%;
+  max-width: 680px;
+  background-color: $cu-white;
+  border-top: 3px solid $cu-red;
+  border-radius: $border-radius-lg;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem 2rem;
+}
+
+// Banner title bar — same pull-to-edges technique as .cu-panel__title
+.pre-canada__card-title {
+  color: $cu-navy;
+  background: $cu-beige;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  margin: -1.5rem -2rem 1.5rem -2rem;
+  padding: 0.6rem 2rem;
+  border-radius: $border-radius-lg $border-radius-lg 0 0;
+}
+
+// ── Countdown card ──────────────────────────────────────────
+
+.pre-canada__countdown {
+  max-width: 200px; // half of the 680px card width
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pre-canada__countdown-number {
+  font-size: 3.5rem;
+  font-weight: 800;
+  color: $cu-red;
+  line-height: 1;
+}
+
+.pre-canada__countdown-label {
+  font-size: 0.9rem;
+  color: $cu-charcoal;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+// ── Tasks intro text ────────────────────────────────────────
+
+.pre-canada__tasks-intro {
+  font-size: 0.88rem;
+  color: $cu-charcoal;
+  margin-bottom: 0.75rem;
+}
