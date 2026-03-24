@@ -41,8 +41,25 @@
                    data-bs-toggle="modal"
                    data-bs-target="#photo-modal-<%= photo.id %>">
 
-                <%# [HW] Author row — sits in the top white area above the photo %>
-                <div class="feed-grid__author"><%= photo.user.name %></div>
+                <%# [HW] Author row: avatar circle immediately left of the name, both in one flex row %>
+                <div class="feed-grid__author">
+                  <%# [HW] stopPropagation stops the click bubbling up to the card's photo modal %>
+                  <%# [HW] so only the avatar modal fires when the circle is clicked %>
+                  <span onclick="event.stopPropagation()"
+                        data-bs-toggle="modal"
+                        data-bs-target="#avatar-modal-<%= photo.user.id %>"
+                        class="feed-grid__avatar-trigger"
+                        title="View <%= photo.user.name %>'s profile">
+                    <% if photo.user.avatar.attached? %>
+                      <%= image_tag photo.user.avatar, class: "feed-grid__avatar" %>
+                    <% else %>
+                      <span class="feed-grid__avatar feed-grid__avatar--placeholder">
+                        <i class="fa fa-user"></i>
+                      </span>
+                    <% end %>
+                  </span>
+                  <span class="feed-grid__author-name"><%= photo.user.name %></span>
+                </div>
 
                 <%# [HW] Photo wrapper — position:relative here so the overlay is scoped to the photo %>
                 <%# [HW] only, not bleeding into the author/caption rows %>
@@ -108,7 +125,40 @@
             <% end %>
           <% end %>
         </div>
+      <%# [HW] Avatar modals — rendered once per unique author outside the photo loop %>
+      <%# [HW] Putting them inside the loop would produce duplicate ids when one user %>
+      <%# [HW] has multiple photos — duplicate ids are invalid HTML and confuse Bootstrap %>
+      <% @feed_photos.map(&:user).uniq.each do |feed_user| %>
+        <div class="modal fade feed-modal" id="avatar-modal-<%= feed_user.id %>"
+             tabindex="-1" aria-label="<%= feed_user.name %>'s profile">
+          <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+
+              <button class="feed-modal__close" data-bs-dismiss="modal" aria-label="Close">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+
+              <%# [HW] Avatar centred inside the polaroid white frame %>
+              <div class="feed-avatar-modal__img-wrap">
+                <% if feed_user.avatar.attached? %>
+                  <%= image_tag feed_user.avatar, class: "feed-avatar-modal__img" %>
+                <% else %>
+                  <div class="feed-avatar-modal__img feed-avatar-modal__img--placeholder">
+                    <i class="fa fa-user"></i>
+                  </div>
+                <% end %>
+              </div>
+
+              <%# [HW] Name and status in the bottom white area %>
+              <div class="feed-modal__content feed-avatar-modal__content">
+                <p class="feed-avatar-modal__name"><%= feed_user.name %></p>
+              </div>
+
+            </div>
+          </div>
+        </div>
       <% end %>
+      <% end %>  <%# [HW] closes the if @feed_photos.none? / else block %>
     </div>
 
     <%# ============================================================ %>

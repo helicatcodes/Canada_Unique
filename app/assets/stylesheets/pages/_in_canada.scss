@@ -401,12 +401,12 @@
 // COMMUNITY FEED — GRID
 // ============================================================
 
-/// [HW] Cards sit flush against each other (gap:0) with side padding so they don't touch the screen edge
 // [HW] auto-fill fills as many columns as fit; 220px minimum keeps cards legible on small screens
+// [HW] gap: 1.5rem adds breathing room between cards without changing their size
 .feed-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0;
+  gap: 1.5rem;
   padding: 0 1.25rem;
 }
 
@@ -423,13 +423,90 @@
   &:hover { box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1); }
 }
 
-// [HW] Author row sits inside the top white frame area — no extra horizontal padding needed
-// [HW] since the card already provides 10px on each side
+// [HW] Author row: flex so the avatar circle and name sit side by side, vertically centred
 .feed-grid__author {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   padding: 0 0 7px;
+}
+
+// [HW] Cursor signals the avatar is clickable (opens profile card modal)
+.feed-grid__avatar-trigger {
+  cursor: pointer;
+  flex-shrink: 0; // [HW] prevents the circle from squishing when the name is long
+}
+
+// [HW] 28px circle — matches the navbar avatar size; red border matches app-wide avatar style
+.feed-grid__avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid $cu-red; // [HW] hairline ring — keeps the red accent without dominating
+  display: block;
+}
+
+// [HW] Placeholder circle when no avatar uploaded — mirrors the profile page fallback
+.feed-grid__avatar--placeholder {
+  background: lighten($cu-navy, 55%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i { font-size: 0.7rem; color: $cu-navy; }
+}
+
+// [HW] Author name — same bold navy as before, now sits right next to the avatar
+// [HW] ellipsis prevents long names from breaking the card layout on narrow columns
+.feed-grid__author-name {
   font-size: 0.88rem;
   font-weight: 700;
   color: $cu-navy;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// [HW] Avatar modal: centres the large circle inside the polaroid white frame
+.feed-avatar-modal__img-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0 4px;
+}
+
+// [HW] 160px circle — large enough to read clearly, contained in modal-sm
+.feed-avatar-modal__img {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid $cu-red;
+  display: block;
+}
+
+// [HW] Placeholder for modal — same grey circle style as grid card, scaled up
+.feed-avatar-modal__img--placeholder {
+  background: lighten($cu-navy, 55%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i { font-size: 3rem; color: $cu-navy; }
+}
+
+// [HW] Profile card text — centred to match the portrait layout above
+.feed-avatar-modal__content { text-align: center; }
+
+.feed-avatar-modal__name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $cu-navy;
+  margin-bottom: 2px;
+}
+
+.feed-avatar-modal__status {
+  font-size: 0.8rem;
+  color: $cu-charcoal;
+  margin-bottom: 0;
 }
 
 // [HW] Wrapper scopes the overlay to the photo only — position:relative here, not on the card
@@ -522,13 +599,10 @@
   overflow-y: auto;
 }
 
-// [HW] Close button sits inside the white polaroid frame — not flush with the card edge
-// [HW] top: 10px / right: 12px centres the 22px circle in the new 28px frame
-// [HW] The light-gray circle makes it read as a tappable button without dominating the card
 .feed-modal__close {
   position: absolute;
-  top: 6px;   // [HW] vertically centred in the 28px top frame (28 - 22 = 6px spare)
-  right: 6px; // [HW] comfortably inside the 28px right frame
+  top: 6px;
+  right: 6px; 
   z-index: 10;
   background: $light-gray;
   border: none;
@@ -544,7 +618,6 @@
   padding: 0;
   transition: background 0.15s ease, color 0.15s ease;
 
-  // [HW] Danger hover matches the trash icon pattern used elsewhere in the app
   &:hover {
     background: darken($light-gray, 10%);
     color: $cu-charcoal;

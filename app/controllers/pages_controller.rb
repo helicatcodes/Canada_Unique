@@ -24,7 +24,10 @@ class PagesController < ApplicationController
     # [HW] includes(:user, :likes, comments: :user) loads all likes, comments and their authors
     # [HW] for every feed photo upfront in one go (eager-loading), so the view doesn't hit the
     # [HW] database again for each individual photo card — preventing N+1 queries
-    @feed_photos = Photo.includes(:user, :likes, comments: :user).where(shared: true).order(created_at: :desc)
+    # [HW] avatar_attachment: :blob added so each user's avatar loads in the same query
+    # [HW] rather than firing a separate DB hit per card — prevents N+1 on the feed grid
+    @feed_photos = Photo.includes(:user, { user: { avatar_attachment: :blob } }, :likes, comments: :user)
+                        .where(shared: true).order(created_at: :desc)
     @photo       = Photo.new
   end
 
