@@ -5,9 +5,10 @@ class PagesController < ApplicationController
   end
 
   def pre_canada
-    return unless current_user.departure_date.present?
+    # Use effective_user so viewers see their linked child's data. MJR
+    return unless effective_user.departure_date.present?
 
-    @countdown = (current_user.departure_date - Date.today).to_i
+    @countdown = (effective_user.departure_date - Date.today).to_i
 
     # t1 = Time.current
     # t2 = current_user.departure_date
@@ -18,7 +19,8 @@ class PagesController < ApplicationController
     # [HW] @my_photos: only the current user's photos (for their private gallery)
     # [HW] @feed_photos: all photos marked as shared by any user (for the community feed)
     # [HW] @photo: blank photo object needed by the upload form
-    @my_photos   = current_user.photos.order(created_at: :desc)
+    # Use effective_user so viewers see their linked child's photos. MJR
+    @my_photos   = effective_user.photos.order(created_at: :desc)
     # [HW] includes(:user, :likes, comments: :user) loads all likes, comments and their authors
     # [HW] for every feed photo upfront in one go (eager-loading), so the view doesn't hit the
     # [HW] database again for each individual photo card — preventing N+1 queries
@@ -29,8 +31,9 @@ class PagesController < ApplicationController
   def post_canada
     # [HW] find_or_create the questionnaire so the page never crashes on first visit.
     # create_for also seeds all 8 predefined questions onto the new questionnaire.
-    @questionnaire = current_user.questionnaires.first ||
-                     Questionnaire.create_for(current_user)
+    # Use effective_user so viewers see their linked child's questionnaire. MJR
+    @questionnaire = effective_user.questionnaires.first ||
+                     Questionnaire.create_for(effective_user)
 
     # [HW] includes(:answers) eager-loads all answers upfront so the view
     # can display each question's existing answer without extra DB queries.

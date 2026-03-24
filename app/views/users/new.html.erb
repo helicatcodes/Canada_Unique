@@ -1,0 +1,47 @@
+<%# Admin form to create a viewer (parent) account linked to a student. MJR %>
+<div class="container mt-4">
+  <h1>Create Viewer Account</h1>
+  <p class="text-muted">A viewer account gives a parent read-only access to their child's profile.</p>
+
+  <%= form_with model: @viewer, url: viewers_path do |f| %>
+
+    <%# Show validation errors if the form was submitted with mistakes. MJR %>
+    <% if @viewer.errors.any? %>
+      <div class="alert alert-danger">
+        <ul class="mb-0">
+          <% @viewer.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="mb-3">
+      <%= f.label :email, class: "form-label" %>
+      <%= f.email_field :email, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :password, class: "form-label" %>
+      <%= f.password_field :password, class: "form-control", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :password_confirmation, "Confirm password", class: "form-label" %>
+      <%= f.password_field :password_confirmation, class: "form-control", required: true %>
+    </div>
+
+    <%# Dropdown to pick which student this viewer is linked to. MJR %>
+    <div class="mb-3">
+      <%= f.label :linked_user_id, "Student to follow", class: "form-label" %>
+      <%= f.select :linked_user_id,
+            @students.map { |u| [u.name.presence || u.email, u.id] },
+            { include_blank: "— select a student —" },
+            class: "form-select", required: true %>
+    </div>
+
+    <%= f.submit "Create Viewer Account", class: "btn btn-primary" %>
+    <%= link_to "Cancel", profile_path, class: "btn btn-secondary ms-2" %>
+
+  <% end %>
+</div>

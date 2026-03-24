@@ -42,6 +42,9 @@ Rails.application.routes.draw do
   get "in_canada", to: "pages#in_canada", as: :in_canada
   get "post_canada", to: "pages#post_canada", as: :post_canada
 
+  # Admin-only: create viewer accounts linked to a student.
+  # Uses "viewers" path to avoid conflict with devise_for :users (both would map to POST /users). MJR
+  resources :viewers, only: [:new, :create], controller: "users"
   resources :tasks, only: [:show, :edit, :update]
 
   # [HW] only :update — the questionnaire form lives on the post_canada page, no separate show needed

@@ -2,9 +2,11 @@ class CommentsController < ApplicationController
   def create
     # [HW] Find the photo this comment belongs to via the nested route param :photo_id
     @photo = Photo.find(params[:photo_id])
-    # [HW] Assign result to @comment so the turbo_stream partial can render it
-    # [HW] Previously the result was discarded, causing a nil error in the partial
-    @comment = @photo.comments.create(text: params[:comment][:text], user: current_user)
+    # Build the comment first so Pundit can check it before saving. MJR
+    @comment = @photo.comments.build(text: params[:comment][:text], user: current_user)
+    # Check if the current user is allowed to post a comment. MJR
+    authorize @comment
+    @comment.save
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to in_canada_path, status: :see_other }
@@ -12,8 +14,10 @@ class CommentsController < ApplicationController
   end
 
   def destroy
-    # [HW] Scope to current_user.comments so users can only delete their own comments
-    @comment = current_user.comments.find(params[:id])
+    # Use Comment.find so Pundit can handle access control. MJR
+    @comment = Comment.find(params[:id])
+    # Check if the current user is allowed to delete this comment. MJR
+    authorize @comment
     # [HW] Capture the photo before destroying the comment — needed by the turbo stream view
     @photo = @comment.photo
     @comment.destroy

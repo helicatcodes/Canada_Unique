@@ -7,8 +7,8 @@
 <br>
 <h2>Your tasks</h2>
 <h3>Obligatory tasks</h3>
-<%= render 'tasks/task_list', tasks: current_user.tasks.where(obligatory: true) %>
+<%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: true) %>
 <br>
 <h3>Next steps</h3>
 <p>Find more information about your new home for the next year to be perfectly prepared for your adventure to come!</p>
-<%= render 'tasks/task_list', tasks: current_user.tasks.where(obligatory: false) %>
+<%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: false) %>

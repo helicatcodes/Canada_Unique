@@ -47,6 +47,28 @@
     </div>
   </div>
 
+  <%# ── Admin tools — only visible to admins ───────────────────────────── %>
+  <% if current_user.admin? %>
+    <div class="profile-section">
+      <h3 class="profile-section__title">Admin</h3>
+      <div class="profile-section__list">
+
+        <%= link_to new_viewer_path, class: "profile-section__item" do %>
+          <span class="profile-section__item-icon"><i class="fa fa-user-plus"></i></span>
+          <span class="profile-section__item-label">Create Viewer Account</span>
+          <i class="fa fa-chevron-right profile-section__item-arrow"></i>
+        <% end %>
+
+        <%= link_to new_notification_path, class: "profile-section__item" do %>
+          <span class="profile-section__item-icon"><i class="fa fa-bullhorn"></i></span>
+          <span class="profile-section__item-label">Send Notification</span>
+          <i class="fa fa-chevron-right profile-section__item-arrow"></i>
+        <% end %>
+
+      </div>
+    </div>
+  <% end %>
+
   <%# ── Log out ──────────────────────────────────────────────────────────── %>
   <%= link_to destroy_user_session_path,
         class: "profile-logout-btn",

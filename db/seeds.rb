@@ -47,7 +47,7 @@ users_data = [
     program_duration: 5,
     departure_date: Date.new(2026, 8, 15),
     date_of_birth: Date.new(2010, 9, 24),
-    admin: false,
+    role: :user,
     folder: "Mario"
   },
   {
@@ -59,7 +59,7 @@ users_data = [
     program_duration: 10,
     departure_date: Date.new(2026, 8, 15),
     date_of_birth: Date.new(2010, 10, 11),
-    admin: false,
+    role: :user,
     folder: "Helena"
   },
   {
@@ -71,7 +71,7 @@ users_data = [
     program_duration: 5,
     departure_date: Date.new(2026, 2, 15),
     date_of_birth: Date.new(2011, 4, 1),
-    admin: true,
+    role: :admin,
     folder: "Niels"
   },
   {
@@ -83,7 +83,7 @@ users_data = [
     program_duration: 10,
     departure_date: Date.new(2026, 2, 15),
     date_of_birth: Date.new(2009, 12, 15),
-    admin: false,
+    role: :user,
     folder: "Manu"
   }
 ]

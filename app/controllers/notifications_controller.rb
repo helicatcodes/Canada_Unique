@@ -1,6 +1,5 @@
 class NotificationsController < ApplicationController
-  # Only admins can access the compose form and send notifications. MJR
-  before_action :require_admin!, only: %i[new create]
+  before_action :authorize_notification, only: %i[new create]
 
   # Loads all notifications for the current user, newest first. MJR
   def index
@@ -31,8 +30,8 @@ class NotificationsController < ApplicationController
 
   private
 
-  # Redirects non-admin users away from admin-only actions. MJR
-  def require_admin!
-    redirect_to root_path, alert: "Not authorized." unless current_user.admin?
+  # Uses Pundit to check if the current user can manage notifications. MJR
+  def authorize_notification
+    authorize :notification
   end
 end

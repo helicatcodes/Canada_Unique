@@ -2,6 +2,8 @@ class QuestionnairesController < ApplicationController
   before_action :set_questionnaire
 
   def update
+    # Check if the current user is allowed to update this questionnaire. MJR
+    authorize @questionnaire
     # [HW] params[:answers] is a hash of { question_id => answer_text } built by the form.
     # first_or_initialize finds an existing answer for the question or builds a new one in memory.
     # We then update the text and save. This handles both creating new answers and editing existing ones.
@@ -53,9 +55,8 @@ class QuestionnairesController < ApplicationController
 
   private
 
-  # [HW] Scopes the lookup to current_user's questionnaires so students
-  # cannot access each other's questionnaires by guessing an ID.
+  # Use Questionnaire.find so Pundit can handle access control. MJR
   def set_questionnaire
-    @questionnaire = current_user.questionnaires.find(params[:id])
+    @questionnaire = Questionnaire.find(params[:id])
   end
 end

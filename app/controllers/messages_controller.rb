@@ -12,7 +12,11 @@ class MessagesController < ApplicationController
   PROMPT
 
   def create
-    @chat = current_user.chats.find(params[:chat_id])
+    @chat = Chat.find(params[:chat_id])
+    # Build the message first so Pundit can check it before saving. MJR
+    @message = @chat.messages.build(role: "user", content: params[:content])
+    # Check if the current user is allowed to send a message. MJR
+    authorize @message
 
     # Save the user's message
     @user_message = @chat.messages.create!(role: "user", content: params[:content])

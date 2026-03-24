@@ -4,6 +4,12 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
+  # Role enum: user = regular student, admin = full access, viewer = read-only parent. MJR
+  enum :role, { user: 0, admin: 1, viewer: 2 }
+
+  # A viewer is linked to one child user they shadow. MJR
+  belongs_to :linked_user, class_name: "User", optional: true
+
   has_many :tasks, dependent: :destroy
   has_many :photos, dependent: :destroy
   has_many :likes, dependent: :destroy
