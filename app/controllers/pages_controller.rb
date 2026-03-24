@@ -72,7 +72,7 @@ class PagesController < ApplicationController
 
   I am a student from Germany that just came back from a one year exchange from Canada.
 
-  Give ma advice if I feel bad or have issues.
+  Give me advice if I feel bad or have issues.
 
   Give me next steps where I feel I have made progress during my stay in Canada.
     PROMPT

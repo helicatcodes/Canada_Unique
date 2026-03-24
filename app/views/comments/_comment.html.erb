@@ -1,7 +1,7 @@
 <%# [HW] Each comment row gets a unique DOM id so turbo_stream.remove can target it directly %>
 <div id="comment-<%= comment.id %>" class="feed-comment">
   <span class="feed-comment__body">
-    <strong class="feed-comment__author"><%= comment.user.name %></strong>
+    <strong class="feed-comment__author"><%= comment.user.display_name %></strong>
     <span class="feed-comment__text"><%= comment.text %></span>
   </span>
   <%# Trash icon shown to the comment's author or an admin. MJR %>

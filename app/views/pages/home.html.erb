@@ -1,5 +1,9 @@
 <h1>Pages#home - CA Logo goes here</h1>
 
+<% if user_signed_in? %>
+  <p class="text-center mb-3">Welcome back, <%= current_user.display_name %>!</p>
+<% end %>
+
 <div class="flex-container">
   <%= link_to pre_canada_path do %>
   <div class="card flex-item rounded" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">

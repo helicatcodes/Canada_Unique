@@ -23,7 +23,7 @@
       </label>
     </div>
 
-    <h2 class="profile-name"><%= current_user.name %></h2>
+    <h2 class="profile-name"><%= [current_user.first_name, current_user.last_name].select(&:present?).join(" ").presence || current_user.name %></h2>
     <p class="profile-email"><%= current_user.email %></p>
   </div>
 
