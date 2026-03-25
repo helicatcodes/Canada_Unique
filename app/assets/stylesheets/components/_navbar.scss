@@ -133,6 +133,32 @@ $nav-height: 64px;
   }
 }
 
+// Profile link wrapper — needs position:relative for the badge
+.bottom-nav__item--profile {
+  position: relative;
+}
+
+// Red unread-notification badge on the profile icon
+.bottom-nav__notif-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: $cu-red;
+  color: #fff;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid $cu-beige;
+  pointer-events: none;
+}
+
 // User avatar in navbar (replaces the fa-user icon when uploaded)
 .bottom-nav__user-avatar {
   width: 38px;

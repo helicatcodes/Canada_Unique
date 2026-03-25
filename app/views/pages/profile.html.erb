@@ -38,9 +38,13 @@
         <i class="fa fa-chevron-right profile-section__item-arrow"></i>
       <% end %>
 
+      <% unread_count = current_user.noticed_notifications.where(read_at: nil).count %>
       <%= link_to notifications_path, class: "profile-section__item" do %>
         <span class="profile-section__item-icon"><i class="fa fa-bell"></i></span>
         <span class="profile-section__item-label">Notifications</span>
+        <% if unread_count > 0 %>
+          <span class="profile-notif-badge"><%= unread_count %></span>
+        <% end %>
         <i class="fa fa-chevron-right profile-section__item-arrow"></i>
       <% end %>
 

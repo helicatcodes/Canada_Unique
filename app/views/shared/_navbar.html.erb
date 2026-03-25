@@ -13,12 +13,16 @@
 
   <div class="bottom-nav__links">
     <% if user_signed_in? %>
-      <%= link_to profile_path, class: "bottom-nav__item" do %>
+      <% unread_count = current_user.noticed_notifications.where(read_at: nil).count %>
+      <%= link_to profile_path, class: "bottom-nav__item bottom-nav__item--profile" do %>
         <% if current_user.avatar.attached? %>
           <%= image_tag current_user.avatar, class: "bottom-nav__user-avatar" %>
         <% else %>
           <i class="fa fa-user"></i>
           <span>Profile</span>
+        <% end %>
+        <% if unread_count > 0 %>
+          <span class="bottom-nav__notif-badge"><%= unread_count %></span>
         <% end %>
       <% end %>
     <% else %>
