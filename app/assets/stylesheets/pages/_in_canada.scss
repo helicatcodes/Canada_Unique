@@ -322,13 +322,13 @@
   min-height: 40px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 // [HW] Caption text
 .photo-card__desc {
-  font-size: 0.8rem;
+  font-size: 0.65rem;
   color: $cu-charcoal;
   margin-bottom: 0.25rem;
 }
@@ -340,10 +340,10 @@
   margin-right: 4px;
 }
 
-// [HW] Icon bar on white card area above the photo — share left, edit+delete right
+// [HW] Icon bar on white card area above the photo — share, edit, delete right-aligned
 .photo-card__actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   padding: 4px 4px 6px;
 
@@ -358,8 +358,8 @@
 
 // [HW] Circular icon buttons — dark navy default, coloured on hover or when active
 .photo-action-btn {
-  width: 32px;
-  height: 32px;
+  width: 26px;
+  height: 26px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -367,7 +367,7 @@
   border-radius: 50%;
   background: none;
   color: $cu-navy;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
@@ -389,14 +389,14 @@
     }
   }
 
-  // [HW] Filled navy when photo is currently shared (active state)
+  // [HW] Light navy tint when photo is currently shared — readable but not dominant
   &--active {
-    background: $cu-navy;
-    color: $cu-white;
+    background: lighten($cu-navy, 60%);
+    color: $cu-navy;
     border-color: $cu-navy;
 
     &:hover {
-      background: darken($cu-navy, 8%);
+      background: lighten($cu-navy, 52%);
       border-color: darken($cu-navy, 8%);
     }
   }
@@ -802,7 +802,7 @@
   gap: 4px;
   padding: 0 0 6px;
   font-size: 0.72rem;
-  font-weight: 600;
+  font-weight: 400;
   color: $cu-charcoal;
 
   i { color: $cu-red; font-size: 0.65rem; }

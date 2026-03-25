@@ -106,7 +106,25 @@
                       <i class="fa-solid fa-xmark"></i>
                     </button>
 
-                    <%# [HW] Location in the white frame above the image — right-aligned, top-right corner %>
+                    <%# [HW] Author row — mirrors index card: avatar (opens profile modal) + name %>
+                    <div class="feed-grid__author">
+                      <span onclick="event.stopPropagation()"
+                            data-bs-toggle="modal"
+                            data-bs-target="#avatar-modal-<%= photo.user.id %>"
+                            class="feed-grid__avatar-trigger"
+                            title="View <%= photo.user.name %>'s profile">
+                        <% if photo.user.avatar.attached? %>
+                          <%= image_tag photo.user.avatar, class: "feed-grid__avatar" %>
+                        <% else %>
+                          <span class="feed-grid__avatar feed-grid__avatar--placeholder">
+                            <i class="fa fa-user"></i>
+                          </span>
+                        <% end %>
+                      </span>
+                      <span class="feed-grid__author-name"><%= photo.user.name %></span>
+                    </div>
+
+                    <%# [HW] Location row — same position as index card, below author %>
                     <% if photo.location.present? %>
                       <div class="feed-modal__above-img">
                         <i class="fa-solid fa-location-dot"></i>
@@ -195,18 +213,9 @@
         <% @my_photos.each do |photo| %>
           <% if photo.image.attached? %>
             <div class="photo-card">
-              <%# [HW] Icon bar — location label left, share + edit + delete right %>
+              <%# [HW] Icon bar — share + edit + delete right-aligned %>
               <div class="photo-card__actions">
-                <%# [HW] Left side: location pin + truncated text (informational, not a button) %>
-                <div class="photo-card__actions-left">
-                  <% if photo.location.present? %>
-                    <span class="photo-card__location-label">
-                      <i class="fa-solid fa-location-dot"></i>
-                      <span><%= photo.location %></span>
-                    </span>
-                  <% end %>
-                </div>
-                <%# [HW] Right side: share moved here from left, alongside edit and delete %>
+                <%# [HW] Right side: share, edit, delete %>
                 <div class="photo-card__actions-right">
                   <%= link_to toggle_share_photo_path(photo),
                       data: { turbo_method: :patch },
@@ -226,6 +235,14 @@
                   <% end %>
                 </div>
               </div>
+
+              <%# [HW] Location row — sits below the icon bar, above the photo, matching feed card layout %>
+              <% if photo.location.present? %>
+                <div class="feed-grid__location">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <span><%= photo.location %></span>
+                </div>
+              <% end %>
 
               <%# [HW] Wrapper makes the image a modal trigger — action buttons above are unaffected %>
               <div class="photo-card__img-wrap"
