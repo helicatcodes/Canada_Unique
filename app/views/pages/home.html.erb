@@ -1,7 +1,9 @@
-<h1>Pages#home - CA Logo goes here</h1>
+<div class="text-center">
+  <%= image_tag "cu_logo.png", alt: "Canada Unique" %>
+</div>
 
 <% if user_signed_in? %>
-  <p class="text-center mb-3">Welcome back, <%= current_user.display_name %>!</p>
+  <p class="text-center mb-3" style="font-family: 'Nunito', Helvetica, sans-serif; font-weight: 700; font-size: 1.4rem;">Welcome back, <%= current_user.display_name %>!</p>
 <% end %>
 
 <div class="flex-container">
@@ -14,15 +16,15 @@
   <% end %>
   <br>
   <%= link_to in_canada_path do %>
-  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'in_canada_image.jpg' %>);">
     <div class="font-homepage">
-      <h1>Community</h1>
+      <h1>Canada Moments</h1>
     </div>
   </div>
   <% end  %>
   <br>
   <%= link_to post_canada_path do %>
-  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'pre_canada_image.jpg' %>);">
+  <div class="card flex-item" style="background-image: linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.4)), url(<%= asset_path 'post_canada_image.jpg' %>);">
     <div class="font-homepage">
       <h1>Welcome back</h1>
     </div>

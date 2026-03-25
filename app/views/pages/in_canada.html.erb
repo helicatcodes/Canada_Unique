@@ -1,21 +1,27 @@
 <div class="container mt-4">
-  <h1 class="mb-3">Canada Community</h1>
+  <h1 class="mb-3">Canada Moments</h1>
 
   <%# [HW] Bootstrap tab bar — data-bs-toggle="tab" and data-bs-target are all Bootstrap needs %>
   <%# [HW] No custom JavaScript required — Bootstrap's bundled JS handles show/hide %>
   <ul class="nav nav-tabs cu-tabs" id="canadaTabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="feed-tab"
+      <button class="nav-link <%= 'active' unless params[:active_tab] == 'gallery' %>" id="feed-tab"
               data-bs-toggle="tab" data-bs-target="#tab-feed"
               type="button" role="tab">
-        Community Feed
+        Community
       </button>
     </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="my-photos-tab"
+    <li class="nav-item nav-item--with-action" role="presentation">
+      <button class="nav-link <%= 'active' if params[:active_tab] == 'gallery' %>" id="my-photos-tab"
               data-bs-toggle="tab" data-bs-target="#tab-my-photos"
               type="button" role="tab">
-        My Photos
+        Gallery
+      </button>
+      <%# [HW] "+" opens the upload modal — not a tab, so no data-bs-toggle="tab" %>
+      <button class="add-photo-btn" type="button"
+              data-bs-toggle="modal" data-bs-target="#add-photo-modal"
+              title="Add photo">
+        <i class="fa-solid fa-plus"></i>
       </button>
     </li>
   </ul>
@@ -26,7 +32,7 @@
     <%# TAB 1 — Community Feed %>
     <%# show + active makes this the default visible tab on page load %>
     <%# ============================================================ %>
-    <div class="tab-pane fade show active" id="tab-feed" role="tabpanel">
+    <div class="tab-pane fade <%= 'show active' unless params[:active_tab] == 'gallery' %>" id="tab-feed" role="tabpanel">
       <% if @feed_photos.none? %>
         <p class="text-muted mt-3">No photos shared yet — be the first!</p>
       <% else %>
@@ -61,13 +67,22 @@
                   <span class="feed-grid__author-name"><%= photo.user.name %></span>
                 </div>
 
+                <%# [HW] Location row — shown only when the photo has a location tag %>
+                <%# [HW] Sits on the white frame between the author row and the photo %>
+                <% if photo.location.present? %>
+                  <div class="feed-grid__location">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span><%= photo.location %></span>
+                  </div>
+                <% end %>
+
                 <%# [HW] Photo wrapper — position:relative here so the overlay is scoped to the photo %>
                 <%# [HW] only, not bleeding into the author/caption rows %>
                 <div class="feed-grid__photo-wrap">
                   <%= image_tag photo.image, class: "feed-grid__img", alt: photo.description %>
                   <div class="feed-grid__overlay">
-                    <span><i class="fa-solid fa-heart"></i> <%= photo.likes.size %></span>
-                    <span><i class="fa-solid fa-comment"></i> <%= photo.comments.size %></span>
+                    <span id="feed-overlay-likes-<%= photo.id %>"><i class="fa-solid fa-heart"></i> <%= photo.likes.size %></span>
+                    <span id="feed-overlay-comments-<%= photo.id %>"><i class="fa-solid fa-comment"></i> <%= photo.comments.size %></span>
                   </div>
                 </div>
 
@@ -82,13 +97,21 @@
               <%# [HW] Modal — modal-lg gives ~800px width, styled as a zoomed polaroid card %>
               <div class="modal fade feed-modal" id="photo-modal-<%= photo.id %>"
                    tabindex="-1" aria-label="<%= photo.user.display_name %>'s photo">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
 
                     <%# [HW] Close button floats over the top-right corner of the photo %>
                     <button class="feed-modal__close" data-bs-dismiss="modal" aria-label="Close">
                       <i class="fa-solid fa-xmark"></i>
                     </button>
+
+                    <%# [HW] Location in the white frame above the image — right-aligned, top-right corner %>
+                    <% if photo.location.present? %>
+                      <div class="feed-modal__above-img">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span><%= photo.location %></span>
+                      </div>
+                    <% end %>
 
                     <%# [HW] Photo fills the white frame, square crop matching the grid thumbnail %>
                     <%= image_tag photo.image, class: "feed-modal__img", alt: photo.description %>
@@ -162,54 +185,34 @@
     </div>
 
     <%# ============================================================ %>
-    <%# TAB 2 — My Photos (unchanged from before) %>
+    <%# TAB 2 — Gallery %>
     <%# ============================================================ %>
-    <div class="tab-pane fade" id="tab-my-photos" role="tabpanel">
-      <%# [HW] Grid always rendered — always contains at least the upload card %>
+    <div class="tab-pane fade <%= 'show active' if params[:active_tab] == 'gallery' %>" id="tab-my-photos" role="tabpanel">
       <div class="photo-grid mt-3">
 
-        <%# [HW] Upload card — permanent first slot, styled as an empty polaroid %>
-        <div class="photo-card photo-card--upload">
-          <%= simple_form_for @photo, url: photos_path do |f| %>
-
-            <%# [HW] Empty actions bar — forces the grey dropzone to start at the same vertical %>
-            <%# [HW] position as the photo in adjacent real cards (min-height matches button row) %>
-            <div class="photo-card__actions"></div>
-
-            <%# [HW] Grey square "photo area" — clicking opens the file picker via label trick %>
-            <label class="photo-card--upload__dropzone" for="photo_image">
-              <i class="fa-solid fa-camera photo-card--upload__camera"></i>
-              <span class="photo-card--upload__hint">Click to upload</span>
-            </label>
-
-            <%# [HW] Hidden file input triggered by the label above %>
-            <%= f.input :image, as: :file, label: false,
-                input_html: { id: "photo_image", class: "photo-card--upload__input" } %>
-
-            <div class="photo-card__body photo-card--upload__body">
-              <%= f.input :description, label: false, placeholder: "Add a caption...",
-                  wrapper: false, input_html: { class: "photo-card--upload__caption" } %>
-              <%= f.submit "Upload", class: "photo-card--upload__submit" %>
-            </div>
-
-          <% end %>
-        </div>
-
-        <%# [HW] User's own photos follow the upload card %>
+        <%# [HW] User's own photos %>
         <% @my_photos.each do |photo| %>
           <% if photo.image.attached? %>
             <div class="photo-card">
-              <%# [HW] Icon bar — share left, edit + delete right %>
+              <%# [HW] Icon bar — location label left, share + edit + delete right %>
               <div class="photo-card__actions">
+                <%# [HW] Left side: location pin + truncated text (informational, not a button) %>
                 <div class="photo-card__actions-left">
+                  <% if photo.location.present? %>
+                    <span class="photo-card__location-label">
+                      <i class="fa-solid fa-location-dot"></i>
+                      <span><%= photo.location %></span>
+                    </span>
+                  <% end %>
+                </div>
+                <%# [HW] Right side: share moved here from left, alongside edit and delete %>
+                <div class="photo-card__actions-right">
                   <%= link_to toggle_share_photo_path(photo),
                       data: { turbo_method: :patch },
                       class: "photo-action-btn #{ photo.shared ? 'photo-action-btn--active' : '' }",
                       title: photo.shared ? "Unshare from feed" : "Share to community feed" do %>
                     <i class="fa-solid fa-share-nodes"></i>
                   <% end %>
-                </div>
-                <div class="photo-card__actions-right">
                   <%= link_to edit_photo_path(photo), class: "photo-action-btn", title: "Edit caption" do %>
                     <i class="fa-solid fa-pen"></i>
                   <% end %>
@@ -223,7 +226,12 @@
                 </div>
               </div>
 
-              <%= image_tag photo.image, class: "photo-card__img" %>
+              <%# [HW] Wrapper makes the image a modal trigger — action buttons above are unaffected %>
+              <div class="photo-card__img-wrap"
+                   data-bs-toggle="modal"
+                   data-bs-target="#gallery-modal-<%= photo.id %>">
+                <%= image_tag photo.image, class: "photo-card__img" %>
+              </div>
 
               <div class="photo-card__body">
                 <p class="photo-card__desc"><%= photo.description %></p>
@@ -233,7 +241,103 @@
         <% end %>
 
       </div>
+
+      <%# [HW] Gallery focused-view modals — one per photo, reuses feed-modal styling %>
+      <%# [HW] Shows location + caption only (no social features — private photos) %>
+      <% @my_photos.each do |photo| %>
+        <% if photo.image.attached? %>
+          <div class="modal fade feed-modal" id="gallery-modal-<%= photo.id %>"
+               tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <button class="feed-modal__close" data-bs-dismiss="modal" aria-label="Close">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+                <%# [HW] Location in the white frame above the image — right-aligned, top-right corner %>
+                <% if photo.location.present? %>
+                  <div class="feed-modal__above-img">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <span><%= photo.location %></span>
+                  </div>
+                <% end %>
+                <%= image_tag photo.image, class: "feed-modal__img", alt: photo.description %>
+                <div class="feed-modal__content">
+                  <p class="photo-card__desc">
+                    <strong class="photo-card__author"><%= current_user.display_name %></strong>
+                    <%= photo.description %>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+
     </div>
 
   </div>
+
+  <%# ============================================================ %>
+  <%# Add Photo Modal — triggered by the "+" next to the Gallery tab %>
+  <%# ============================================================ %>
+  <div class="modal fade add-photo-modal" id="add-photo-modal"
+       tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="upload-tab">
+          <%# [HW] data-controller wires up the Stimulus preview controller %>
+          <div class="photo-card photo-card--upload photo-card--upload-lg"
+               data-controller="photo-upload">
+            <%= simple_form_for @photo, url: photos_path do |f| %>
+
+              <%# [HW] Location field above the dropzone — mirrors its position on the posted photo card %>
+              <%# [HW] data-controller wires up the Nominatim autocomplete Stimulus controller %>
+              <div class="photo-card--upload__field-row" data-controller="location-autocomplete">
+                <i class="fa-solid fa-location-dot photo-card--upload__field-icon"></i>
+                <div class="location-autocomplete-wrap">
+                  <%= f.input :location, label: false, placeholder: "Add a location...",
+                      wrapper: false, input_html: {
+                        class: "photo-card--upload__caption",
+                        data: { "location-autocomplete-target": "input",
+                                action: "input->location-autocomplete#search" }
+                      } %>
+                  <%# [HW] Dropdown is hidden by default; Stimulus populates and shows it on search %>
+                  <div data-location-autocomplete-target="dropdown"
+                       class="location-dropdown" hidden></div>
+                </div>
+              </div>
+
+              <%# [HW] Grey square dropzone — placeholder shows until a file is chosen %>
+              <label class="photo-card--upload__dropzone" for="photo_image">
+                <span class="photo-card--upload__placeholder" data-photo-upload-target="placeholder">
+                  <i class="fa-solid fa-camera photo-card--upload__camera"></i>
+                  <span class="photo-card--upload__hint">Click to upload a photo</span>
+                </span>
+                <%# [HW] Preview image — hidden until a file is selected %>
+                <img data-photo-upload-target="preview"
+                     class="photo-card--upload__preview" alt="" />
+              </label>
+
+              <%# [HW] Hidden file input — triggers preview on change %>
+              <%= f.input :image, as: :file, label: false,
+                  input_html: {
+                    id: "photo_image",
+                    class: "photo-card--upload__input",
+                    data: { action: "change->photo-upload#preview" }
+                  } %>
+
+              <div class="photo-card__body photo-card--upload__body">
+                <%= f.input :description, label: false, placeholder: "Add a caption...",
+                    wrapper: false, input_html: { class: "photo-card--upload__caption" } %>
+                <%= f.submit "Upload", class: "photo-card--upload__submit" %>
+              </div>
+
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 </div>

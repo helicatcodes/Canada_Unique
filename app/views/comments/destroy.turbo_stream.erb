@@ -1,2 +1,7 @@
 <%# [HW] Remove the comment row from the DOM by its unique id — modal stays open, no page navigation %>
 <%= turbo_stream.remove "comment-#{@comment.id}" %>
+
+<%# [HW] Also update the comment count in the hover overlay on the feed grid card %>
+<%= turbo_stream.replace "feed-overlay-comments-#{@photo.id}" do %>
+  <span id="feed-overlay-comments-<%= @photo.id %>"><i class="fa-solid fa-comment"></i> <%= @photo.comments.size %></span>
+<% end %>

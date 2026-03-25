@@ -16,6 +16,7 @@
     <%= f.input :password_confirmation,
                 required: true,
                 input_html: { autocomplete: "new-password" } %>
+    <%= f.hidden_field :token, value: params[:token] %>
   </div>
 
   <div class="form-actions">

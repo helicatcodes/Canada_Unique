@@ -1,0 +1,7 @@
+<h1>Send Invitations</h1>
+
+<%= form_with url: invitations_path, method: :post do |f| %>
+  <%= f.label :emails, "Email addresses (comma or newline separated)" %>
+  <%= f.text_area :emails %>
+  <%= f.submit "Send Invitations" %>
+<% end %>

@@ -158,6 +158,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_25_095022) do
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
+  create_table "tokens", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "email"
+    t.string "status", default: "pending"
+    t.string "token"
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_tokens_on_token", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.integer "batch_number"
     t.datetime "created_at", null: false

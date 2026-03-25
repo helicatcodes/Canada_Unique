@@ -17,24 +17,24 @@
   border-radius: $border-radius-lg $border-radius-lg 0 0;
 }
 
-// [HW] Photo grid — responsive columns, wider gap to let polaroid shadows breathe
+// [HW] Photo grid — responsive columns, matches community feed grid density and outer padding
 .photo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1.25rem;
 }
 
-// [HW] Polaroid card: thick white border on all sides, extra padding at the bottom
+// [HW] Polaroid card: matches community feed card frame, shadow, and hover behaviour
 .photo-card {
   background: $cu-white;
-  padding: 8px 8px 36px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.08);
+  padding: 10px 10px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08);
   border-radius: 2px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
 
   &:hover {
-    transform: scale(1.03) rotate(0deg) !important;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.1);
   }
 
   // [HW] Upload card inherits the full polaroid look — no border override, no shadow reset
@@ -44,8 +44,7 @@
 
     // [HW] Suppress the scale-on-hover — looks odd when the card contains a form
     &:hover {
-      transform: none !important;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), 0 1px 4px rgba(0, 0, 0, 0.08);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08);
     }
 
     .photo-card__actions {
@@ -56,7 +55,9 @@
 
 // [HW] Grey square fills the same space as a real photo — aspect-ratio 1/1 enforces the square
 // [HW] cursor: pointer signals the whole area is clickable (linked to the hidden file input)
+// [HW] position: relative needed so the absolute preview image fills the square correctly
 .photo-card--upload__dropzone {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -67,8 +68,19 @@
   cursor: pointer;
   transition: background 0.2s ease;
   margin-bottom: 0;
+  overflow: hidden;
 
   &:hover { background: darken($light-gray, 4%); }
+}
+
+// [HW] Preview image — absolutely fills the dropzone square once a file is selected
+.photo-card--upload__preview {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 // [HW] Hidden file input — label click triggers it so it never needs to be visible
@@ -81,6 +93,14 @@
   font-size: 2rem;
   color: darken($light-gray, 25%);
   margin-bottom: 0.4rem;
+}
+
+// [HW] Placeholder wrapper — stacks the camera icon and hint text vertically
+.photo-card--upload__placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 // [HW] Small hint text below the camera icon
@@ -127,17 +147,179 @@
   &:hover { background: darken($cu-navy, 8%); }
 }
 
+// [HW] Location field row in the upload modal — red pin icon left, input right
+.photo-card--upload__field-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+// [HW] Red pin icon that prefixes the location input
+.photo-card--upload__field-icon {
+  font-size: 0.75rem;
+  color: $cu-red;
+  flex-shrink: 0;
+}
+
+// [HW] Wrapper gives the dropdown an anchor point (position: relative) while the input fills the space
+.location-autocomplete-wrap {
+  position: relative;
+  flex: 1;
+}
+
+// [HW] Suggestion dropdown — floats below the input, scrollable if many results
+.location-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid $light-gray;
+  border-radius: 2px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+// [HW] Each suggestion row — truncated to one line, highlights on hover
+.location-suggestion {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: 0.75rem;
+  color: $cu-charcoal;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover { background: $light-gray; }
+}
+
+// [HW] Gallery card location label — left of the polaroid actions bar, above the photo
+// [HW] Truncated with ellipsis if the place name is long
+.photo-card__location-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.65rem;
+  max-width: 110px;
+  overflow: hidden;
+  white-space: nowrap;
+  color: $cu-red;
+
+  span {
+    color: $cu-charcoal;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+// [HW] Feed grid location row — sits between author name and photo on the white card frame
+// [HW] overflow: hidden on the row + min-width: 0 on the span enables ellipsis inside flex
+.feed-grid__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 5px;
+  font-size: 0.72rem;
+  color: $cu-charcoal;
+  font-weight: 600;
+  overflow: hidden;
+
+  i { color: $cu-red; font-size: 0.65rem; flex-shrink: 0; }
+
+  span {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    min-width: 0;
+  }
+}
+
+// [HW] Gallery nav item — flex row so the "+" button sits inline beside the tab label
+.nav-item--with-action {
+  display: flex;
+  align-items: center;
+}
+
+// [HW] Small "+" circle that opens the Add Photo modal
+.add-photo-btn {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: 1px solid $light-gray;
+  border-radius: 50%;
+  color: $cu-navy;
+  font-size: 0.65rem;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: background 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background: $light-gray;
+    border-color: $cu-charcoal;
+  }
+}
+
+// [HW] Add Photo modal — centres the upload card inside the modal frame
+.upload-tab {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+// [HW] Enlarged upload card inside the Add Photo modal
+.photo-card--upload-lg {
+  width: 100%;
+  max-width: 380px;
+
+  .photo-card--upload__camera {
+    font-size: 3.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .photo-card--upload__hint {
+    font-size: 0.9rem;
+  }
+}
+
+// [HW] Wrapper for the gallery photo — position:relative anchors the location badge,
+// [HW] overflow:hidden clips the hover scale, cursor:pointer signals the image is clickable
+.photo-card__img-wrap {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
 // [HW] Square crop — keeps the grid uniform regardless of original image dimensions
+// [HW] Scale on parent hover matches feed's image-level zoom (card frame stays still)
 .photo-card__img {
   width: 100%;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   display: block;
+  transition: transform 0.2s ease;
+
+  .photo-card:hover & {
+    transform: scale(1.04);
+  }
 }
 
-// [HW] Caption area — centered for My Photos (polaroid feel), left-aligned for feed cards
+// [HW] Caption area — matches feed caption spacing (bottom-heavy for polaroid feel)
 .photo-card__body {
-  padding: 10px 4px 0;
+  padding: 7px 0 14px;
+  min-height: 40px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -363,6 +545,7 @@
 // ============================================================
 
 .cu-tabs {
+  justify-content: center;
   border-bottom: 2px solid $light-gray;
   margin-bottom: 0;
 
@@ -556,8 +739,31 @@
 // ============================================================
 
 // ============================================================
+// ADD PHOTO MODAL — frameless, only the polaroid card is visible
+// ============================================================
+
+.add-photo-modal .modal-dialog {
+  max-width: 400px;
+}
+
+// [HW] Transparent modal shell — no white box, no padding, no shadow
+// [HW] overflow: visible so the polaroid card's own shadow isn't clipped
+.add-photo-modal .modal-content {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  overflow: visible;
+}
+
+// ============================================================
 // COMMUNITY FEED — MODAL (polaroid style: photo top, content below)
 // ============================================================
+
+// [HW] Constrain to ~420px — matches add-photo modal width, keeps photo + comments in one view
+.feed-modal .modal-dialog {
+  max-width: 420px;
+}
 
 .feed-modal .modal-content {
   border: none;
@@ -580,10 +786,26 @@
 
 // [HW] Content below the photo — no horizontal padding (modal-content handles the 16px frame)
 // [HW] Bottom padding is larger than top, matching the polaroid proportion of the grid cards
+// [HW] max-height reduced from 45vh — photo is smaller now so less scroll room needed
 .feed-modal__content {
   padding: 10px 0 22px;
-  max-height: 45vh;
+  max-height: 28vh;
   overflow-y: auto;
+}
+
+// [HW] Location in the white frame above the photo — right-aligned to sit in the top-right corner
+// [HW] padding-right leaves clearance for the absolute close button (22px wide + 6px from edge)
+.feed-modal__above-img {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 4px;
+  padding: 0 0 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: $cu-charcoal;
+
+  i { color: $cu-red; font-size: 0.65rem; }
 }
 
 .feed-modal__close {

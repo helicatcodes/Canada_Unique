@@ -5,8 +5,9 @@
 
   <div class="bottom-nav__center">
     <%= button_to chats_path, method: :post, class: "bottom-nav__chat-btn", form_class: "bottom-nav__chat-form" do %>
-      <%= image_tag "chatbot_avatar_1.png", alt: "Chat", class: "bottom-nav__chat-avatar" %>
-      <span>Start Chat</span>
+      <div class="bottom-nav__chat-bubble">
+        <%= image_tag "chatbot_avatar_1.png", alt: "Chat", class: "bottom-nav__chat-avatar" %>
+      </div>
     <% end %>
   </div>
 
@@ -17,8 +18,8 @@
           <%= image_tag current_user.avatar, class: "bottom-nav__user-avatar" %>
         <% else %>
           <i class="fa fa-user"></i>
+          <span>Profile</span>
         <% end %>
-        <span>Profile</span>
       <% end %>
     <% else %>
       <%= link_to new_user_session_path, class: "bottom-nav__item" do %>
