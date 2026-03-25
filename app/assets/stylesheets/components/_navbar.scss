@@ -62,7 +62,7 @@ $nav-height: 64px;
   background-color: $cu-beige;
   border: 2px solid $cu-red;
   border-radius: 16px 16px 16px 4px;
-  padding: 4px;
+  padding: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -81,8 +81,8 @@ $nav-height: 64px;
 }
 
 .bottom-nav__chat-avatar {
-  width: 30px;
-  height: 30px;
+  width: 36px;
+  height: 36px;
   border-radius: 12px 12px 12px 2px;
   object-fit: cover;
   display: block;
@@ -135,8 +135,8 @@ $nav-height: 64px;
 
 // User avatar in navbar (replaces the fa-user icon when uploaded)
 .bottom-nav__user-avatar {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid $cu-red;
