@@ -1,7 +1,16 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Canada Unique" %></title>
+    <title><%= content_for(:title) || "Canada Unique - Your exchange year in Canada" %></title>
+    <%= favicon_link_tag 'faviconCU.ico' %>
+
+    <%# Open Graph meta tags for social sharing %>
+    <meta property="og:title" content="Canada Unique - Your exchange year in Canada">
+    <meta property="og:description" content="Connect with fellow exchange students, share your Canadian adventure, and reflect on your journey.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.cuapp.live">
+    <meta property="og:image" content="<%= image_url('cu_logo.png') %>">
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Canada Unique">
