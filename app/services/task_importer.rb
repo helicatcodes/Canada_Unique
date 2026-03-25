@@ -9,6 +9,8 @@ class TaskImporter
       task_name   = row[1]&.value
       description = row[2]&.value
       status      = row[3]&.value
+      obligatory = row[4]&.value
+
 
       next if email.blank? || task_name.blank?
 
@@ -18,6 +20,7 @@ class TaskImporter
       task = user.tasks.find_or_initialize_by(name: task_name)
       task.description = description
       task.status      = status
+      task.obligatory = obligatory
       task.save!
     end
   end

@@ -50,6 +50,7 @@ Rails.application.routes.draw do
   # Uses "viewers" path to avoid conflict with devise_for :users (both would map to POST /users). MJR
   resources :viewers, only: [:new, :create], controller: "users"
   resources :tasks, only: [:show, :edit, :update]
+  post "tasks/sync", to: "tasks#sync", as: :sync_tasks
 
   # status is polled by the frontend to check if the background AI summary job is done
   resources :questionnaires, only: [:update] do
