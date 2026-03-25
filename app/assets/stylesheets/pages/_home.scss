@@ -1,8 +1,36 @@
 // Specific CSS for your home-page
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 500px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+.home-header__logo {
+  height: 50px;
+  width: auto;
+}
+
+.home-header__welcome {
+  margin: 0;
+  font-family: 'Nunito', Helvetica, sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1.4;
+  text-align: right;
+
+  span {
+    font-size: 1.3rem;
+  }
+}
+
 .flex-container {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin: 0 auto;
 }
 
 .card {
@@ -51,11 +79,15 @@
 }
 
 @media (min-width: 481px) and (max-width: 1366px) {
+  .home-header {
+    width: 90vw;
+  }
+
   .flex-container {
     gap: 12px;
     width: 100%;
     align-items: stretch;
-    height: calc(100dvh - 64px - 90px - 24px);
+    height: calc(100dvh - 64px - 90px - 20px);
   }
 
   .flex-container a {
@@ -77,20 +109,18 @@
 }
 
 @media (max-width: 480px) {
-  .text-center {
-    text-align: left !important;
-    padding-left: 16px;
+  .home-header {
+    width: 95vw;
   }
 
-  .text-center img {
-    max-height: 50px;
-    width: auto;
+  .home-header__logo {
+    height: 40px;
   }
 
   .flex-container {
     gap: 8px;
     width: 100%;
-    height: calc(100dvh - 64px - 70px - 32px);
+    height: calc(100dvh - 64px - 70px - 16px);
   }
 
   .flex-container a {

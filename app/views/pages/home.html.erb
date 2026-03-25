@@ -1,10 +1,9 @@
-<div class="text-center">
-  <%= image_tag "cu_logo.png", alt: "Canada Unique" %>
+<div class="home-header">
+  <%= image_tag "cu_logo.png", alt: "Canada Unique", class: "home-header__logo" %>
+  <% if user_signed_in? %>
+    <p class="home-header__welcome">Welcome back,<br><span><%= current_user.display_name %></span></p>
+  <% end %>
 </div>
-
-<% if user_signed_in? %>
-  <p class="text-center mb-3" style="font-family: 'Nunito', Helvetica, sans-serif; font-weight: 700; font-size: 1.4rem;">Welcome back, <%= current_user.display_name %>!</p>
-<% end %>
 
 <div class="flex-container">
   <%= link_to pre_canada_path do %>
