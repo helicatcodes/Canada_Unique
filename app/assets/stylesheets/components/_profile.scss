@@ -134,6 +134,23 @@
   color: lighten($cu-charcoal, 25%);
 }
 
+// Red unread count badge on the Notifications row
+.profile-notif-badge {
+  background-color: $cu-red;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
 // ── Log out button ────────────────────────────────────────────────────────────
 
 .profile-logout-btn {
