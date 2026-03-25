@@ -115,42 +115,79 @@ puts "Created #{User.count} users"
 # ---------------------------
 puts "Creating photos..."
 
-# Hardcoded captions per user — matched to photos by index order. MJR
+# Captions per user — matched to photos by index order.
+# Written in social media style with emojis and hashtags. MJR/HW
 photo_captions = {
   "Mario" => [
-    "First day getting ready for Canada!",
-    "Packing my bags - so excited!",
-    "Saying goodbye to friends",
-    "Airport vibes"
+    "First day getting ready for Canada! 🍁✈️ #CanadaBound #ExchangeYear #CantWait",
+    "Packing my bags — so excited I can barely breathe! 🎒😍 #Packing #AdventureAwaits #CanadaUniqueExchange",
+    "Saying goodbye to the best people 🥺❤️ See you in 5 months! #MissYouAlready #ExchangeLife #Goodbyes",
+    "Airport vibes loading ✈️🛫 Next stop: Canada! #AirportVibes #OffWeGo #ExchangeYear"
   ],
   "Helena" => [
-    "Arrived in Vancouver! The mountains are insane",
-    "First day at school - everyone is so nice",
-    "Weekend hike with my host family",
-    "Canadian breakfast hits different",
-    "Downtown Vancouver at night",
-    "Snow day!!"
+    "I MADE IT TO VANCOUVER 🍁🏔️ The mountains literally took my breath away #Vancouver #ExchangeYear #CanadaUniqueExchange",
+    "First day at school done! Everyone is SO nice here 😊🎒 #NewSchool #ExchangeLife #VancouverVibes",
+    "Weekend hike with my host family 🥾🌲 Nature therapy hits different in Canada #Hiking #NatureLovers #BCWild",
+    "Canadian breakfast >>> 🍁🥞 Maple syrup on everything, no notes #CanadianFood #MapleLife #Brunch",
+    "Downtown Vancouver at night is absolutely stunning ✨🌃 #Vancouver #CityLights #NightPhotography",
+    "SNOW DAY!! ❄️⛄ My first real snow and I am obsessed #SnowDay #WinterWonderland #VancouverSnow"
   ],
   "Niels" => [
-    "Toronto skyline from the CN Tower",
-    "Hockey game last night - incredible atmosphere",
-    "Maple syrup tasting at the market",
-    "Niagara Falls - worth the trip",
-    "Last week of school, bittersweet"
+    "Toronto skyline from the CN Tower 🏙️😮 I am SO small #CNTower #Toronto #ExchangeLife",
+    "Hockey game last night and my voice is GONE 🏒🇨🇦 Best atmosphere I have ever experienced #NHL #HockeyNight #Toronto",
+    "Maple syrup tasting at the market 🍁😋 I may have bought too many bottles #MapleLife #StLawrenceMarket #Toronto",
+    "NIAGARA FALLS 🌊🤯 Worth. Every. Second. #NiagaraFalls #Ontario #MustSee",
+    "Last week of school how is this already ending 🥺📚 Bittersweet does not even cover it #ExchangeYear #LastWeek #Bittersweet"
   ],
   "Manu" => [
-    "Missing Canadian winters already",
-    "Best memories from my exchange year",
-    "Final day at school",
-    "Goodbye Canada, hello Germany",
-    "One year later - still dreaming of Canada"
+    "Missing Canadian winters so much right now ❄️😭 Nothing compares #PostCanada #MissingCanada #HomeIsWhereTheSnowIs",
+    "Going through my photos and crying a little 🥺📸 Best year of my life #ExchangeYear #Memories #CanadaForever",
+    "Final day at school still not over it 🎓🥲 Thank you for everything Canada #FinalDay #Gratitude #ExchangeLife",
+    "Goodbye Canada, hello Germany 🇨🇦🇩🇪 Heart is staying behind #Bittersweet #ExchangeEnds #SeeYouSoon",
+    "One year later and I still dream about Canada every single night 🍁💭 #OneYearAnniversary #ForeverGrateful #CanadaUnique"
+  ]
+}
+
+# Locations per user — index matches the caption above (caption 0 → location 0).
+# All locations are in Canada to match the seed's Canada-focused context.
+# Each user is placed in a different Canadian city, with real high school names
+# used where the photo context fits a school setting. HW
+photo_locations = {
+  "Mario" => [
+    "Ottawa, ON, Canada",
+    "Ottawa, ON, Canada",
+    "Lisgar Collegiate Institute, Ottawa, ON",
+    "Ottawa Macdonald-Cartier International Airport, ON"
+  ],
+  "Helena" => [
+    "Vancouver, BC, Canada",
+    "Kitsilano Secondary School, Vancouver, BC",
+    "Grouse Mountain, BC, Canada",
+    "Vancouver, BC, Canada",
+    "Downtown Vancouver, BC, Canada",
+    "North Vancouver, BC, Canada"
+  ],
+  "Niels" => [
+    "CN Tower, Toronto, ON",
+    "Scotiabank Arena, Toronto, ON",
+    "St. Lawrence Market, Toronto, ON",
+    "Niagara Falls, ON, Canada",
+    "Northern Secondary School, Toronto, ON"
+  ],
+  "Manu" => [
+    "Montreal, QC, Canada",
+    "Montreal, QC, Canada",
+    "Westmount High School, Montreal, QC",
+    "Montreal-Trudeau International Airport, QC",
+    "Montreal, QC, Canada"
   ]
 }
 
 all_photos = []
 
 users.each do |folder, user|
-  captions = photo_captions[folder] || []
+  captions  = photo_captions[folder]  || []
+  locations = photo_locations[folder] || [] # look up the matching location list for this user
   # Scope photos to each user's own folder so users get their own images, not a shared pool. MJR
   user_photos = Dir.glob("#{SEEDS_IMAGES_PATH}/#{folder}/[Pp]hoto*").sort
 
@@ -158,6 +195,7 @@ users.each do |folder, user|
     file = user_photos[index % user_photos.length]
     photo = Photo.create!(
       description: caption,
+      location:    locations[index], # index keeps caption and location in sync
       user: user,
       shared: [true, true, false].sample
     )

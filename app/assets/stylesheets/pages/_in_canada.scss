@@ -229,9 +229,9 @@
   align-items: center;
   gap: 4px;
   padding: 0 0 5px;
-  font-size: 0.72rem;
+  font-size: 0.60rem;
   color: $cu-charcoal;
-  font-weight: 600;
+  font-weight: 400;
   overflow: hidden;
 
   i { color: $cu-red; font-size: 0.65rem; flex-shrink: 0; }
@@ -456,7 +456,7 @@
   align-items: baseline;
   justify-content: space-between;
   padding: 2px 0;
-  font-size: 0.78rem;
+  font-size: 0.65rem;
   color: $cu-charcoal;
 
   form { display: inline-flex; margin: 0; }
@@ -633,8 +633,8 @@
 // [HW] Author name — same bold navy as before, now sits right next to the avatar
 // [HW] ellipsis prevents long names from breaking the card layout on narrow columns
 .feed-grid__author-name {
-  font-size: 0.88rem;
-  font-weight: 700;
+  font-size: 0.80rem;
+  font-weight: 520;
   color: $cu-navy;
   white-space: nowrap;
   overflow: hidden;
@@ -728,9 +728,9 @@
 // [HW] min-height keeps all cards the same height even when a photo has no caption
 .feed-grid__caption {
   padding: 7px 0 14px;
-  font-size: 0.88rem;
+  font-size: 0.65rem;
   color: $cu-charcoal;
-  text-align: center;
+  text-align: left;
   min-height: 40px;
 }
 
@@ -830,5 +830,18 @@
   &:hover {
     background: darken($light-gray, 10%);
     color: $cu-charcoal;
+  }
+}
+
+// [HW] Hashtags inside photo captions — coloured blue to look like a social media link.
+// The format_caption helper (app/helpers/application_helper.rb) wraps every #word in
+// a <span class="caption-hashtag">, and this rule styles those spans.
+.caption-hashtag {
+  color: $cu-blue;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+    cursor: default; // [HW] keeps the arrow cursor — hashtags look like links but go nowhere
   }
 }

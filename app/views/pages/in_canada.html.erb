@@ -87,7 +87,8 @@
                 </div>
 
                 <%# [HW] Caption row — centered below the photo in the bottom white area %>
-                <div class="feed-grid__caption"><%= photo.description %></div>
+                <%# [HW] format_caption wraps #hashtags in a span so CSS can colour them blue %>
+                <div class="feed-grid__caption"><%= format_caption(photo.description) %></div>
 
               </div>
 
@@ -126,7 +127,7 @@
                       <%# [HW] Author name + caption — bold name inline before the description %>
                       <p class="photo-card__desc">
                         <strong class="photo-card__author"><%= photo.user.display_name %></strong>
-                        <%= photo.description %>
+                        <%= format_caption(photo.description) %>
                       </p>
 
                       <%# [HW] Additional comments below — id is the Turbo Stream append target %>
@@ -234,7 +235,7 @@
               </div>
 
               <div class="photo-card__body">
-                <p class="photo-card__desc"><%= photo.description %></p>
+                <p class="photo-card__desc"><%= format_caption(photo.description) %></p>
               </div>
             </div>
           <% end %>
@@ -264,7 +265,7 @@
                 <div class="feed-modal__content">
                   <p class="photo-card__desc">
                     <strong class="photo-card__author"><%= current_user.display_name %></strong>
-                    <%= photo.description %>
+                    <%= format_caption(photo.description) %>
                   </p>
                 </div>
               </div>

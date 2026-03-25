@@ -17,10 +17,10 @@ export default class extends Controller {
     this.debounceTimer = setTimeout(() => this.fetchSuggestions(query), 300)
   }
 
-  // [HW] Hits Nominatim with countrycodes=ca (Canada only) and addressdetails=1
-  // [HW] so the structured address object is available for clean formatting
+  // [HW] Hits Nominatim with addressdetails=1 so the structured address object is available
+  // [HW] for clean formatting. No countrycodes restriction — searches the whole world.
   async fetchSuggestions(query) {
-    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&countrycodes=ca&addressdetails=1`
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=5&addressdetails=1`
     const res = await fetch(url, { headers: { "Accept-Language": "en" } })
     this.renderDropdown(await res.json())
   }
