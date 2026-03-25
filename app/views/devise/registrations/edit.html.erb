@@ -7,6 +7,9 @@
     <%= f.input :first_name, required: true, autofocus: true %>
     <%= f.input :last_name, required: true %>
     <%= f.input :email, required: true %>
+    <%= f.input :district %>
+    <%= f.input :city %>
+    <%= f.input :school %>
 
     <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
       <p>Currently waiting confirmation for: <%= resource.unconfirmed_email %></p>

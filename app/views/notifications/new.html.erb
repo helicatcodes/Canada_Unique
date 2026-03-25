@@ -1,8 +1,42 @@
-<%# Admin compose form - sends a notification with title and message to all users. MJR %>
+<%# Admin compose form - sends a notification with optional filters for district, city, and school. MJR %>
 <div class="container mt-4">
-  <h1>Send Notification to All Users</h1>
+  <h1>Send Notification</h1>
 
   <%= form_with url: notifications_path, method: :post do |f| %>
+    <div class="card mb-4">
+      <div class="card-header">
+        <strong>Filter Recipients</strong>
+        <small class="text-muted ms-2">Leave all blank to send to all users.</small>
+      </div>
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <%= f.label :district, class: "form-label" %>
+            <%= f.select :district,
+                  options_for_select([["All Districts", ""]] + @districts.map { |d| [d, d] }),
+                  {},
+                  class: "form-select" %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :city, class: "form-label" %>
+            <%= f.select :city,
+                  options_for_select([["All Cities", ""]] + @cities.map { |c| [c, c] }),
+                  {},
+                  class: "form-select" %>
+          </div>
+
+          <div class="col-md-4">
+            <%= f.label :school, class: "form-label" %>
+            <%= f.select :school,
+                  options_for_select([["All Schools", ""]] + @schools.map { |s| [s, s] }),
+                  {},
+                  class: "form-select" %>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="mb-3">
       <%= f.label :title, class: "form-label" %>
       <%= f.text_field :title, class: "form-control", required: true %>
@@ -13,6 +47,6 @@
       <%= f.text_area :message, rows: 5, class: "form-control", required: true %>
     </div>
 
-    <%= f.submit "Send to All Users", class: "btn btn-primary" %>
+    <%= f.submit "Send Notification", class: "btn btn-primary" %>
   <% end %>
 </div>

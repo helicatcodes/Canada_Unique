@@ -14,18 +14,27 @@ class NotificationsController < ApplicationController
     @notification.mark_as_read!
   end
 
-  # Renders the admin compose form. MJR
+  # Renders the admin compose form with filter options. MJR
   def new
+    @districts = User.where.not(district: [nil, ""]).distinct.pluck(:district).sort
+    @cities    = User.where.not(city:     [nil, ""]).distinct.pluck(:city).sort
+    @schools   = User.where.not(school:   [nil, ""]).distinct.pluck(:school).sort
   end
 
-  # Broadcasts the notification to every user in the database. MJR
+  # Broadcasts the notification to users matching the selected filters. MJR
   def create
+    recipients = User.all
+    recipients = recipients.where(district: params[:district]) if params[:district].present?
+    recipients = recipients.where(city:     params[:city])     if params[:city].present?
+    recipients = recipients.where(school:   params[:school])   if params[:school].present?
+
     AdminBroadcastNotifier.with(
       title: params[:title],
       message: params[:message]
-    ).deliver(User.all)
+    ).deliver(recipients)
 
-    redirect_to notifications_path, notice: "Notification sent to all users."
+    count = recipients.count
+    redirect_to notifications_path, notice: "Notification sent to #{count} user(s)."
   end
 
   private
