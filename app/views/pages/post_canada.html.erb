@@ -1,10 +1,17 @@
-<div class="container mt-4">
+<div class="post-canada">
 
-  <h1 class="mt-3 mb-1">Welcome back, <%= current_user.display_name %>!</h1>
-  <p class="text-muted mb-4">You did something incredible. Now let's reflect on it.</p>
+  <%# ── Hero heading ── %>
+  <div class="post-canada__hero">
+    <h1 class="post-canada__hero-title">
+      Welcome back,<br>
+      <span class="post-canada__hero-accent"><%= current_user.display_name %>!</span>
+    </h1>
+  </div>
 
-  <%# AI Summary section — shown first so the reward is visible before the questionnaire %>
-  <div class="ai-summary-panel mb-5" id="ai-summary"
+  <p class="post-canada__intro">You did something incredible. We hope you enjoyed your adventure in Canada, made friends and grew as a person. We want to help you to get the best out of it. The best way is to reflect on it. We are happy to also help you on this last final steps with some helpful questions. After you answered them you get your personal summary with helpful advice from your AI coach.</p>
+
+  <%# ── AI Summary — dark navy card ── %>
+  <div class="ai-summary-panel" id="ai-summary"
        data-controller="ai-summary"
        data-ai-summary-url-value="<%= status_questionnaire_path(@questionnaire, format: :json) %>">
 
@@ -19,12 +26,10 @@
       </p>
 
       <% if @questionnaire.ai_summary.present? %>
-        <%# Summary already generated — show it directly %>
         <div class="ai-summary__response" data-ai-summary-target="content">
           <%= simple_format(@questionnaire.ai_summary) %>
         </div>
       <% else %>
-        <%# Job is queued — show spinner and start polling %>
         <div class="ai-summary__spinner" data-ai-summary-target="spinner" data-pending="true">
           <i class="fa-solid fa-circle-notch fa-spin"></i>
           <p class="ai-summary__spinner-label">Generating your personal story… this takes about 20 seconds.</p>
@@ -46,84 +51,92 @@
     <% end %>
   </div>
 
-  <%# Questionnaire section — id used as scroll anchor after submit/revert redirects %>
-  <div class="cu-panel mb-5" id="questionnaire">
-    <div class="cu-panel__title d-flex align-items-center gap-2">
-      <i class="fa-solid fa-clipboard-question"></i>
-      Reflection Questionnaire
+  <%# ── Reflection Questionnaire — navy collapsible card ── %>
+  <% answered_count = @questions.count { |q| q.answers.first&.text.present? } %>
+  <% question_icons = [
+    "fa-solid fa-dumbbell",
+    "fa-solid fa-globe",
+    "fa-solid fa-rocket",
+    "fa-solid fa-comments",
+    "fa-solid fa-feather",
+    "fa-solid fa-house",
+    "fa-solid fa-bullseye",
+    "fa-solid fa-envelope"
+  ] %>
+
+  <div class="reflect-checklist" data-controller="collapsible"
+       data-collapsible-show-label-value="Show questions"
+       data-collapsible-hide-label-value="Hide questions">
+    <div class="reflect-checklist__header" data-action="click->collapsible#toggle">
+      <p class="reflect-checklist__header-status"><%= answered_count %>/<%= @questions.count %> ANSWERED</p>
+      <div class="reflect-checklist__header-body">
+        <div class="reflect-checklist__header-icon">
+          <i class="fa-solid fa-clipboard-question"></i>
+        </div>
+        <h3 class="reflect-checklist__header-title">Reflection Questionnaire</h3>
+      </div>
+      <button class="reflect-checklist__header-btn" data-collapsible-target="chevron">Show questions</button>
     </div>
 
-    <p class="text-muted mb-4">Answer at your own pace — save each answer individually, then create your summary when you're ready.</p>
+    <div class="reflect-checklist__list collapsible--hidden" data-collapsible-target="content">
+      <p class="reflect-checklist__hint">Answer at your own pace — save each answer individually, then unlock your summary.</p>
 
-    <%# One Font Awesome icon per question, matched to its theme %>
-    <% question_icons = [
-      "fa-solid fa-dumbbell",
-      "fa-solid fa-globe",
-      "fa-solid fa-rocket",
-      "fa-solid fa-comments",
-      "fa-solid fa-feather",
-      "fa-solid fa-house",
-      "fa-solid fa-bullseye",
-      "fa-solid fa-envelope"
-    ] %>
+      <% @questions.each_with_index do |question, index| %>
+        <div class="reflect-item reflect-item--expandable"
+             data-controller="task-expand question-card"
+             data-question-card-questionnaire-id-value="<%= @questionnaire.id %>"
+             data-question-card-question-id-value="<%= question.id %>"
+             data-question-card-submitted-value="<%= @questionnaire.submitted? %>">
 
-    <% @questions.each_with_index do |question, index| %>
-      <div class="question-card"
-           data-controller="question-card"
-           data-question-card-questionnaire-id-value="<%= @questionnaire.id %>"
-           data-question-card-question-id-value="<%= question.id %>"
-           data-question-card-submitted-value="<%= @questionnaire.submitted? %>">
+          <div class="reflect-item__row" data-action="click->task-expand#toggle">
+            <i class="<%= question_icons[index % question_icons.length] %> reflect-item__icon"></i>
+            <span class="reflect-item__question"><%= question.text %></span>
+            <i class="fa-solid fa-chevron-down prep-checklist__chevron" data-task-expand-target="chevron"></i>
+          </div>
 
-        <div class="question-card__icon">
-          <i class="<%= question_icons[index % question_icons.length] %>"></i>
-        </div>
-
-        <div class="question-card__body">
-          <label class="question-card__label"><%= question.text %></label>
-
-          <p class="question-card__answer-text" data-question-card-target="display"></p>
-
-          <div data-question-card-target="editor">
-            <%= text_area_tag "answers[#{question.id}]",
-                              question.answers.first&.text,
-                              class: "form-control",
-                              rows: 3,
-                              placeholder: "Share your thoughts...",
-                              data: { "question-card-target": "textarea" } %>
+          <div class="prep-checklist__item-desc reflect-item__body" data-task-expand-target="desc">
+            <p class="question-card__answer-text" data-question-card-target="display"></p>
+            <div data-question-card-target="editor">
+              <%= text_area_tag "answers[#{question.id}]",
+                                question.answers.first&.text,
+                                class: "form-control reflect-item__textarea",
+                                rows: 3,
+                                placeholder: "Share your thoughts...",
+                                data: { "question-card-target": "textarea" } %>
+            </div>
+            <div class="reflect-item__actions">
+              <button type="button"
+                      class="reflect-item__edit-btn"
+                      data-question-card-target="editBtn"
+                      data-action="click->question-card#edit">
+                <i class="fa-solid fa-pen"></i> Edit
+              </button>
+              <button type="button"
+                      class="reflect-item__save-btn"
+                      data-question-card-target="saveBtn"
+                      data-action="click->question-card#save">
+                <i class="fa-solid fa-floppy-disk"></i> Save
+              </button>
+            </div>
           </div>
         </div>
+      <% end %>
 
-        <div class="question-card__icon-area">
-          <button type="button"
-                  class="question-card__edit-btn"
-                  data-question-card-target="editBtn"
-                  data-action="click->question-card#edit">
-            <i class="fa-solid fa-pen"></i>
-          </button>
-          <button type="button"
-                  class="question-card__save-btn"
-                  data-question-card-target="saveBtn"
-                  data-action="click->question-card#save">
-            <i class="fa-solid fa-floppy-disk"></i>
-          </button>
+      <% if @questionnaire.submitted? %>
+        <div class="reflect-checklist__footer">
+          <span class="badge bg-success">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Summary created
+          </span>
+          <%= button_to questionnaire_path(@questionnaire), method: :patch,
+                params: { submitted: false },
+                class: "btn-revert-draft",
+                form: { class: "d-inline" },
+                title: "Go back to edit mode" do %>
+            <i class="fa-solid fa-rotate-left"></i>
+          <% end %>
         </div>
-      </div>
-    <% end %>
-
-    <% if @questionnaire.submitted? %>
-      <div class="questionnaire-status">
-        <span class="badge bg-success">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> Summary created
-        </span>
-        <%= button_to questionnaire_path(@questionnaire), method: :patch,
-              params: { submitted: false },
-              class: "btn-revert-draft",
-              form: { class: "d-inline" },
-              title: "Go back to edit mode" do %>
-          <i class="fa-solid fa-rotate-left"></i>
-        <% end %>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
   </div>
 
 </div>
