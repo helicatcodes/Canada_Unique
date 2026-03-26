@@ -8,11 +8,9 @@ class PagesController < ApplicationController
     # Use effective_user so viewers see their linked child's data. MJR
     return unless effective_user.departure_date.present?
 
-    @countdown = (effective_user.departure_date - Date.today).to_i
-
-    # t1 = Time.current
-    # t2 = current_user.departure_date
-    # @countdown = (t1 - t2).to_i
+    @countdown  = (effective_user.departure_date - Date.today).to_i
+    # Total days from account creation to departure — used to calculate the ring fill fraction.
+    @total_days = [(effective_user.departure_date - effective_user.created_at.to_date).to_i, 1].max
   end
 
   def in_canada

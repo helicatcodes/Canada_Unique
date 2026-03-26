@@ -1,37 +1,110 @@
 <div class="pre-canada">
 
-  <%# ── Card 1: Countdown ── %>
-  <div class="pre-canada__card pre-canada__countdown">
-    <h2 class="pre-canada__card-title">Your countdown</h2>
-    <span class="pre-canada__countdown-number"><%= @countdown %></span>
-    <span class="pre-canada__countdown-label">days until departure</span>
+  <%# ── Hero heading ── %>
+  <div class="pre-canada__hero">
+    <h1 class="pre-canada__hero-title">
+      Your Canadian<br>
+      <span class="pre-canada__hero-accent">Journey Awaits</span>
+    </h1>
   </div>
 
-  <%# ── Card 2: Obligatory tasks ── %>
-  <div class="pre-canada__card">
-    <div class="pre-canada__card-title-row">
-      <h2 class="pre-canada__card-title">Tasks</h2>
-      <%= button_to sync_tasks_path, method: :post, class: "pre-canada__sync-btn", title: "Sync tasks" do %>
-        <i class="fa-solid fa-rotate"></i>
+  <p class="pre-canada__intro">You decided to start your next big adventure and we are as excited as you are to get started. We gathered everything essential you need to prepare for your adventure here. Complete the tasks to make sure your transition will be smooth.</p>
+
+  <%# ── Countdown ring ─────────────────────────────────────────────────────────
+      Fill fraction goes from 0 (many days left) to 1 (departure day).
+      dash_offset drives the SVG arc: 0 = full circle, circumference = no arc. ── %>
+  <% circumference = 2 * Math::PI * 54 %>
+  <% fill_fraction = [[1.0 - (@countdown.to_f / @total_days), 0.0].max, 1.0].min %>
+  <% dash_offset   = circumference * (1 - fill_fraction) %>
+
+  <div class="countdown-section">
+  <h2 class="prep-checklist__title">Countdown until departure</h2>
+  <div class="pre-canada__ring-section">
+    <div class="pre-canada__ring-wrap">
+      <svg class="pre-canada__ring-svg" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="70" cy="70" r="54" fill="none" stroke="#e8e8e8" stroke-width="5"/>
+        <circle cx="70" cy="70" r="54" fill="none"
+                stroke="#C92020"
+                stroke-width="5"
+                stroke-linecap="round"
+                stroke-dasharray="<%= circumference.round(2) %>"
+                stroke-dashoffset="<%= dash_offset.round(2) %>"
+                transform="rotate(-90 70 70)"/>
+      </svg>
+      <div class="pre-canada__ring-inner">
+        <span class="pre-canada__ring-number"><%= @countdown %></span>
+        <span class="pre-canada__ring-label">DAYS LEFT</span>
+      </div>
+    </div>
+
+    <div class="pre-canada__departure-info">
+      <% if effective_user.city.present? %>
+        <p class="pre-canada__departure-city"><%= effective_user.city %></p>
+      <% end %>
+      <p class="pre-canada__departure-date">Departure: <%= effective_user.departure_date.strftime("%b %d, %Y") %></p>
+    </div>
+  </div>
+  </div>
+
+  <%# ── Preparation Checklist ── %>
+  <% obligatory_tasks = effective_user.tasks.where(obligatory: true).sort_by { |t| task_badge_class(t.status) == 'task-table__badge--done' ? 1 : 0 } %>
+  <% done_count = obligatory_tasks.count { |t| task_badge_class(t.status) == 'task-table__badge--done' } %>
+
+  <div class="prep-checklist" data-controller="collapsible">
+    <div class="prep-checklist__header" data-action="click->collapsible#toggle">
+      <p class="prep-checklist__header-status"><%= done_count %>/<%= obligatory_tasks.count %> DONE</p>
+      <div class="prep-checklist__header-body">
+        <div class="prep-checklist__header-icon">
+          <i class="fa-solid fa-list-check"></i>
+        </div>
+        <h3 class="prep-checklist__header-title">Preparation Checklist</h3>
+      </div>
+      <button class="prep-checklist__header-btn" data-collapsible-target="chevron">Show tasks</button>
+    </div>
+
+    <div class="prep-checklist__list collapsible--hidden" data-collapsible-target="content">
+      <div class="prep-checklist__list-actions">
+        <%= button_to sync_tasks_path, method: :post, class: "prep-checklist__sync-btn", title: "Sync tasks" do %>
+          <i class="fa-solid fa-rotate"></i> Sync
+        <% end %>
+      </div>
+      <% obligatory_tasks.each do |task| %>
+        <% done = task_badge_class(task.status) == 'task-table__badge--done' %>
+        <div class="prep-checklist__item <%= 'prep-checklist__item--expandable' if task.description.present? %>"
+             <% if task.description.present? %>
+               data-controller="task-expand"
+               data-action="click->task-expand#toggle"
+             <% end %>>
+          <div class="prep-checklist__item-row">
+            <% if task.description.present? %>
+              <i class="fa-solid fa-chevron-down prep-checklist__chevron" data-task-expand-target="chevron"></i>
+            <% end %>
+            <span class="prep-checklist__item-name <%= 'prep-checklist__item-name--done' if done %>"><%= task.name %></span>
+            <span class="task-table__badge <%= task_badge_class(task.status) %>"><%= task_badge_label(task.status) %></span>
+          </div>
+          <% if task.description.present? %>
+            <span class="prep-checklist__item-desc" data-task-expand-target="desc"><%= task.description %></span>
+          <% end %>
+        </div>
       <% end %>
     </div>
-    <%= render 'tasks/task_list', tasks: effective_user.tasks.where(obligatory: true) %>
   </div>
 
-  <%# ── Card 3: Next steps — 3 visual boxes linking to task#show ── %>
-  <div class="pre-canada__card">
-    <h2 class="pre-canada__card-title">Next steps</h2>
-    <div class="next-steps">
-      <% effective_user.tasks.where(obligatory: false).each do |task| %>
-        <%= link_to task_path(task), class: "next-steps__box" do %>
-          <%# [MG] Image matched to task name — files live in app/assets/images/pre_canada_<task_name>.jpg %>
-          <%# [MG] Image matched to task name — underscored filename e.g. pre_canada_pack_your_bags.jpg %>
-          <div class="next-steps__img" style="background-image: url('<%= asset_path("pre_canada_#{task.name.downcase.gsub(' ', '_')}.jpg") %>')"></div>
-          <div class="next-steps__overlay">
-            <span class="next-steps__name"><%= task.name %></span>
-          </div>
+  <%# ── Next steps — 3 image cards linking to each fun task ── %>
+  <div class="next-steps-section">
+    <h2 class="prep-checklist__title">Next steps</h2>
+    <div class="pre-canada__card">
+      <div class="next-steps">
+        <% effective_user.tasks.where(obligatory: false).each do |task| %>
+          <%# Image filename matches task name, e.g. pre_canada_pack_your_bags.jpg %>
+          <%= link_to task_path(task), class: "next-steps__box" do %>
+            <div class="next-steps__img" style="background-image: url('<%= asset_path("pre_canada_#{task.name.downcase.gsub(' ', '_')}.jpg") %>')"></div>
+            <div class="next-steps__overlay">
+              <span class="next-steps__name"><%= task.name %></span>
+            </div>
+          <% end %>
         <% end %>
-      <% end %>
+      </div>
     </div>
   </div>
 

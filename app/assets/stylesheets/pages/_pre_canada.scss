@@ -1,90 +1,263 @@
 // ============================================================
 // PRE-CANADA PAGE
-// Single centred column: countdown → obligatory tasks → next steps
-// Follows the .cu-panel card style from _in_canada.scss
+// Centred column: hero → countdown ring card → preparation
+// checklist → next steps (fun task image cards)
 // ============================================================
+
+// ── Hero heading ────────────────────────────────────────────
+
+.pre-canada__hero {
+  width: 100%;
+  max-width: 680px;
+  padding: 1rem 0 0;
+}
+
+.pre-canada__hero-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #000;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.pre-canada__hero-accent {
+  color: $cu-red;
+}
+
+.pre-canada__intro {
+  width: 100%;
+  max-width: 680px;
+  font-size: 0.9rem;
+  color: #787776;
+  line-height: 1.6;
+  margin: 0;
+}
 
 // Page wrapper — centred column, cards fill the same width
 .pre-canada {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 2rem;
   padding: 1.5rem;
 }
 
-// Each card — same width, white with red top accent
+// ── Next steps section wrapper (title sits above the card) ──
+
+.next-steps-section {
+  width: 100%;
+  max-width: 680px;
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  .pre-canada__card { margin-top: 0; }
+}
+
+// Next steps image card — shares the same white rounded style as the ring card
 .pre-canada__card {
   width: 100%;
   max-width: 680px;
+  margin-top: 0.75rem;
   background-color: white;
-  border-radius: $border-radius-lg;
-  border-bottom: 3px solid $cu-red;
-  box-shadow: 0 0 15px rgba(0,0,0,0.2);
-  padding: 1.5rem 2rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+  padding: 1.5rem;
 }
 
-// Banner title bar — same pull-to-edges technique as .cu-panel__title
-.pre-canada__card-title {
-  color: $cu-navy;
-  background: white;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin: -1.5rem -2rem 1.5rem -2rem;
-  padding: 0.6rem 2rem;
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
-  border-bottom: 1.5px solid $cu-red;
+
+// ── Countdown section (title + card) ────────────────────────
+
+.countdown-section {
+  width: 100%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
-// ── Countdown card ──────────────────────────────────────────
+// ── Countdown ring ──────────────────────────────────────────
 
-.pre-canada__countdown {
-  max-width: 200px; // half of the 680px card width
-  text-align: center;
+.pre-canada__ring-section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0;
+  width: 100%;
+  max-width: 680px;
+  min-height: 320px;
+  justify-content: center;
+  background: white;
+  border-radius: 20px;
+  padding: 1.5rem 1rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
 }
 
-.pre-canada__countdown-number {
-  font-size: 3.5rem;
+// Relative container so the inner text can be absolutely centred over the SVG
+.pre-canada__ring-wrap {
+  position: relative;
+  width: 200px;
+  height: 200px;
+}
+
+.pre-canada__ring-svg {
+  width: 200px;
+  height: 200px;
+}
+
+// Number + label centred inside the ring
+.pre-canada__ring-inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.pre-canada__ring-number {
+  font-size: 2.4rem;
   font-weight: 800;
   color: $cu-red;
   line-height: 1;
 }
 
-.pre-canada__countdown-label {
-  font-size: 0.9rem;
+.pre-canada__ring-label {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   color: $cu-charcoal;
-  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  margin-top: 2px;
 }
 
-// ── Card title row (title + sync button) ────────────────────
+// Departure info below the ring
+.pre-canada__departure-info {
+  text-align: center;
+}
 
-.pre-canada__card-title-row {
+.pre-canada__departure-city {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: $cu-navy;
+  margin: 0;
+}
+
+.pre-canada__departure-date {
+  font-size: 0.8rem;
+  color: $cu-charcoal;
+  margin: 0;
+}
+
+// ── Preparation Checklist ───────────────────────────────────
+
+.prep-checklist {
+  width: 100%;
+  max-width: 680px;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+// Header card — olive milestone card, tapping toggles the task list
+.prep-checklist__header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: #D8A300;
+  border-radius: 20px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  width: 100%;
+}
+
+.prep-checklist__header-status {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.prep-checklist__header-body {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin: -1.5rem -2rem 1.5rem -2rem;
-  padding: 0 2rem 0 0;
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
-  border-bottom: 1.5px solid $cu-red;
-
-
-  .pre-canada__card-title {
-    margin: 0;
-    border-bottom: none;
-  }
+  gap: 1rem;
 }
 
-.pre-canada__sync-btn {
+.prep-checklist__header-icon {
+  width: 52px;
+  height: 52px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  color: white;
+}
+
+.prep-checklist__header-title {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: white;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.prep-checklist__header-btn {
+  background: white;
+  border: none;
+  border-radius: 50px;
+  padding: 0.65rem 1.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #D8A300;
+  cursor: pointer;
+  align-self: center;
+}
+
+// Sync button shown at the top of the task list (only visible when expanded)
+.prep-checklist__list-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.25rem;
+}
+
+.prep-checklist__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #000;
+  margin: 0;
+  width: 100%;
+  max-width: 680px;
+  align-self: flex-start;
+}
+
+.prep-checklist__badge {
+  background: #448272;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.65rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+
+.prep-checklist__sync-btn {
   background: none;
   border: none;
-  font-size: 1rem;
   color: $cu-charcoal;
+  font-size: 0.95rem;
   cursor: pointer;
   padding: 0.2rem 0.4rem;
   border-radius: 4px;
@@ -93,13 +266,74 @@
   &:hover { color: $cu-red; }
 }
 
-// ── Tasks intro text ────────────────────────────────────────
-
-.pre-canada__tasks-intro {
-  font-size: 0.88rem;
-  color: $cu-charcoal;
-  margin-bottom: 0.75rem;
+// sync button_to form wrapper — keep it inline
+form:has(.prep-checklist__sync-btn) {
+  display: contents;
 }
+
+.prep-checklist__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.collapsible--hidden {
+  display: none;
+}
+
+.prep-checklist__item {
+  background: white;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+// Expandable cards get a pointer cursor
+.prep-checklist__item--expandable {
+  cursor: pointer;
+}
+
+// Single line: chevron · name · badge — all vertically centred
+.prep-checklist__item-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.prep-checklist__item-name {
+  flex: 1;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: $cu-navy;
+
+  &--done {
+    text-decoration: line-through;
+    color: #aaa;
+  }
+}
+
+// Hidden by default, revealed when --expanded is toggled by Stimulus
+.prep-checklist__item-desc {
+  font-size: 0.75rem;
+  color: #999;
+  display: none;
+
+  &--expanded { display: block; }
+}
+
+.prep-checklist__chevron {
+  font-size: 0.7rem;
+  color: #bbb;
+  transition: transform 0.2s ease;
+  flex-shrink: 0;
+
+  &--open { transform: rotate(180deg); }
+}
+
 
 // ── Next steps boxes ────────────────────────────────────────
 
@@ -116,7 +350,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-radius: $border-radius-lg;
+  border-radius: 15px;
   overflow: hidden;
   position: relative;
   text-decoration: none;
@@ -136,7 +370,7 @@
 .next-steps__overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.242);
   display: flex;
   align-items: flex-end;
   padding: 0.75rem;
@@ -150,99 +384,16 @@
   line-height: 1.2;
 }
 
-// ── Task table ──────────────────────────────────────────────
+// ── Task status badge — used in the checklist item rows ─────
+// Three states mapped by the task_badge_class helper in ApplicationHelper
 
-.task-table {
-  width: 100%;
-  border-collapse: collapse;
+.task-table__badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
 
-  &__row {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-
-    &:last-child { border-bottom: none; }
-  }
-
-  &__name,
-  &__status,
-  &__action {
-    padding: 0.55rem 0.25rem;
-    vertical-align: middle;
-  }
-
-  &__name {
-    font-size: 0.9rem;
-    width: 60%;
-
-    a {
-      color: $cu-navy;
-      text-decoration: none;
-      &:hover { color: $cu-red; }
-    }
-  }
-
-  &__status { width: 30%;
-  text-align: center;}
-
-  &__action {
-    width: 10%;
-    text-align: right;
-  }
-
-  // Status badge
-  &__badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.2rem 0.55rem;
-    border-radius: 20px;
-    background: $light-gray;
-    color: $cu-charcoal;
-
-    // [MG] Three states only — open/in-progress/done — mapped by task_badge_class helper
-    &--open        { background: #f0f2f5; color: #666; }
-    &--in-progress { background: #fff3cd; color: #856404; }
-    &--done        { background: #d1e7dd; color: #0a5c36; }
-  }
-
-  // [MG] Expandable row — pointer cursor signals tappability
-  &__row--expandable {
-    cursor: pointer;
-    &:hover { background: rgba(0, 0, 0, 0.02); }
-  }
-
-  // [MG] Description row — hidden by default, shown when --visible is toggled by Stimulus
-  &__description-row {
-    display: none;
-
-    &--visible { display: table-row; }
-  }
-
-  &__description {
-    font-size: 0.85rem;
-    color: $cu-charcoal;
-    padding: 0.4rem 0.25rem 0.75rem !important;
-    opacity: 0.8;
-  }
-
-  // [MG] Chevron rotates 180° when the row is expanded
-  &__chevron {
-    font-size: 0.7rem;
-    color: #aaa;
-    transition: transform 0.2s ease;
-
-    &--open { transform: rotate(180deg); }
-  }
-
-  // Action button
-  &__btn {
-    background: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.75rem;
-    color: $cu-charcoal;
-    cursor: pointer;
-    white-space: nowrap;
-
-    &:hover { border-color: $cu-red; color: $cu-red; }
-  }
+  &--open        { background: #f0f2f5; color: #666; }
+  &--in-progress { background: #FFC107; color: #fff; }
+  &--done        { background: #448272; color: #fff; }
 }

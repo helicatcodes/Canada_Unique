@@ -18,6 +18,12 @@ module ApplicationHelper
   # anything else (including date placeholders like "[Departure Date]") is treated as done.
   IN_PROGRESS_STATUSES = %w[sent in\ progress pending ongoing\ coordination].freeze
 
+  def task_badge_label(status)
+    return "open"        if status.blank? || status == "not started"
+    return "in progress" if IN_PROGRESS_STATUSES.include?(status.downcase)
+    "done"
+  end
+
   def task_badge_class(status)
     return "task-table__badge--open"        if status.blank? || status == "not started"
     return "task-table__badge--in-progress" if IN_PROGRESS_STATUSES.include?(status.downcase)
