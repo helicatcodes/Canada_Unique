@@ -1,0 +1,67 @@
+<%# [HW] Edit photo modal — one rendered per gallery photo, opened by the pen icon on the photo card. %>
+<%# [HW] Reuses the add-photo-modal card structure and the same Stimulus controllers (photo-upload, location-autocomplete). %>
+<%# [HW] simple_form_for on a persisted record auto-generates PATCH /photos/:id and pre-fills fields from the model. %>
+<div class="modal fade add-photo-modal" id="edit-photo-modal-<%= photo.id %>"
+     tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="upload-tab">
+        <div class="photo-card photo-card--upload photo-card--upload-lg"
+             data-controller="photo-upload">
+          <%= simple_form_for photo do |f| %>
+
+            <%# [HW] Location field with Nominatim autocomplete — pre-filled by simple_form from photo.location %>
+            <div class="photo-card--upload__field-row" data-controller="location-autocomplete">
+              <i class="fa-solid fa-location-dot photo-card--upload__field-icon"></i>
+              <div class="location-autocomplete-wrap">
+                <%= f.input :location, label: false, placeholder: "Add a location...",
+                    wrapper: false, input_html: {
+                      class: "photo-card--upload__caption",
+                      data: { "location-autocomplete-target": "input",
+                              action: "input->location-autocomplete#search" }
+                    } %>
+                <div data-location-autocomplete-target="dropdown"
+                     class="location-dropdown" hidden></div>
+              </div>
+            </div>
+
+            <%# [HW] Label for= must match the file input id below — using photo.id keeps it unique per modal %>
+            <label class="photo-card--upload__dropzone" for="photo_image_edit_<%= photo.id %>">
+              <%# [HW] Placeholder hidden upfront — current image already shows in the preview tag below %>
+              <span class="photo-card--upload__placeholder" data-photo-upload-target="placeholder"
+                    style="display: none;">
+                <i class="fa-solid fa-camera photo-card--upload__camera"></i>
+                <span class="photo-card--upload__hint">Click to replace photo</span>
+              </span>
+              <%# [HW] Pre-set src + display:block so the current photo is visible when the modal opens. %>
+              <%# [HW] photo_upload_controller.js normally sets these after a file is picked — here we mirror %>
+              <%# [HW] that state in ERB so the existing image shows without any JS changes. %>
+              <img data-photo-upload-target="preview"
+                   class="photo-card--upload__preview"
+                   src="<%= url_for(photo.image) %>"
+                   style="display: block;" alt="" />
+            </label>
+
+            <%# [HW] File input — id is unique per photo to avoid collision with the add-photo modal's input %>
+            <%= f.input :image, as: :file, label: false,
+                input_html: {
+                  id: "photo_image_edit_#{photo.id}",
+                  class: "photo-card--upload__input",
+                  data: { action: "change->photo-upload#preview" }
+                } %>
+
+            <%# [HW] Caption field — pre-filled by simple_form from photo.description %>
+            <%# [HW] as: :text renders a <textarea> so the full caption is visible without scrolling %>
+            <%# [HW] photo-card--upload__caption--autosize (CSS) grows the textarea to fit its content %>
+            <div class="photo-card__body photo-card--upload__body">
+              <%= f.input :description, as: :text, label: false, placeholder: "Add a caption...",
+                  wrapper: false, input_html: { class: "photo-card--upload__caption photo-card--upload__caption--autosize" } %>
+              <%= f.submit "Save", class: "photo-card--upload__submit" %>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

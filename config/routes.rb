@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
   # Routes for admin broadcast and user inbox. MJR
   resources :notifications, only: %i[index show new create]
-  resources :photos, only: [:create, :edit, :update, :destroy] do
+  resources :photos, only: [:create, :update, :destroy] do
     member do
       patch :toggle_share
     end

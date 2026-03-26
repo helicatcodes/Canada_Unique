@@ -20,13 +20,14 @@ export default class extends Controller {
     // Optimistically render the user's message immediately on submit,
     // before waiting for the server response
     const text = this.inputTarget.value.trim()
-    if (text) {
-      const bubble = document.createElement("div")
-      bubble.className = "chat-message chat-message--user"
-      bubble.innerHTML = `<div class="chat-bubble">${this._escapeHtml(text)}</div>`
-      this.messagesTarget.appendChild(bubble)
-    }
+    if (!text) return
 
+    const bubble = document.createElement("div")
+    bubble.className = "chat-message chat-message--user"
+    bubble.innerHTML = `<div class="chat-bubble">${this._escapeHtml(text)}</div>`
+    this.messagesTarget.appendChild(bubble)
+
+    this.inputTarget.value = ""
     this.typingTarget.hidden = false
     this.submitTarget.disabled = true
     this.scrollToBottom()
@@ -35,14 +36,15 @@ export default class extends Controller {
   hideTyping() {
     this.typingTarget.hidden = true
     this.submitTarget.disabled = false
-    this.inputTarget.value = ""
     this.inputTarget.focus()
   }
 
   submitOnEnter(event) {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault()
-      this.submitTarget.click()
+      if (this.inputTarget.value.trim()) {
+        this.submitTarget.click()
+      }
     }
   }
 

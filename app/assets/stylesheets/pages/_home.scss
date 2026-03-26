@@ -51,18 +51,6 @@
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
 }
 
-.card::after {
-  content: '';
-  position: absolute;
-  top: 12px;
-  right: 16px;
-  width: 60px;
-  height: 60px;
-  background-image: image-url('pointer.png');
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
 .card h1 {
   margin: 0;
   color: white;
@@ -144,10 +132,4 @@
     font-size: 26px;
   }
 
-  .card::after {
-    width: 48px;
-    height: 48px;
-    top: 8px;
-    right: 10px;
-  }
 }

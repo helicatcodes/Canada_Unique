@@ -130,6 +130,15 @@
   &:focus { border-bottom-color: $cu-navy; }
 }
 
+// [HW] Used in the edit photo modal description field — grows the textarea to fit its content.
+// [HW] field-sizing: content is supported in Chrome 123+, Firefox 128+, Safari 18+.
+// [HW] resize: none removes the drag handle since auto-sizing makes manual resize unnecessary.
+.photo-card--upload__caption--autosize {
+  field-sizing: content;
+  resize: none;
+  min-height: 1.5rem;
+}
+
 // [HW] Full-width navy upload button at the bottom of the card body
 .photo-card--upload__submit {
   margin-top: 8px;
@@ -771,9 +780,8 @@
   box-shadow: 0 12px 50px rgba(0, 0, 0, 0.28);
   overflow: hidden;
   position: relative;
-  // [HW] 28px frame on top/left/right gives a thick polaroid border and keeps the close button
-  // [HW] well above the photo — no bottom padding here, the content section handles that
-  padding: 28px 28px 0;
+  // [HW] Reduced from 28px — the X is now in the header row so we no longer need tall top clearance
+  padding: 12px 28px 0;
 }
 
 // [HW] Square photo inside the white frame — aspect-ratio matches the grid card thumbnail exactly
@@ -808,11 +816,19 @@
   i { color: $cu-red; font-size: 0.65rem; }
 }
 
+// [HW] .feed-modal__header — flex row holding the avatar (left) and close button (right)
+// [HW] margin-bottom: 0 + overriding .feed-grid__author padding keeps the gap to the location row tight
+.feed-modal__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0;
+
+  .feed-grid__author { padding-bottom: 0; }
+}
+
 .feed-modal__close {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  z-index: 10;
+  flex-shrink: 0;
   background: $light-gray;
   border: none;
   border-radius: 50%;

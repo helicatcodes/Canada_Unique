@@ -119,31 +119,31 @@ puts "Creating photos..."
 # Written in social media style with emojis and hashtags. MJR/HW
 photo_captions = {
   "Mario" => [
-    "First day getting ready for Canada! 🍁✈️ #CanadaBound #ExchangeYear #CantWait",
-    "Packing my bags — so excited I can barely breathe! 🎒😍 #Packing #AdventureAwaits #CanadaUniqueExchange",
-    "Saying goodbye to the best people 🥺❤️ See you in 5 months! #MissYouAlready #ExchangeLife #Goodbyes",
-    "Airport vibes loading ✈️🛫 Next stop: Canada! #AirportVibes #OffWeGo #ExchangeYear"
+    "First day in Canada! 🍁✈️ I received my Canada starting kit: nice shirt and hockey sticks #CanadaBound #ExchangeYear #LetsGo",
+    "Meeting new friends — so excited I can barely breathe! 🎒😍 #Packing #AdventureAwaits #CanadaUniqueExchange",
+    "Meeting the best people in Canada 🥺❤️ Lokking forward for 5 great months! #OhCanada #ExchangeLife #FeelingGood",
+    "Hockey vibes loading ✈️🛫 Next stop: Stadium! #HockeyVibes #OffWeGo #ExchangeYear"
   ],
   "Helena" => [
-    "I MADE IT TO VANCOUVER 🍁🏔️ The mountains literally took my breath away #Vancouver #ExchangeYear #CanadaUniqueExchange",
-    "First day at school done! Everyone is SO nice here 😊🎒 #NewSchool #ExchangeLife #VancouverVibes",
-    "Weekend hike with my host family 🥾🌲 Nature therapy hits different in Canada #Hiking #NatureLovers #BCWild",
+    "I MADE IT TO VANCOUVER 🍁🏔️ The the food is fantastic #Vancouver #ExchangeYear #CanadaUniqueExchange",
+    "First day at school done! A lot of Canada is going on 😊🎒 #NewSchool #ExchangeLife #VancouverVibes",
+    "Weekend hike with my friends 🥾🌲 Nature therapy hits different in Canada #Hiking #NatureLovers #BCWild",
     "Canadian breakfast >>> 🍁🥞 Maple syrup on everything, no notes #CanadianFood #MapleLife #Brunch",
-    "Downtown Vancouver at night is absolutely stunning ✨🌃 #Vancouver #CityLights #NightPhotography",
-    "SNOW DAY!! ❄️⛄ My first real snow and I am obsessed #SnowDay #WinterWonderland #VancouverSnow"
+    "NIAGARA FALLS 🌊🤯 Worth. Every. Second. #NiagaraFalls #Ontario #MustSee",
+    "My first ride on a moose!! ☺️🦌 So much fun!! #NiceDay #CruisingDownTheStreets #NorthVancouver"
   ],
   "Niels" => [
-    "Toronto skyline from the CN Tower 🏙️😮 I am SO small #CNTower #Toronto #ExchangeLife",
+    "The best friends ever 🥳🍀 #SchoolExchange #Toronto #ExchangeLife",
     "Hockey game last night and my voice is GONE 🏒🇨🇦 Best atmosphere I have ever experienced #NHL #HockeyNight #Toronto",
     "Maple syrup tasting at the market 🍁😋 I may have bought too many bottles #MapleLife #StLawrenceMarket #Toronto",
-    "NIAGARA FALLS 🌊🤯 Worth. Every. Second. #NiagaraFalls #Ontario #MustSee",
-    "Last week of school how is this already ending 🥺📚 Bittersweet does not even cover it #ExchangeYear #LastWeek #Bittersweet"
+    "Downtown in my lovely city 🌊🤯 Worth. Every. Second. #BestCityEver #Ontario #MustSee",
+    "SNOW DAY!! ❄️⛄ My first real snow and I am obsessed #SnowDay #WinterWonderland #BestHorsesInCanada"
   ],
   "Manu" => [
     "Missing Canadian winters so much right now ❄️😭 Nothing compares #PostCanada #MissingCanada #HomeIsWhereTheSnowIs",
     "Going through my photos and crying a little 🥺📸 Best year of my life #ExchangeYear #Memories #CanadaForever",
     "Final day at school still not over it 🎓🥲 Thank you for everything Canada #FinalDay #Gratitude #ExchangeLife",
-    "Goodbye Canada, hello Germany 🇨🇦🇩🇪 Heart is staying behind #Bittersweet #ExchangeEnds #SeeYouSoon",
+    "Best Pizza ever !! 🇨🇦🇩🇪 I will never forget the wonderful taste #SuperSweet #ExchangeEnds #SeeYouSoon",
     "One year later and I still dream about Canada every single night 🍁💭 #OneYearAnniversary #ForeverGrateful #CanadaUnique"
   ]
 }
