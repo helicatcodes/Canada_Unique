@@ -167,7 +167,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background: #D8A300;
+  background: $yellow;
   border-radius: 20px;
   padding: 1.25rem 1.5rem;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
@@ -218,7 +218,7 @@
   padding: 0.65rem 1.5rem;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #D8A300;
+  color: $yellow;
   cursor: pointer;
   align-self: center;
 }
