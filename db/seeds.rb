@@ -69,7 +69,7 @@ users_data = [
     status: "in_canada",
     batch_number: 2026,
     program_duration: 5,
-    departure_date: Date.new(2026, 2, 15),
+    departure_date: Date.new(2026, 7, 6),
     date_of_birth: Date.new(2011, 4, 1),
     role: :admin,
     folder: "Niels"
