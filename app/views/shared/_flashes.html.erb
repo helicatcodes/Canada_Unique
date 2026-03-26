@@ -12,3 +12,20 @@
     </button>
   </div>
 <% end %>
+
+<%# [HW] Auto-dismiss flash alerts after 2 seconds using Bootstrap's built-in close method. %>
+<%# Listens on both turbo:load (Turbo navigations) and DOMContentLoaded (full page loads) %>
+<%# so alerts are caught in all cases. The X button still works for manual early dismissal. %>
+<script>
+  (function () {
+    function autoCloseAlerts() {
+      document.querySelectorAll(".alert").forEach(function (alert) {
+        setTimeout(function () {
+          bootstrap.Alert.getOrCreateInstance(alert).close();
+        }, 2000);
+      });
+    }
+    document.addEventListener("turbo:load", autoCloseAlerts);
+    document.addEventListener("DOMContentLoaded", autoCloseAlerts);
+  })();
+</script>
