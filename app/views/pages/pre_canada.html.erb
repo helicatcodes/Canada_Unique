@@ -42,7 +42,7 @@
   </div>
 
   <%# ── Preparation Checklist ── %>
-  <% obligatory_tasks = effective_user.tasks.where(obligatory: true).sort_by { |t| t.status == 'done' ? 1 : 0 } %>
+  <% obligatory_tasks = effective_user.tasks.where(obligatory: true).sort_by { |t| task_badge_class(t.status) == 'task-table__badge--done' ? 1 : 0 } %>
   <% done_count = obligatory_tasks.count { |t| task_badge_class(t.status) == 'task-table__badge--done' } %>
 
   <div class="prep-checklist">
@@ -62,7 +62,8 @@
                data-action="click->task-expand#toggle"
              <% end %>>
           <div class="prep-checklist__item-body">
-            <span class="prep-checklist__item-name"><%= task.name %></span>
+            <% done = task_badge_class(task.status) == 'task-table__badge--done' %>
+            <span class="prep-checklist__item-name <%= 'prep-checklist__item-name--done' if done %>"><%= task.name %></span>
             <% if task.description.present? %>
               <span class="prep-checklist__item-desc" data-task-expand-target="desc">
                 <%= task.description %>
