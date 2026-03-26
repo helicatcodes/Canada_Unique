@@ -57,18 +57,6 @@
   padding: 1.5rem;
 }
 
-// Banner title bar — same pull-to-edges technique as .cu-panel__title
-.pre-canada__card-title {
-  color: $cu-navy;
-  background: white;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  margin: -1.5rem -2rem 1.5rem -2rem;
-  padding: 0.6rem 2rem;
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
-  border-bottom: 1.5px solid $cu-red;
-}
 
 // ── Countdown ring ──────────────────────────────────────────
 
@@ -242,44 +230,6 @@ form:has(.prep-checklist__sync-btn) {
   flex-shrink: 0;
 }
 
-// ── Card title row (title + sync button) ────────────────────
-
-.pre-canada__card-title-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: -1.5rem -2rem 1.5rem -2rem;
-  padding: 0 2rem 0 0;
-  border-radius: $border-radius-lg $border-radius-lg 0 0;
-  border-bottom: 1.5px solid $cu-red;
-
-
-  .pre-canada__card-title {
-    margin: 0;
-    border-bottom: none;
-  }
-}
-
-.pre-canada__sync-btn {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  color: $cu-charcoal;
-  cursor: pointer;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  line-height: 1;
-
-  &:hover { color: $cu-red; }
-}
-
-// ── Tasks intro text ────────────────────────────────────────
-
-.pre-canada__tasks-intro {
-  font-size: 0.88rem;
-  color: $cu-charcoal;
-  margin-bottom: 0.75rem;
-}
 
 // ── Next steps boxes ────────────────────────────────────────
 
@@ -330,99 +280,16 @@ form:has(.prep-checklist__sync-btn) {
   line-height: 1.2;
 }
 
-// ── Task table ──────────────────────────────────────────────
+// ── Task status badge — used in the checklist item rows ─────
+// Three states mapped by the task_badge_class helper in ApplicationHelper
 
-.task-table {
-  width: 100%;
-  border-collapse: collapse;
+.task-table__badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.2rem 0.55rem;
+  border-radius: 20px;
 
-  &__row {
-    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
-
-    &:last-child { border-bottom: none; }
-  }
-
-  &__name,
-  &__status,
-  &__action {
-    padding: 0.55rem 0.25rem;
-    vertical-align: middle;
-  }
-
-  &__name {
-    font-size: 0.9rem;
-    width: 60%;
-
-    a {
-      color: $cu-navy;
-      text-decoration: none;
-      &:hover { color: $cu-red; }
-    }
-  }
-
-  &__status { width: 30%;
-  text-align: center;}
-
-  &__action {
-    width: 10%;
-    text-align: right;
-  }
-
-  // Status badge
-  &__badge {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 0.2rem 0.55rem;
-    border-radius: 20px;
-    background: $light-gray;
-    color: $cu-charcoal;
-
-    // [MG] Three states only — open/in-progress/done — mapped by task_badge_class helper
-    &--open        { background: #f0f2f5; color: #666; }
-    &--in-progress { background: #FFC107; color: #fff; }
-    &--done        { background: #448272; color: #fff; }
-  }
-
-  // [MG] Expandable row — pointer cursor signals tappability
-  &__row--expandable {
-    cursor: pointer;
-    &:hover { background: rgba(0, 0, 0, 0.02); }
-  }
-
-  // [MG] Description row — hidden by default, shown when --visible is toggled by Stimulus
-  &__description-row {
-    display: none;
-
-    &--visible { display: table-row; }
-  }
-
-  &__description {
-    font-size: 0.85rem;
-    color: $cu-charcoal;
-    padding: 0.4rem 0.25rem 0.75rem !important;
-    opacity: 0.8;
-  }
-
-  // [MG] Chevron rotates 180° when the row is expanded
-  &__chevron {
-    font-size: 0.7rem;
-    color: #aaa;
-    transition: transform 0.2s ease;
-
-    &--open { transform: rotate(180deg); }
-  }
-
-  // Action button
-  &__btn {
-    background: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.75rem;
-    color: $cu-charcoal;
-    cursor: pointer;
-    white-space: nowrap;
-
-    &:hover { border-color: $cu-red; color: $cu-red; }
-  }
+  &--open        { background: #f0f2f5; color: #666; }
+  &--in-progress { background: #FFC107; color: #fff; }
+  &--done        { background: #448272; color: #fff; }
 }
