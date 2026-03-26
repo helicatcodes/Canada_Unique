@@ -101,27 +101,30 @@
                 <div class="modal-dialog modal-dialog-centered">
                   <div class="modal-content">
 
-                    <%# [HW] Close button floats over the top-right corner of the photo %>
-                    <button class="feed-modal__close" data-bs-dismiss="modal" aria-label="Close">
-                      <i class="fa-solid fa-xmark"></i>
-                    </button>
+                    <%# [HW] Header row: avatar+name on the left, close button on the right — both in normal flow %>
+                    <%# [HW] Replaces the old absolute-positioned X so less top padding is needed above the photo %>
+                    <div class="feed-modal__header">
+                      <%# [HW] Author row — mirrors index card: avatar (opens profile modal) + name %>
+                      <div class="feed-grid__author">
+                        <span onclick="event.stopPropagation()"
+                              data-bs-toggle="modal"
+                              data-bs-target="#avatar-modal-<%= photo.user.id %>"
+                              class="feed-grid__avatar-trigger"
+                              title="View <%= photo.user.name %>'s profile">
+                          <% if photo.user.avatar.attached? %>
+                            <%= image_tag photo.user.avatar, class: "feed-grid__avatar" %>
+                          <% else %>
+                            <span class="feed-grid__avatar feed-grid__avatar--placeholder">
+                              <i class="fa fa-user"></i>
+                            </span>
+                          <% end %>
+                        </span>
+                        <span class="feed-grid__author-name"><%= photo.user.name %></span>
+                      </div>
 
-                    <%# [HW] Author row — mirrors index card: avatar (opens profile modal) + name %>
-                    <div class="feed-grid__author">
-                      <span onclick="event.stopPropagation()"
-                            data-bs-toggle="modal"
-                            data-bs-target="#avatar-modal-<%= photo.user.id %>"
-                            class="feed-grid__avatar-trigger"
-                            title="View <%= photo.user.name %>'s profile">
-                        <% if photo.user.avatar.attached? %>
-                          <%= image_tag photo.user.avatar, class: "feed-grid__avatar" %>
-                        <% else %>
-                          <span class="feed-grid__avatar feed-grid__avatar--placeholder">
-                            <i class="fa fa-user"></i>
-                          </span>
-                        <% end %>
-                      </span>
-                      <span class="feed-grid__author-name"><%= photo.user.name %></span>
+                      <button class="feed-modal__close" data-bs-dismiss="modal" aria-label="Close">
+                        <i class="fa-solid fa-xmark"></i>
+                      </button>
                     </div>
 
                     <%# [HW] Location row — same position as index card, below author %>
@@ -223,9 +226,11 @@
                       title: photo.shared ? "Unshare from feed" : "Share to community feed" do %>
                     <i class="fa-solid fa-share-nodes"></i>
                   <% end %>
-                  <%= link_to edit_photo_path(photo), class: "photo-action-btn", title: "Edit caption" do %>
+                  <%# [HW] Edit button now opens the per-photo edit modal instead of navigating to a separate page %>
+                  <a class="photo-action-btn" title="Edit photo"
+                     data-bs-toggle="modal" data-bs-target="#edit-photo-modal-<%= photo.id %>">
                     <i class="fa-solid fa-pen"></i>
-                  <% end %>
+                  </a>
                   <%# [HW] Delete — dark navy default, red on hover %>
                   <%= button_to photo_path(photo), method: :delete,
                       class: "photo-action-btn photo-action-btn--danger",
@@ -259,6 +264,13 @@
         <% end %>
 
       </div>
+
+      <%# [HW] Edit photo modals — one per photo, opened by the pen icon on each card %>
+      <% @my_photos.each do |photo| %>
+        <% if photo.image.attached? %>
+          <%= render "photos/edit_modal", photo: photo %>
+        <% end %>
+      <% end %>
 
       <%# [HW] Gallery focused-view modals — one per photo, reuses feed-modal styling %>
       <%# [HW] Shows location + caption only (no social features — private photos) %>
