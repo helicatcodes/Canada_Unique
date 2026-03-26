@@ -22,6 +22,22 @@ class User < ApplicationRecord
   def display_name
     first_name.presence || name.presence || email.split("@").first
   end
+
+  # [MG] Create the 3 fixed non-obligatory tasks for every new user after registration.
+  # These are the same for all users — content is managed in the task show views.
+  after_create :create_default_tasks
+
+  private
+
+  def create_default_tasks
+    [
+      { name: "Pack your bags",    description: "Here you can find the most important things you may not forget" },
+      { name: "Your new hometown", description: "We collected the most interesting facts about your new hometown." },
+      { name: "Lorem ipsum",       description: "lorem ipsum lorem ipsum" }
+    ].each do |t|
+      tasks.create!(name: t[:name], description: t[:description], obligatory: false, status: "not started")
+    end
+  end
   # Gives each user access to their notification inbox via current_user.noticed_notifications. MJR
   has_many :noticed_notifications, as: :recipient, class_name: "Noticed::Notification", dependent: :destroy
 end
