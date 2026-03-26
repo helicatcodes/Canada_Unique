@@ -1,4 +1,19 @@
-<h2> <%= @task.name %></h2>
-<p> <%= @task.description %> </p>
-<p> <%= @task.status %> </p>
-<%= link_to "Back to your tasks", pre_canada_path, class: "btn btn-success"  %>
+<%# [MG] Task show page — slides in from the right via CSS animation %>
+<div class="task-show">
+
+  <%# Back button %>
+  <div class="task-show__back">
+    <%= link_to pre_canada_path do %>
+      <i class="fa-solid fa-chevron-left"></i> Back
+    <% end %>
+  </div>
+
+  <%# [MG] Title = task description %>
+  <h1 class="task-show__title"><%= @task.description %></h1>
+
+  <%# [MG] Renders a different partial per task name — e.g. _show_pack_your_bags.html.erb %>
+  <div class="task-show__body">
+    <%= render "tasks/show_#{@task.name.downcase.gsub(' ', '_')}" %>
+  </div>
+
+</div>

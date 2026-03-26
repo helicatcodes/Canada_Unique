@@ -1,0 +1,58 @@
+// ============================================================
+// TASK SHOW PAGE
+// Slides in from the right when navigating from pre-canada boxes. [MG]
+// ============================================================
+
+// [MG] Slide-in animation — plays once when the page loads via Turbo
+@keyframes slideInFromRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
+.task-show {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  animation: slideInFromRight 0.3s ease;
+}
+
+// [MG] Back button row at the top
+.task-show__back {
+  margin-bottom: 1.5rem;
+
+  a {
+    color: $cu-charcoal;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    &:hover { color: $cu-red; }
+  }
+}
+
+// [MG] Hero image — matched to task name, same asset as pre-canada box
+.task-show__hero {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+  border-radius: $border-radius-lg;
+  margin-bottom: 1.5rem;
+}
+
+// [MG] Title = task description (short, used as page headline)
+.task-show__title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: $cu-navy;
+  margin-bottom: 1rem;
+}
+
+// [MG] Body content — filled manually per task in the view
+.task-show__body {
+  font-size: 0.95rem;
+  color: $cu-charcoal;
+  line-height: 1.6;
+}
