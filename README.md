@@ -1,6 +1,7 @@
 # Beyond Exchange
+### The Canada Unique Journey
 
-A web platform for German teenagers (14–16) preparing for their student exchange year. Built by a team of four in two weeks, from pitch to demo day, during [Le Wagon](https://www.lewagon.com)'s AI Software Development bootcamp.
+A web platform for German teenagers (14–16) preparing for their student exchange year with the exchange agency Canada Unique. Built by a team of four in two weeks, from pitch to demo day, during [Le Wagon](https://www.lewagon.com)'s AI Software Development bootcamp.
 
 ## The problem
 
@@ -35,7 +36,6 @@ Beyond Exchange structures the exchange journey, builds peer community, and cent
 
 ## Getting started
 
-\`\`\`bash
 # install dependencies
 bundle install
 
@@ -44,7 +44,6 @@ rails db:create db:migrate db:seed
 
 # run the app
 rails server
-\`\`\`
 
 The app expects a `.env` file with credentials for Cloudinary and your LLM provider.
 
