@@ -1,7 +1,7 @@
 # Beyond Exchange
 ### The Canada Unique Journey
 
-A web platform for German teenagers (14–16) preparing for their student exchange year with the exchange agency Canada Unique. Built by a team of four in two weeks, from pitch to demo day, during [Le Wagon](https://www.lewagon.com)'s AI Software Development bootcamp.
+A web platform for German teenagers (14–16) preparing for their student exchange year with the exchange agency Canada Unique. Built by a team of four in two weeks, from pitch to demo day, during [Le Wagon's](https://www.lewagon.com) AI Software Development bootcamp.
 
 ## The problem
 
@@ -21,6 +21,35 @@ Beyond Exchange structures the exchange journey, builds peer community, and cent
 - **Direct messaging & notifications** — centralized communication between students, parents, and host families
 - **AI chatbot** — an in-app assistant for guidance and support
 - **Role-based access** — separate views for students, admins, and parents/viewers
+
+<table>
+  <tr>
+    <td width="25%" valign="top">
+      <a href="https://github.com/user-attachments/assets/8dd108f9-e7fc-48b7-9337-fb3bfdbd7fe1">
+        <img src="https://github.com/user-attachments/assets/8dd108f9-e7fc-48b7-9337-fb3bfdbd7fe1" alt="Home screen" width="100%">
+      </a>
+      <br><sub><b>Home</b><br>Your cohort, your moments, one tap away.</sub>
+    </td>
+    <td width="25%" valign="top">
+      <a href="https://github.com/user-attachments/assets/20d8ab18-d0a1-4321-9e47-090bdcb941f5">
+        <img src="https://github.com/user-attachments/assets/20d8ab18-d0a1-4321-9e47-090bdcb941f5" alt="Countdown until departure" width="100%">
+      </a>
+      <br><sub><b>Before you go</b><br>Countdown and prep tasks so nothing gets missed.</sub>
+    </td>
+    <td width="25%" valign="top">
+      <a href="https://github.com/user-attachments/assets/83b6c9c5-4088-4f15-9980-c5fb6ac060a6">
+        <img src="https://github.com/user-attachments/assets/83b6c9c5-4088-4f15-9980-c5fb6ac060a6" alt="Chat with Lucy, the AI coach" width="100%">
+      </a>
+      <br><sub><b>Lucy, your AI coach</b><br>Someone to ask at 2am when the paperwork is overwhelming.</sub>
+    </td>
+    <td width="25%" valign="top">
+      <a href="https://github.com/user-attachments/assets/be745989-2671-4d36-910c-6f69a49430c9">
+        <img src="https://github.com/user-attachments/assets/be745989-2671-4d36-910c-6f69a49430c9" alt="Canada Moments community feed" width="100%">
+      </a>
+      <br><sub><b>Canada Moments</b><br>Share the year with the people living it too.</sub>
+    </td>
+  </tr>
+</table>
 
 ## Tech stack
 
