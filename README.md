@@ -13,6 +13,8 @@ Student exchange journeys are often let down by:
 
 ## What Beyond Exchange does
 
+Beyond Exchange structures the exchange journey, builds peer community, and centralizes communication in one place for students, parents, and host families. It's the first digital pedagogical framework that makes high-touch exchange support measurable and guided, rather than ad hoc.
+
 <table>
   <tr>
     <td width="25%" valign="top">
@@ -41,8 +43,6 @@ Student exchange journeys are often let down by:
     </td>
   </tr>
 </table>
-
-Beyond Exchange structures the exchange journey, builds peer community, and centralizes communication in one place for students, parents, and host families. It's the first digital pedagogical framework that makes high-touch exchange support measurable and guided, rather than ad hoc.
 
 - **Guided reflection** — structured questionnaires that prompt students to reflect on challenges, growth, and confidence at key points in their journey
 - **Community feed** — students share photos and updates, and comment and like each other's posts
